@@ -1,0 +1,15 @@
+.idea
+.vscode
+coverage.out
+charts/
+bin
+*tmp*
+tmp/
+.env
+.aws/
+*.pem
+./images
+*.srl
+.horusec/
+horusec-analysis-*.json
+vendor
