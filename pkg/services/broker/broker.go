@@ -32,8 +32,8 @@ type IBroker interface {
 }
 
 type Broker struct {
-	connection *amqp.Connection
-	channel    *amqp.Channel
+	connection iConnection
+	channel    iChannel
 	config     brokerConfig.IConfig
 }
 
@@ -43,19 +43,19 @@ func NewBroker(config brokerConfig.IConfig) (IBroker, error) {
 	}
 
 	broker := &Broker{config: config}
-	if err := broker.setUpConnection(); err != nil {
+	if err := broker.setupConnection(); err != nil {
 		return nil, errors.Wrap(err, enums.FailedConnectBroker)
 	}
 
-	return broker, broker.setUpChannel()
+	return broker, broker.setupChannel()
 }
 
-func (b *Broker) setUpConnection() (err error) {
+func (b *Broker) setupConnection() (err error) {
 	if b.isEmptyOrNilConnection() {
 		b.connection, err = b.makeConnection()
 	}
 
-	if b.isEmptyOrNilConnection() || b.connection.IsClosed() {
+	if err != nil || b.connection.IsClosed() {
 		b.connection, err = b.makeConnection()
 	}
 
@@ -70,12 +70,16 @@ func (b *Broker) makeConnection() (*amqp.Connection, error) {
 	return amqp.Dial(b.config.GetConnectionString())
 }
 
-func (b *Broker) setUpChannel() (channelErr error) {
-	if err := b.setUpConnection(); err != nil {
+func (b *Broker) setupChannel() (channelErr error) {
+	if err := b.setupConnection(); err != nil {
 		return err
 	}
 
-	if b.channel == nil || b.channel == (&amqp.Channel{}) {
+	return b.verifyEmptyChannelAndSetFlow()
+}
+
+func (b *Broker) verifyEmptyChannelAndSetFlow() (channelErr error) {
+	if b.isEmptyOrNilChannel() {
 		b.channel, channelErr = b.connection.Channel()
 	}
 
@@ -86,12 +90,20 @@ func (b *Broker) setUpChannel() (channelErr error) {
 	return channelErr
 }
 
+func (b *Broker) isEmptyOrNilChannel() bool {
+	return b.channel == nil || b.channel == (&amqp.Channel{})
+}
+
 func (b *Broker) IsAvailable() bool {
-	if err := b.setUpConnection(); err != nil {
+	if err := b.setupConnection(); err != nil {
 		return false
 	}
 
-	if b.connection == nil || b.connection == (&amqp.Connection{}) {
+	return b.isNotClosedOrNil()
+}
+
+func (b *Broker) isNotClosedOrNil() bool {
+	if b.isEmptyOrNilConnection() {
 		return false
 	}
 
@@ -121,7 +133,7 @@ func (b *Broker) exchangeDeclare(exchange, exchangeKind string) error {
 }
 
 func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) error {
-	if err := b.setUpChannel(); err != nil {
+	if err := b.setupChannel(); err != nil {
 		logger.LogError(enums.FailedCreateChannelPublish, err)
 		return err
 	}
@@ -136,7 +148,7 @@ func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) erro
 
 func (b *Broker) Consume(queue, exchange, exchangeKing string, handler func(packet brokerPacket.IPacket)) {
 	for {
-		if err := b.setUpChannel(); err != nil {
+		if err := b.setupChannel(); err != nil {
 			logger.LogPanic(enums.FailedCreateChannelConsume, err)
 		}
 
@@ -166,8 +178,7 @@ func (b *Broker) handleDeliveries(queue string, handler func(packet brokerPacket
 
 	for delivery := range deliveries {
 		message := delivery
-		p := brokerPacket.NewPacket(&message)
-		handler(p)
+		handler(brokerPacket.NewPacket(&message))
 	}
 }
 

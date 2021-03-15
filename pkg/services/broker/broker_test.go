@@ -15,122 +15,392 @@
 package broker
 
 import (
-	"os"
+	"errors"
 	"testing"
 
+	"github.com/streadway/amqp"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
 )
 
-func setDefaultEnvVars() {
-	_ = os.Setenv("HORUSEC_BROKER_HOST", "")
-	_ = os.Setenv("HORUSEC_BROKER_PORT", "")
-	_ = os.Setenv("HORUSEC_BROKER_USERNAME", "")
-	_ = os.Setenv("HORUSEC_BROKER_PASSWORD", "")
-}
+func testConsumer(_ packet.IPacket) {}
 
 func TestNewBroker(t *testing.T) {
-	t.Run("should success return a new broker without errors", func(t *testing.T) {
-		setDefaultEnvVars()
-
+	t.Run("should return error when failed to connect", func(t *testing.T) {
 		broker, err := NewBroker(config.NewBrokerConfig())
-		assert.NotNil(t, broker)
-		assert.NoError(t, err)
+
+		assert.Nil(t, broker)
+		assert.Error(t, err)
 	})
 
 	t.Run("should return error when invalid config", func(t *testing.T) {
-		_, err := NewBroker(&config.Config{})
+		broker, err := NewBroker(&config.Config{})
+
+		assert.Nil(t, broker)
 		assert.Error(t, err)
 	})
+}
 
-	t.Run("should return error when making connection", func(t *testing.T) {
-		_ = os.Setenv("HORUSEC_BROKER_HOST", "test")
-		_ = os.Setenv("HORUSEC_BROKER_PORT", "test")
-		_ = os.Setenv("HORUSEC_BROKER_USERNAME", "test")
-		_ = os.Setenv("HORUSEC_BROKER_PASSWORD", "test")
+func TestSetupChannel(t *testing.T) {
+	t.Run("should success setup channel without errors", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-		_, err := NewBroker(config.NewBrokerConfig())
-		assert.Error(t, err)
+		connectionMock.On("IsClosed").Return(false)
+		channelMock.On("Flow").Return(nil)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.NoError(t, broker.setupChannel())
+	})
+
+	t.Run("should return error when failed to setup connection", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Error(t, broker.setupChannel())
+	})
+}
+
+func TestVerifyEmptyChannelAndSetFlow(t *testing.T) {
+	t.Run("should success verify no empty or nil channel and set flow", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.NoError(t, broker.verifyEmptyChannelAndSetFlow())
+	})
+
+	t.Run("should return error when failed to set flow", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(errors.New("test"))
+		connectionMock.On("Channel").Return(&amqp.Channel{}, errors.New("test"))
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Error(t, broker.verifyEmptyChannelAndSetFlow())
+	})
+
+	t.Run("should panic when trying to set channel with nil connection", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			_ = broker.verifyEmptyChannelAndSetFlow()
+		})
 	})
 }
 
 func TestIsAvailable(t *testing.T) {
-	setDefaultEnvVars()
+	t.Run("should return true when everything it is ok", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-	t.Run("should return true when its available", func(t *testing.T) {
-		broker, _ := NewBroker(config.NewBrokerConfig())
+		connectionMock.On("Channel").Return(&amqp.Channel{}, nil)
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
 		assert.True(t, broker.IsAvailable())
+	})
+
+	t.Run("should return false when failed to setup connection", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.False(t, broker.IsAvailable())
+	})
+}
+
+func TestIsNotClosedOrNil(t *testing.T) {
+	t.Run("should return true when everything it is ok", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.True(t, broker.isNotClosedOrNil())
+	})
+
+	t.Run("should return false when closed connection", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		connectionMock.On("IsClosed").Return(true)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.False(t, broker.isNotClosedOrNil())
+	})
+
+	t.Run("should return false when nil connection", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.False(t, broker.isNotClosedOrNil())
 	})
 }
 
 func TestClose(t *testing.T) {
-	t.Run("should close connection without errors", func(t *testing.T) {
-		broker, _ := NewBroker(config.NewBrokerConfig())
+	t.Run("should success close connection with no errors", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		connectionMock.On("Close").Return(nil)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
 		assert.NoError(t, broker.Close())
 	})
 }
 
 func TestPublish(t *testing.T) {
-	t.Run("should publish packet without errors and no exchange", func(t *testing.T) {
-		broker, _ := NewBroker(config.NewBrokerConfig())
+	t.Run("should success publish packet without exchange and no errors", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-		err := broker.Publish("test", "", "", []byte("test"))
-		assert.NoError(t, err)
+		channelMock.On("Publish").Return(nil)
+		channelMock.On("Flow").Return(nil)
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.NoError(t, broker.Publish("", "", "", []byte("")))
 	})
 
-	t.Run("should publish packet without errors with exchange", func(t *testing.T) {
-		broker, _ := NewBroker(config.NewBrokerConfig())
+	t.Run("should success publish packet with exchange and no errors", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-		err := broker.Publish("test", "test", "topic", []byte("test"))
-		assert.NoError(t, err)
+		channelMock.On("Publish").Return(nil)
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("ExchangeDeclare").Return(nil)
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.NoError(t, broker.Publish("", "test", "test", []byte("")))
+	})
+
+	t.Run("should return error when failed to declare exchange", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("ExchangeDeclare").Return(errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Error(t, broker.Publish("", "test", "test", []byte("")))
+	})
+
+	t.Run("should return error when failed setup channel", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Error(t, broker.Publish("", "", "", []byte("")))
 	})
 }
 
-func TestIsAvailableMock(t *testing.T) {
-	t.Run("should return true", func(t *testing.T) {
-		mock := &Mock{}
+func TestConsume(t *testing.T) {
+	t.Run("should success start a consumer without errors", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-		mock.On("IsAvailable").Return(true)
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(nil)
+		channelMock.On("QueueDeclare").Return(amqp.Queue{}, nil)
+		channelMock.On("Consume").Return(make(<-chan amqp.Delivery), nil)
+		connectionMock.On("IsClosed").Return(false)
 
-		result := mock.IsAvailable()
-		assert.True(t, result)
-	})
-}
-
-func TestPublishMock(t *testing.T) {
-	t.Run("should return no error", func(t *testing.T) {
-		mock := &Mock{}
-
-		mock.On("Publish").Return(nil)
-
-		result := mock.Publish("", "", "", nil)
-		assert.NoError(t, result)
-	})
-}
-
-func TestConsumeMock(t *testing.T) {
-	t.Run("should not panic", func(t *testing.T) {
-		mock := &Mock{}
-
-		mock.On("Consume")
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
 
 		assert.NotPanics(t, func() {
-			mock.Consume("", "", "", testConsumer)
+			go broker.Consume("", "", "", testConsumer)
 		})
 	})
-}
 
-func testConsumer(_ packet.IPacket) {}
+	t.Run("should panic when failed to consume", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
 
-func TestCloseMock(t *testing.T) {
-	t.Run("should return no error", func(t *testing.T) {
-		mock := &Mock{}
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(nil)
+		channelMock.On("QueueDeclare").Return(amqp.Queue{}, nil)
+		channelMock.On("Consume").Return(make(<-chan amqp.Delivery), errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
 
-		mock.On("Close").Return(nil)
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
 
-		result := mock.Close()
-		assert.NoError(t, result)
+		assert.Panics(t, func() {
+			broker.Consume("", "", "", testConsumer)
+		})
+	})
+
+	t.Run("should panic when failed to queue bind", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(nil)
+		channelMock.On("QueueDeclare").Return(amqp.Queue{}, nil)
+		channelMock.On("ExchangeDeclare").Return(nil)
+		channelMock.On("QueueBind").Return(errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			broker.Consume("", "test", "test", testConsumer)
+		})
+	})
+
+	t.Run("should panic when failed to exchange declare", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(nil)
+		channelMock.On("QueueDeclare").Return(amqp.Queue{}, nil)
+		channelMock.On("ExchangeDeclare").Return(errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			broker.Consume("", "test", "test", testConsumer)
+		})
+	})
+
+	t.Run("should panic when failed to queue declare", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(nil)
+		channelMock.On("QueueDeclare").Return(amqp.Queue{}, errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			broker.Consume("", "", "", testConsumer)
+		})
+	})
+
+	t.Run("should panic when failed to set consumer prefetch", func(t *testing.T) {
+		connectionMock := &connectionMock{}
+		channelMock := &channelMock{}
+
+		channelMock.On("Flow").Return(nil)
+		channelMock.On("Qos").Return(errors.New("test"))
+		connectionMock.On("IsClosed").Return(false)
+
+		broker := &Broker{
+			connection: connectionMock,
+			channel:    channelMock,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			broker.Consume("", "", "", testConsumer)
+		})
+	})
+
+	t.Run("should panic when failed to setup channel", func(t *testing.T) {
+		broker := &Broker{
+			connection: nil,
+			channel:    nil,
+			config:     config.NewBrokerConfig(),
+		}
+
+		assert.Panics(t, func() {
+			broker.Consume("", "", "", testConsumer)
+		})
 	})
 }
