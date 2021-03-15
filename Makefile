@@ -23,7 +23,7 @@ coverage:
 test:
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=20m -parallel=1 -failfast -short
 
-imports:
+fix-imports:
     ifeq (, $(shell which $(GO_IMPORTS)))
 		$(GO) get -u golang.org/x/tools/cmd/goimports
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
@@ -31,4 +31,4 @@ imports:
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
     endif
 	
-pipeline: fmt imports lint test coverage
+pipeline: fmt fix-imports lint test coverage
