@@ -15,12 +15,13 @@
 package broker
 
 import (
+	"github.com/pkg/errors"
+	"github.com/streadway/amqp"
+
 	brokerConfig "github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
 	brokerPacket "github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
 	"github.com/ZupIT/horusec-devkit/pkg/services/utils/logger"
-	"github.com/pkg/errors"
-	"github.com/streadway/amqp"
 )
 
 type IBroker interface {

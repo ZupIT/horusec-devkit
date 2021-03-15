@@ -15,9 +15,10 @@
 package broker
 
 import (
+	"github.com/stretchr/testify/mock"
+
 	brokerPacket "github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
 	mockUtils "github.com/ZupIT/horusec-devkit/pkg/services/utils/mock"
-	"github.com/stretchr/testify/mock"
 )
 
 type Mock struct {

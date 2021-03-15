@@ -18,9 +18,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
-	"github.com/stretchr/testify/assert"
 )
 
 func setDefaultEnvVars() {

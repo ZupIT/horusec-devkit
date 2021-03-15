@@ -15,9 +15,10 @@
 package packet
 
 import (
+	"testing"
+
 	"github.com/streadway/amqp"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNewPacket(t *testing.T) {

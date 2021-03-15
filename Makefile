@@ -1,10 +1,12 @@
 GO ?= go
 GOFMT ?= gofmt
-GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
+GO_FILES ?= $$(find . -name '*.go' | grep -v vendor)
 GO_CI_LINT ?= ./bin/golangci-lint
+GO_IMPORTS ?= goimports
+GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-devkit
 
 fmt:
-	$(GOFMT) -w $(GOFMT_FILES)
+	$(GOFMT) -w $(GO_FILES)
 
 lint:
     ifeq ($(wildcard $(GO_CI_LINT)), $(GO_CI_LINT))
@@ -21,4 +23,12 @@ coverage:
 test:
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=20m -parallel=1 -failfast -short
 
-pipeline: fmt lint test coverage
+imports:
+    ifeq (, $(shell which $(GO_IMPORTS)))
+		$(GO) get -u golang.org/x/tools/cmd/goimports
+		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
+    else
+		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
+    endif
+	
+pipeline: fmt imports lint test coverage
