@@ -1,12 +1,10 @@
 name: HorusecDevelomentKit
 
-on:
-  pull_request:
-    branches: [ "**" ]
+on: [push, pull_request]
 
 jobs:
   install-build-test-fmt-lint:
-    name: fmt-lint-test-coverage
+    name: lint-test-coverage
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
@@ -17,8 +15,6 @@ jobs:
         id: go
       - name: Check out code
         uses: actions/checkout@v2
-      - name: fmt
-        run: make fmt
       - name: lint
         run: make lint
       - name: test

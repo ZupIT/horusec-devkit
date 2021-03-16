@@ -24,7 +24,7 @@ func TestNewBrokerConfig(t *testing.T) {
 	t.Run("should success create new broker start", func(t *testing.T) {
 		config := NewBrokerConfig()
 		assert.NotNil(t, config)
-		assert.NotEmpty(t, config)
+		assert.Empty(t, config)
 	})
 }
 
