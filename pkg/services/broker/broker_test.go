@@ -25,11 +25,22 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
 )
 
+func getTestConfig() *config.Config {
+	brokerConfig := &config.Config{}
+
+	brokerConfig.SetHost("test")
+	brokerConfig.SetPort("test")
+	brokerConfig.SetUsername("test")
+	brokerConfig.SetPassword("test")
+
+	return brokerConfig
+}
+
 func testConsumer(_ packet.IPacket) {}
 
 func TestNewBroker(t *testing.T) {
 	t.Run("should return error when failed to connect", func(t *testing.T) {
-		broker, err := NewBroker(config.NewBrokerConfig())
+		broker, err := NewBroker(getTestConfig())
 
 		assert.Nil(t, broker)
 		assert.Error(t, err)
@@ -54,7 +65,7 @@ func TestSetupChannel(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NoError(t, broker.setupChannel())
@@ -64,7 +75,7 @@ func TestSetupChannel(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Error(t, broker.setupChannel())
@@ -81,7 +92,7 @@ func TestVerifyEmptyChannelAndSetFlow(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NoError(t, broker.verifyEmptyChannelAndSetFlow())
@@ -97,7 +108,7 @@ func TestVerifyEmptyChannelAndSetFlow(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Error(t, broker.verifyEmptyChannelAndSetFlow())
@@ -107,7 +118,7 @@ func TestVerifyEmptyChannelAndSetFlow(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -127,7 +138,7 @@ func TestIsAvailable(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.True(t, broker.IsAvailable())
@@ -137,7 +148,7 @@ func TestIsAvailable(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.False(t, broker.IsAvailable())
@@ -154,7 +165,7 @@ func TestIsNotClosedOrNil(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.True(t, broker.isNotClosedOrNil())
@@ -169,7 +180,7 @@ func TestIsNotClosedOrNil(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.False(t, broker.isNotClosedOrNil())
@@ -179,7 +190,7 @@ func TestIsNotClosedOrNil(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.False(t, broker.isNotClosedOrNil())
@@ -196,7 +207,7 @@ func TestClose(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NoError(t, broker.Close())
@@ -215,7 +226,7 @@ func TestPublish(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NoError(t, broker.Publish("", "", "", []byte("")))
@@ -233,7 +244,7 @@ func TestPublish(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NoError(t, broker.Publish("", "test", "test", []byte("")))
@@ -250,7 +261,7 @@ func TestPublish(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Error(t, broker.Publish("", "test", "test", []byte("")))
@@ -260,7 +271,7 @@ func TestPublish(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Error(t, broker.Publish("", "", "", []byte("")))
@@ -281,7 +292,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.NotPanics(t, func() {
@@ -302,7 +313,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -324,7 +335,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -345,7 +356,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -365,7 +376,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -384,7 +395,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: connectionMock,
 			channel:    channelMock,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
@@ -396,7 +407,7 @@ func TestConsume(t *testing.T) {
 		broker := &Broker{
 			connection: nil,
 			channel:    nil,
-			config:     config.NewBrokerConfig(),
+			config:     getTestConfig(),
 		}
 
 		assert.Panics(t, func() {
