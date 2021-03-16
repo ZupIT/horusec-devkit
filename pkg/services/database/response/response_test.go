@@ -31,29 +31,26 @@ func TestNewResponse(t *testing.T) {
 	})
 }
 
-func TestGetAndSetRowsAffected(t *testing.T) {
-	t.Run("should success set and get rows affected", func(t *testing.T) {
-		databaseResponse := &Response{}
+func TestGetRowsAffected(t *testing.T) {
+	t.Run("should success get rows affected", func(t *testing.T) {
+		databaseResponse := &Response{rowsAffected: 5}
 
-		databaseResponse.SetRowsAffected(5)
 		assert.Equal(t, 5, databaseResponse.GetRowsAffected())
 	})
 }
 
-func TestGetAndSetError(t *testing.T) {
-	t.Run("should success set and get error", func(t *testing.T) {
-		databaseResponse := &Response{}
+func TestGetError(t *testing.T) {
+	t.Run("should success get error", func(t *testing.T) {
+		databaseResponse := &Response{err: errors.New("error")}
 
-		databaseResponse.SetError(errors.New("error"))
 		assert.Equal(t, errors.New("error"), databaseResponse.GetError())
 	})
 }
 
-func TestGetAndSetData(t *testing.T) {
-	t.Run("should success set and get error", func(t *testing.T) {
-		databaseResponse := &Response{}
+func TestGetData(t *testing.T) {
+	t.Run("should success get data", func(t *testing.T) {
+		databaseResponse := &Response{data: "test"}
 
-		databaseResponse.SetData("test")
 		assert.Equal(t, "test", databaseResponse.GetData())
 	})
 }

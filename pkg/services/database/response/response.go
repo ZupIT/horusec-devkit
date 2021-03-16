@@ -16,11 +16,8 @@ package response
 
 type IResponse interface {
 	GetRowsAffected() int
-	SetRowsAffected(value int)
 	GetData() interface{}
-	SetData(value interface{})
 	GetError() error
-	SetError(value error)
 }
 
 type Response struct {
@@ -29,10 +26,10 @@ type Response struct {
 	data         interface{}
 }
 
-func NewResponse(rowsAffected int, err error, data interface{}) IResponse {
+func NewResponse(rowsAffected int64, err error, data interface{}) IResponse {
 	return &Response{
 		err:          err,
-		rowsAffected: rowsAffected,
+		rowsAffected: int(rowsAffected),
 		data:         data,
 	}
 }
@@ -41,22 +38,10 @@ func (r *Response) GetRowsAffected() int {
 	return r.rowsAffected
 }
 
-func (r *Response) SetRowsAffected(value int) {
-	r.rowsAffected = value
-}
-
 func (r *Response) GetData() interface{} {
 	return r.data
 }
 
-func (r *Response) SetData(value interface{}) {
-	r.data = value
-}
-
 func (r *Response) GetError() error {
 	return r.err
-}
-
-func (r *Response) SetError(value error) {
-	r.err = value
 }

@@ -27,30 +27,18 @@ func TestNewConfig(t *testing.T) {
 	t.Run("should success create config with default values", func(t *testing.T) {
 		databaseConfig := NewConfig()
 
-		assert.Equal(t, "postgres", databaseConfig.dialect)
 		assert.Equal(t, false, databaseConfig.logMode)
 		assert.Equal(t, "postgresql://root:root@localhost:5432/horusec_db?sslmode=disable", databaseConfig.uri)
 	})
 
 	t.Run("should success create config with custom values", func(t *testing.T) {
-		_ = os.Setenv(enums.EnvRelationalDialect, "test")
 		_ = os.Setenv(enums.EnvRelationalURI, "test")
 		_ = os.Setenv(enums.EnvRelationalLogMode, "true")
 
 		databaseConfig := NewConfig()
 
-		assert.Equal(t, "test", databaseConfig.dialect)
 		assert.Equal(t, true, databaseConfig.logMode)
 		assert.Equal(t, "test", databaseConfig.uri)
-	})
-}
-
-func TestGetAndSetDialect(t *testing.T) {
-	t.Run("should success set and get dialect", func(t *testing.T) {
-		databaseConfig := NewConfig()
-		databaseConfig.SetDialect("test")
-
-		assert.Equal(t, "test", databaseConfig.GetDialect())
 	})
 }
 

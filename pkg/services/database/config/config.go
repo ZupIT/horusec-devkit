@@ -32,27 +32,17 @@ type IConfig interface {
 }
 
 type Config struct {
-	dialect string
 	uri     string
 	logMode bool
 }
 
 func NewConfig() *Config {
 	config := &Config{}
-	config.SetDialect(env.GetEnvOrDefault(enums.EnvRelationalDialect, "postgres"))
 	config.SetURI(env.GetEnvOrDefault(enums.EnvRelationalURI,
 		"postgresql://root:root@localhost:5432/horusec_db?sslmode=disable"))
 	config.SetLogMode(env.GetEnvOrDefaultBool(enums.EnvRelationalLogMode, false))
 
 	return config
-}
-
-func (c *Config) SetDialect(dialect string) {
-	c.dialect = dialect
-}
-
-func (c *Config) GetDialect() string {
-	return c.dialect
 }
 
 func (c *Config) SetURI(uri string) {
@@ -73,7 +63,6 @@ func (c *Config) GetLogMode() bool {
 
 func (c *Config) Validate() error {
 	fieldRules := []*validation.FieldRules{
-		validation.Field(&c.dialect, validation.Required),
 		validation.Field(&c.uri, validation.Required),
 	}
 
