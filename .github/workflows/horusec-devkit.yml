@@ -6,10 +6,6 @@ on:
       - master
       - develop
   pull_request:
-    branches:
-      - feature/**
-      - bugfix/**
-      - hotfix/**
 
 jobs:
   lint-test-coverage:
