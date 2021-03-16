@@ -50,6 +50,7 @@ func NewBrokerConfig() IConfig {
 	config.SetUsername(env.GetEnvOrDefault(enums.EnvBrokerUsername, "guest"))
 	config.SetPassword(env.GetEnvOrDefault(enums.EnvBrokerPassword, "guest"))
 
+	
 	return config
 }
 

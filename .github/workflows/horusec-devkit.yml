@@ -1,9 +1,18 @@
 name: HorusecDevelomentKit
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - feature/*
+      - bugfix/*
+      - hotfix/*
 
 jobs:
-  install-build-test-fmt-lint:
+  lint-test-coverage:
     name: lint-test-coverage
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
@@ -21,5 +30,3 @@ jobs:
         run: make test
       - name: coverage
         run: make coverage
-
-
