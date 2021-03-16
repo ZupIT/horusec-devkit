@@ -7,9 +7,9 @@ on:
       - develop
   pull_request:
     branches:
-      - feature/*
-      - bugfix/*
-      - hotfix/*
+      - feature/**
+      - bugfix/**
+      - hotfix/**
 
 jobs:
   lint-test-coverage:
