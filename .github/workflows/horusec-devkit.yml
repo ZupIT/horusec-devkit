@@ -6,7 +6,6 @@ on:
       - master
       - develop
   pull_request:
-
 jobs:
   lint-test-coverage:
     name: lint-test-coverage
