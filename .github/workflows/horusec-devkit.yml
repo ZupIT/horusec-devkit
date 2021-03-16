@@ -1,0 +1,31 @@
+name: HorusecDevelomentKit
+
+on:
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  install-build-test-fmt-lint:
+    name: fmt-lint-test-coverage
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+        id: go
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Setup External Dependences
+        run: make compose-horusec-account
+      - name: fmt
+        run: make fmt
+      - name: lint
+        run: make lint
+      - name: test
+        run: make test
+      - name: coverage
+        run: make coverage
+
+
