@@ -25,26 +25,27 @@ import (
 
 func TestNewConfig(t *testing.T) {
 	t.Run("should success create config with default values", func(t *testing.T) {
-		databaseConfig := NewConfig()
+		databaseConfig := NewDatabaseConfig()
 
-		assert.Equal(t, false, databaseConfig.logMode)
-		assert.Equal(t, "postgresql://root:root@localhost:5432/horusec_db?sslmode=disable", databaseConfig.uri)
+		assert.Equal(t, false, databaseConfig.GetLogMode())
+		assert.Equal(t, "postgresql://root:root@localhost:5432/horusec_db?sslmode=disable",
+			databaseConfig.GetURI())
 	})
 
 	t.Run("should success create config with custom values", func(t *testing.T) {
 		_ = os.Setenv(enums.EnvRelationalURI, "test")
 		_ = os.Setenv(enums.EnvRelationalLogMode, "true")
 
-		databaseConfig := NewConfig()
+		databaseConfig := NewDatabaseConfig()
 
-		assert.Equal(t, true, databaseConfig.logMode)
-		assert.Equal(t, "test", databaseConfig.uri)
+		assert.Equal(t, true, databaseConfig.GetLogMode())
+		assert.Equal(t, "test", databaseConfig.GetURI())
 	})
 }
 
 func TestGetAndSetURI(t *testing.T) {
 	t.Run("should success set and get dialect", func(t *testing.T) {
-		databaseConfig := NewConfig()
+		databaseConfig := NewDatabaseConfig()
 		databaseConfig.SetURI("test")
 
 		assert.Equal(t, "test", databaseConfig.GetURI())
@@ -53,7 +54,7 @@ func TestGetAndSetURI(t *testing.T) {
 
 func TestGetAndSetLogMode(t *testing.T) {
 	t.Run("should success set and get dialect", func(t *testing.T) {
-		databaseConfig := NewConfig()
+		databaseConfig := NewDatabaseConfig()
 		databaseConfig.SetLogMode(true)
 
 		assert.Equal(t, true, databaseConfig.GetLogMode())
@@ -62,7 +63,7 @@ func TestGetAndSetLogMode(t *testing.T) {
 
 func TestValidate(t *testing.T) {
 	t.Run("should return no error when valid config", func(t *testing.T) {
-		databaseConfig := NewConfig()
+		databaseConfig := NewDatabaseConfig()
 
 		assert.NoError(t, databaseConfig.Validate())
 	})

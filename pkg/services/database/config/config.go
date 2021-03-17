@@ -22,8 +22,6 @@ import (
 )
 
 type IConfig interface {
-	SetDialect(dialect string)
-	GetDialect() string
 	SetURI(uri string)
 	GetURI() string
 	SetLogMode(logMode bool)
@@ -36,7 +34,7 @@ type Config struct {
 	logMode bool
 }
 
-func NewConfig() *Config {
+func NewDatabaseConfig() IConfig {
 	config := &Config{}
 	config.SetURI(env.GetEnvOrDefault(enums.EnvRelationalURI,
 		"postgresql://root:root@localhost:5432/horusec_db?sslmode=disable"))

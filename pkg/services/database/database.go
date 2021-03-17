@@ -31,17 +31,25 @@ func NewDatabaseReadAndWrite(config databaseConfig.IConfig) (IDatabaseRead, IDat
 }
 
 func (d *Database) makeConnection() {
+	d.makeConnectionWrite()
+	d.makeConnectionRead()
+}
+
+func (d *Database) makeConnectionWrite() {
 	connectionWrite, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
 		logger.LogPanic(enums.FailedToConnectToDatabase, err)
 	}
 
+	d.connectionWrite = connectionWrite
+}
+
+func (d *Database) makeConnectionRead() {
 	connectionRead, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
 		logger.LogPanic(enums.FailedToConnectToDatabase, err)
 	}
 
-	d.connectionWrite = connectionWrite
 	d.connectionRead = connectionRead
 }
 
@@ -52,7 +60,7 @@ func (d *Database) setLogMode() {
 		return
 	}
 
-	d.connectionWrite.Logger = d.connectionWrite.Logger.LogMode(gormLogger.Info)
+	d.connectionWrite.Logger = d.connectionWrite.Logger.LogMode(gormLogger.Error)
 	d.connectionRead.Logger = d.connectionRead.Logger.LogMode(gormLogger.Error)
 }
 
