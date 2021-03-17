@@ -19,7 +19,8 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/utils/env"
+	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
 )
 
 type IConfig interface {
@@ -44,23 +45,23 @@ type Config struct {
 
 func NewBrokerConfig() IConfig {
 	config := &Config{}
-	config.SetHost(env.GetEnvOrDefault("HORUSEC_BROKER_HOST", "127.0.0.1"))
-	config.SetPort(env.GetEnvOrDefault("HORUSEC_BROKER_PORT", "5672"))
-	config.SetUsername(env.GetEnvOrDefault("HORUSEC_BROKER_USERNAME", "guest"))
-	config.SetPassword(env.GetEnvOrDefault("HORUSEC_BROKER_PASSWORD", "guest"))
+	config.SetHost(env.GetEnvOrDefault(enums.EnvBrokerHost, "127.0.0.1"))
+	config.SetPort(env.GetEnvOrDefault(enums.EnvBrokerPort, "5672"))
+	config.SetUsername(env.GetEnvOrDefault(enums.EnvBrokerUsername, "guest"))
+	config.SetPassword(env.GetEnvOrDefault(enums.EnvBrokerPassword, "guest"))
 
 	return config
 }
 
 func (c *Config) Validate() error {
-	validations := []*validation.FieldRules{
+	fieldRules := []*validation.FieldRules{
 		validation.Field(&c.host, validation.Required),
 		validation.Field(&c.port, validation.Required),
 		validation.Field(&c.username, validation.Required),
 		validation.Field(&c.password, validation.Required),
 	}
 
-	return validation.ValidateStruct(c, validations...)
+	return validation.ValidateStruct(c, fieldRules...)
 }
 
 func (c *Config) GetHost() string {

@@ -21,7 +21,7 @@ import (
 	brokerConfig "github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
 	brokerPacket "github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
-	"github.com/ZupIT/horusec-devkit/pkg/services/utils/logger"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 type IBroker interface {

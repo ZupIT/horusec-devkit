@@ -1,0 +1,28 @@
+name: HorusecDevelopmentKit
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  lint-test-coverage:
+    name: lint-test-coverage
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+        id: go
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: lint
+        run: make lint
+      - name: test
+        run: make test
+      - name: coverage
+        run: make coverage
