@@ -1,0 +1,14 @@
+name: Lint
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: lint
+        run: make lint
