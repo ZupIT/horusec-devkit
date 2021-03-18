@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"strings"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -115,6 +116,9 @@ func (d *Database) CreateOrUpdate(entity interface{}, where map[string]interface
 
 func (d *Database) Find(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).Find(entity)
+	if err := d.verifyNotFoundError(result); err != nil {
+		return response.NewResponse(result.RowsAffected, err, nil)
+	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
@@ -133,12 +137,34 @@ func (d *Database) Delete(where map[string]interface{}, table string) response.I
 
 func (d *Database) First(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).First(entity)
+	if err := d.verifyNotFoundError(result); err != nil {
+		return response.NewResponse(result.RowsAffected, err, nil)
+	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
 func (d *Database) Raw(rawSQL string, entity interface{}) response.IResponse {
 	result := d.connectionRead.Raw(rawSQL).Find(entity)
+	if err := d.verifyNotFoundError(result); err != nil {
+		return response.NewResponse(result.RowsAffected, err, nil)
+	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
+}
+
+func (d *Database) verifyNotFoundError(result *gorm.DB) error {
+	if result.Error != nil {
+		if strings.EqualFold(result.Error.Error(), "record not found") {
+			return enums.ErrNotFoundRecords
+		}
+
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return enums.ErrNotFoundRecords
+	}
+
+	return nil
 }
