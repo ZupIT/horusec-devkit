@@ -25,6 +25,7 @@ func GetEnvOrDefault(env, defaultValue string) (value string) {
 		return defaultValue
 	}
 
+	
 	return value
 }
 
