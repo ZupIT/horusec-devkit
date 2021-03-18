@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/http/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
@@ -22,7 +22,7 @@ type Request struct {
 	timeout int
 }
 
-func NewHTTPRequestUtil(timeout int) IRequest {
+func NewHTTPRequestService(timeout int) IRequest {
 	return &Request{
 		timeout: timeout,
 	}
