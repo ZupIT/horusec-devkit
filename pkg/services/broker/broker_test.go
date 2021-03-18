@@ -43,7 +43,7 @@ func TestNewBroker(t *testing.T) {
 		broker, err := NewBroker(getTestConfig())
 
 		assert.Nil(t, broker)
-		assert.Error(t, err)
+		assert.NoError(t, err)
 	})
 
 	t.Run("should return error when invalid config", func(t *testing.T) {
