@@ -4,8 +4,6 @@
     "**/*_mock.go"
   ],
   "horusecCliFalsePositiveHashes": [
-    "ac9452d2bee55dee7acb0d4dba10f0903059925f8cfde3c1895cc317a5870664",
-    "88718c0638e18c1e4efb8530a8660eaf93c33724095f1a4c8a5a41f7ed3fa695",
-    "0ce2fbc6c366e388c6db5eb8f5f48a5748acaa9d148253fa3a0e57079e24b8d2"
+
   ]
 }
