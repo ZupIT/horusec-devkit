@@ -23,11 +23,11 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 
-	authEnums "github.com/ZupIT/horusec-devkit/pkg/enums/auth"
 	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth"
 	"github.com/ZupIT/horusec-devkit/pkg/services/middlewares/enums"
 	httpUtil "github.com/ZupIT/horusec-devkit/pkg/utils/http"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt"
+	jwtEnums "github.com/ZupIT/horusec-devkit/pkg/utils/jwt/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
@@ -163,7 +163,7 @@ func (a *AuthzMiddleware) getAccountID(r *http.Request) string {
 }
 
 func (a *AuthzMiddleware) getJWTToken(r *http.Request) string {
-	return r.Header.Get(authEnums.HorusecJWTHeader)
+	return r.Header.Get(jwtEnums.HorusecJWTHeader)
 }
 
 func (a *AuthzMiddleware) checkGetConfigResponse(err error, w http.ResponseWriter) error {
