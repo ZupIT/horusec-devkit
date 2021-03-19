@@ -24,9 +24,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt/entities"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt"
 	authGRPC "github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt/entities"
 )
 
 func testHandler(w http.ResponseWriter, _ *http.Request) {
