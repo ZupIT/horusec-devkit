@@ -56,6 +56,17 @@ func TestLogInfo(t *testing.T) {
 	})
 }
 
+func TestLogWarn(t *testing.T) {
+	t.Run("should log warning log without panic", func(t *testing.T) {
+		assert.NotPanics(t, func() { LogWarn("test") })
+	})
+
+	t.Run("should log warning log without panic", func(t *testing.T) {
+		args := map[string]interface{}{"test": "test"}
+		assert.NotPanics(t, func() { LogWarn("test", args) })
+	})
+}
+
 func TestLogPrint(t *testing.T) {
 	t.Run("should log print log without panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogPrint("test") })

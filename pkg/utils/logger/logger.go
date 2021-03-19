@@ -55,6 +55,15 @@ func LogInfo(msg string, args ...interface{}) {
 	logrus.Info(msg)
 }
 
+func LogWarn(msg string, args ...interface{}) {
+	if args != nil {
+		logrus.Warn(msg, args)
+		return
+	}
+
+	logrus.Warn(msg)
+}
+
 func LogPrint(msg string) {
 	log.SetFlags(0)
 	log.Println(msg)

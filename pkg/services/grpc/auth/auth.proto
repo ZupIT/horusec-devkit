@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package grpc;
 
-option go_package = "development-kit/pkg/services/grpc/auth";
+option go_package = "pkg/services/grpc/auth";
 
 service AuthService {
   rpc IsAuthorized (IsAuthorizedData) returns (IsAuthorizedResponse) {}
@@ -12,7 +12,7 @@ service AuthService {
 
 message IsAuthorizedData {
   string token = 1;
-  string role = 2;
+  string type = 2;
   string companyID = 3;
   string repositoryID = 4;
 }
@@ -33,7 +33,7 @@ message GetAccountDataResponse {
 message GetAuthConfigData {}
 
 message GetAuthConfigResponse {
-  bool ApplicationAdminEnable = 1;
-  string AuthType = 2;
-  bool DisabledBroker = 3;
+  bool enableApplicationAdmin = 1;
+  string authType = 2;
+  bool disabledBroker = 3;
 }
