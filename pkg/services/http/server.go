@@ -30,7 +30,7 @@ type Server struct {
 	corsConfig *cors.Options
 }
 
-func NewServerConfig(defaultPort string, corsConfig *cors.Options) *Server {
+func NewServerConfigService(defaultPort string, corsConfig *cors.Options) *Server {
 	return &Server{
 		port:       env.GetEnvOrDefault("HORUSEC_PORT", defaultPort),
 		corsConfig: corsConfig,
