@@ -26,13 +26,13 @@ import (
 
 func TestNewServerConfig(t *testing.T) {
 	t.Run("should return a new server server", func(t *testing.T) {
-		assert.NotNil(t, NewServerConfig("8000", &cors.Options{}))
+		assert.NotNil(t, NewServerConfigService("8000", &cors.Options{}))
 	})
 }
 
 func TestCors(t *testing.T) {
 	t.Run("should return a new http handler", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 
 		assert.NotNil(t, server)
 		assert.NotNil(t, server.Cors(&chi.Mux{}))
@@ -41,7 +41,7 @@ func TestCors(t *testing.T) {
 
 func TestSetTimeout(t *testing.T) {
 	t.Run("should success set timeout", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 		assert.NotNil(t, server)
 
 		server.SetTimeout(20)
@@ -51,7 +51,7 @@ func TestSetTimeout(t *testing.T) {
 
 func TestGetTimeout(t *testing.T) {
 	t.Run("should success get timeout", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 		assert.NotNil(t, server)
 
 		server.SetTimeout(10)
@@ -61,7 +61,7 @@ func TestGetTimeout(t *testing.T) {
 
 func TestGetCompression(t *testing.T) {
 	t.Run("should get compression", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 
 		assert.NotNil(t, server)
 		assert.Equal(t, server.GetCompression(), flate.BestCompression)
@@ -70,7 +70,7 @@ func TestGetCompression(t *testing.T) {
 
 func TestGetPort(t *testing.T) {
 	t.Run("should return http server port", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 
 		assert.NotNil(t, server)
 		assert.Equal(t, "8000", server.GetPort())
@@ -79,7 +79,7 @@ func TestGetPort(t *testing.T) {
 
 func TestSetPort(t *testing.T) {
 	t.Run("should success set port", func(t *testing.T) {
-		server := NewServerConfig("8000", &cors.Options{})
+		server := NewServerConfigService("8000", &cors.Options{})
 		assert.NotNil(t, server)
 
 		server.SetPort("9999")
