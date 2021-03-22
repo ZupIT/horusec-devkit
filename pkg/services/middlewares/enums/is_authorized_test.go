@@ -31,3 +31,9 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "IsRepositoryMember", RepositoryMember.ToString())
 	})
 }
+
+func TestValues(t *testing.T) {
+	t.Run("should return 6 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 6)
+	})
+}

@@ -14,3 +14,14 @@ const (
 func (i IsAuthorizedType) ToString() string {
 	return string(i)
 }
+
+func Values() []IsAuthorizedType {
+	return []IsAuthorizedType{
+		ApplicationAdmin,
+		CompanyAdmin,
+		CompanyMember,
+		RepositoryAdmin,
+		RepositorySupervisor,
+		RepositoryMember,
+	}
+}
