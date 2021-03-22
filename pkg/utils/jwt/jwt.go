@@ -91,7 +91,7 @@ func GetAccountIDByJWTToken(token string) (uuid.UUID, error) {
 func getHorusecJWTKey() []byte {
 	secretKey := env.GetEnvOrDefault("HORUSEC_JWT_SECRET_KEY", enums.DefaultSecretJWT)
 	if secretKey == enums.DefaultSecretJWT {
-		logger.LogInfo(enums.WarningDefaultJWTSecretKey)
+		logger.LogInfo(enums.MessageWarningDefaultJWTSecretKey)
 	}
 
 	return []byte(secretKey)

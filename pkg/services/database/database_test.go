@@ -318,7 +318,7 @@ func TestFind(t *testing.T) {
 		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -339,7 +339,7 @@ func TestFind(t *testing.T) {
 		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -360,7 +360,7 @@ func TestFind(t *testing.T) {
 		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.NotEqual(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -452,7 +452,7 @@ func TestFirst(t *testing.T) {
 		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -473,7 +473,7 @@ func TestFirst(t *testing.T) {
 		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -494,7 +494,7 @@ func TestFirst(t *testing.T) {
 		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
 
 		assert.Error(t, response.GetError())
-		assert.NotEqual(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -538,7 +538,7 @@ func TestRaw(t *testing.T) {
 		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -559,7 +559,7 @@ func TestRaw(t *testing.T) {
 		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
 
 		assert.Error(t, response.GetError())
-		assert.Equal(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})
@@ -580,7 +580,7 @@ func TestRaw(t *testing.T) {
 		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
 
 		assert.Error(t, response.GetError())
-		assert.NotEqual(t, enums.ErrNotFoundRecords, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
 		assert.Equal(t, 0, response.GetRowsAffected())
 		assert.Equal(t, nil, response.GetData())
 	})

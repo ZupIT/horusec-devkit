@@ -44,7 +44,7 @@ func NewBroker(config brokerConfig.IConfig) (IBroker, error) {
 
 	broker := &Broker{config: config}
 	if err := broker.setupConnection(); err != nil {
-		return nil, errors.Wrap(err, enums.FailedConnectBroker)
+		return nil, errors.Wrap(err, enums.MessageFailedConnectBroker)
 	}
 
 	return broker, broker.setupChannel()
@@ -134,12 +134,12 @@ func (b *Broker) exchangeDeclare(exchange, exchangeKind string) error {
 
 func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) error {
 	if err := b.setupChannel(); err != nil {
-		logger.LogError(enums.FailedCreateChannelPublish, err)
+		logger.LogError(enums.MessageFailedCreateChannelPublish, err)
 		return err
 	}
 
 	if err := b.exchangeDeclare(exchange, exchangeKind); err != nil {
-		logger.LogError(enums.FailedDeclareExchangePublish, err)
+		logger.LogError(enums.MessageFailedDeclareExchangePublish, err)
 		return err
 	}
 
@@ -149,7 +149,7 @@ func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) erro
 func (b *Broker) Consume(queue, exchange, exchangeKing string, handler func(packet brokerPacket.IPacket)) {
 	for {
 		if err := b.setupChannel(); err != nil {
-			logger.LogPanic(enums.FailedCreateChannelConsume, err)
+			logger.LogPanic(enums.MessageFailedCreateChannelConsume, err)
 		}
 
 		b.setConsumerPrefetch()
@@ -161,7 +161,7 @@ func (b *Broker) Consume(queue, exchange, exchangeKing string, handler func(pack
 func (b *Broker) declareQueueAndBind(queue, exchange, exchangeKing string) {
 	if _, err := b.channel.QueueDeclare(queue, true, false, false,
 		false, nil); err != nil {
-		logger.LogPanic(enums.FailedCreateQueueConsume, err)
+		logger.LogPanic(enums.MessageFailedCreateQueueConsume, err)
 	}
 
 	if exchange != "" && exchangeKing != "" {
@@ -173,7 +173,7 @@ func (b *Broker) handleDeliveries(queue string, handler func(packet brokerPacket
 	deliveries, err := b.channel.Consume(queue, "", false, false, false,
 		false, nil)
 	if err != nil {
-		logger.LogPanic(enums.FailedConsumeHandlingDelivery, err)
+		logger.LogPanic(enums.MessageFailedConsumeHandlingDelivery, err)
 	}
 
 	for delivery := range deliveries {
@@ -184,16 +184,16 @@ func (b *Broker) handleDeliveries(queue string, handler func(packet brokerPacket
 
 func (b *Broker) setConsumerPrefetch() {
 	if err := b.channel.Qos(1, 0, false); err != nil {
-		logger.LogPanic(enums.FailedSetConsumerPrefetch, err)
+		logger.LogPanic(enums.MessageFailedSetConsumerPrefetch, err)
 	}
 }
 
 func (b *Broker) declareExchangeAndBind(queue, exchange, exchangeKing string) {
 	if err := b.exchangeDeclare(exchange, exchangeKing); err != nil {
-		logger.LogPanic(enums.FailedToDeclareExchangeQueue, err)
+		logger.LogPanic(enums.MessageFailedToDeclareExchangeQueue, err)
 	}
 
 	if err := b.channel.QueueBind(queue, "", exchange, false, nil); err != nil {
-		logger.LogPanic(enums.FailedBindQueueConsume, err)
+		logger.LogPanic(enums.MessageFailedBindQueueConsume, err)
 	}
 }

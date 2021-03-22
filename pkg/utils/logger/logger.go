@@ -72,7 +72,7 @@ func LogPrint(msg string) {
 func SetLogLevel(level string) {
 	logLevel, err := logrus.ParseLevel(level)
 	if err != nil {
-		logrus.Error(fmt.Sprintf(enums.InvalidLogLevel, level, enums.InfoLevel.String()))
+		logrus.Error(fmt.Sprintf(enums.MessageInvalidLogLevel, level, enums.InfoLevel.String()))
 		logLevel = enums.InfoLevel
 	}
 

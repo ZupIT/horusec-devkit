@@ -130,21 +130,21 @@ func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
 	return &auth.IsAuthorizedData{
 		Token:        a.getJWTToken(r),
 		Type:         isAuthorizedType.ToString(),
-		CompanyID:    chi.URLParam(r, "companyID"),
-		RepositoryID: chi.URLParam(r, "repositoryID"),
+		CompanyID:    chi.URLParam(r, enums.CompanyID),
+		RepositoryID: chi.URLParam(r, enums.RepositoryID),
 	}
 }
 
 func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *auth.IsAuthorizedResponse,
 	w http.ResponseWriter, r *http.Request, isAuthorizedType enums.IsAuthorizedType) error {
 	if err != nil {
-		logger.LogError(enums.GRPCRequestError, err)
+		logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)
 		httpUtil.StatusInternalServerError(w, enums.ErrorFailedToVerifyRequest)
 		return enums.ErrorFailedToVerifyRequest
 	}
 
 	if !response.GetIsAuthorized() {
-		logger.LogWarn(fmt.Sprintf(enums.UnauthorizedRequest, a.getAccountID(r), r.URL, r.Method, isAuthorizedType))
+		a.logHTTPRequestError(r, isAuthorizedType)
 		httpUtil.StatusUnauthorized(w, enums.ErrorUnauthorized)
 		return enums.ErrorUnauthorized
 	}
@@ -152,10 +152,15 @@ func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *auth.Is
 	return nil
 }
 
+func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType enums.IsAuthorizedType) {
+	logger.LogWarn(fmt.Sprintf(enums.MessageUnauthorizedHTTPRequest, a.getAccountID(r),
+		r.URL, r.Method, isAuthorizedType))
+}
+
 func (a *AuthzMiddleware) getAccountID(r *http.Request) string {
 	accountID, err := jwt.GetAccountIDByJWTToken(a.getJWTToken(r))
 	if err != nil {
-		logger.LogError(enums.FailedToGetAccountID, err)
+		logger.LogError(enums.MessageFailedToGetAccountID, err)
 		return uuid.Nil.String()
 	}
 
@@ -168,7 +173,7 @@ func (a *AuthzMiddleware) getJWTToken(r *http.Request) string {
 
 func (a *AuthzMiddleware) checkGetConfigResponse(err error, w http.ResponseWriter) error {
 	if err != nil {
-		logger.LogError(enums.FailedToGetAuthConfig, err)
+		logger.LogError(enums.MessageFailedToGetAuthConfig, err)
 		httpUtil.StatusInternalServerError(w, enums.ErrorWhenGettingAuthConfig)
 		return enums.ErrorWhenGettingAuthConfig
 	}

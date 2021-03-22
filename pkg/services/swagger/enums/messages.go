@@ -1,5 +1,5 @@
 package enums
 
 const (
-	SwaggerURLMessage = "swagger can be accessed on: http://%s/swagger/index.html"
+	MessageSwaggerURL = "swagger can be accessed on: http://%s/swagger/index.html"
 )
