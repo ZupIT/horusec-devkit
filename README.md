@@ -55,7 +55,7 @@ Feel free to use, recommend improvements, or contribute to new implementations.
 If this is our first repository that you visit, or would like to know more about Horusec, 
 check out some of our other projects.
 
-- [Horusec CLI](https://github.com/ZupIT/horusec-devkit)
+- [Horusec CLI](https://github.com/ZupIT/horusec)
 - [Horusec WEB](https://github.com/ZupIT/horusec-platform)
 
 This project exists thanks to all the contributors. You rock! ❤️🚀

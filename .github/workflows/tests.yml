@@ -1,13 +1,7 @@
 name: Test
 on:
-  push:
-    branches:
-      - master
-      - develop
   pull_request:
-    branches-ignore:
-      - master
-      - develop
+    branches: [ "**" ]
 jobs:
   test:
     runs-on: ubuntu-latest

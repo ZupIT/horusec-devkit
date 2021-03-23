@@ -1,13 +1,7 @@
 name: Lint
 on:
-  push:
-    branches:
-      - master
-      - develop
   pull_request:
-    branches-ignore:
-      - master
-      - develop
+    branches: [ "**" ]
 jobs:
   lint:
     runs-on: ubuntu-latest
