@@ -1,7 +1,4 @@
-<p align="center">
-    <img src="assets/horusec_logo.png"
-        height="446" alt="horusec logo">
-</p>
+<p align="center" margin="20 0"><a href="https://horusec.io/"><img src="assets/horusec_logo.png" alt="logo_header" width="65%" style="max-width:100%;"/></a></p>
 
 <p align="center">
     <img alt="activity" src="https://img.shields.io/github/commit-activity/w/ZupIT/horusec-devkit">
