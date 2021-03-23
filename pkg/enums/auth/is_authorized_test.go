@@ -1,4 +1,4 @@
-package enums
+package auth
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestToString(t *testing.T) {
+func TestToStringIsAuthorizedType(t *testing.T) {
 	t.Run("should success parse to string", func(t *testing.T) {
 		assert.Equal(t, "IsApplicationAdmin", ApplicationAdmin.ToString())
 	})
@@ -29,5 +29,11 @@ func TestToString(t *testing.T) {
 
 	t.Run("should success parse to string", func(t *testing.T) {
 		assert.Equal(t, "IsRepositoryMember", RepositoryMember.ToString())
+	})
+}
+
+func TestValuesIsAuthorizedType(t *testing.T) {
+	t.Run("should return 6 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 6)
 	})
 }
