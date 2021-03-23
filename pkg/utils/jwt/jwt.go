@@ -31,10 +31,10 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
-func CreateToken(account *entities.TokenData, permissions []string) (string, time.Time, error) {
+func CreateToken(tokenData *entities.TokenData, permissions []string) (string, time.Time, error) {
 	expiresAt := time.Now().Add(time.Hour * time.Duration(1))
 
-	tokenSigned, err := newTokenNotSignedWithClaims(account, expiresAt, permissions).SignedString(getHorusecJWTKey())
+	tokenSigned, err := newTokenNotSignedWithClaims(tokenData, expiresAt, permissions).SignedString(getHorusecJWTKey())
 
 	return tokenSigned, expiresAt, err
 }
@@ -91,7 +91,7 @@ func GetAccountIDByJWTToken(token string) (uuid.UUID, error) {
 func getHorusecJWTKey() []byte {
 	secretKey := env.GetEnvOrDefault("HORUSEC_JWT_SECRET_KEY", enums.DefaultSecretJWT)
 	if secretKey == enums.DefaultSecretJWT {
-		logger.LogInfo(enums.WarningDefaultJWTSecretKey)
+		logger.LogInfo(enums.MessageWarningDefaultJWTSecretKey)
 	}
 
 	return []byte(secretKey)

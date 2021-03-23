@@ -31,7 +31,7 @@ func NewHTTPRequestService(timeout int) IRequest {
 func (r *Request) DoRequest(request *http.Request, tlsConfig *tls.Config) (*http.Response, error) {
 	response, err := r.setClient(tlsConfig).Do(request)
 	if err != nil {
-		logger.LogError(enums.FailedToMakeHTTPRequest, err)
+		logger.LogError(enums.MessageFailedToMakeHTTPRequest, err)
 		return response, err
 	}
 

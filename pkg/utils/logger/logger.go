@@ -55,6 +55,15 @@ func LogInfo(msg string, args ...interface{}) {
 	logrus.Info(msg)
 }
 
+func LogWarn(msg string, args ...interface{}) {
+	if args != nil {
+		logrus.Warn(msg, args)
+		return
+	}
+
+	logrus.Warn(msg)
+}
+
 func LogPrint(msg string) {
 	log.SetFlags(0)
 	log.Println(msg)
@@ -63,7 +72,7 @@ func LogPrint(msg string) {
 func SetLogLevel(level string) {
 	logLevel, err := logrus.ParseLevel(level)
 	if err != nil {
-		logrus.Error(fmt.Sprintf(enums.InvalidLogLevel, level, enums.InfoLevel.String()))
+		logrus.Error(fmt.Sprintf(enums.MessageInvalidLogLevel, level, enums.InfoLevel.String()))
 		logLevel = enums.InfoLevel
 	}
 

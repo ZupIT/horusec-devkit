@@ -33,7 +33,7 @@ func NewSwagger(router *chi.Mux, defaultPort string) ISwagger {
 func (s *Swagger) SetupSwagger() {
 	s.routerSwagger()
 
-	logger.LogInfo(fmt.Sprintf(enums.SwaggerURLMessage, s.GetSwaggerHost()))
+	logger.LogInfo(fmt.Sprintf(enums.MessageSwaggerURL, s.GetSwaggerHost()))
 }
 
 func (s *Swagger) routerSwagger() {
