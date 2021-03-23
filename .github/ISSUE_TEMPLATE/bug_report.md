@@ -20,7 +20,6 @@ Not doing so may result in your bug not being addressed in a timely manner. Than
 **Anything else we need to know?**:
 
 **Environment**:
-- Horusec version:
 - Operating System:
 - Network plugin / Tool and version (if this is a network-related / tool bug):
 - Others:
