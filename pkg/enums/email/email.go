@@ -8,3 +8,12 @@ const (
 	OrganizationInvite  Template = "organization-invite"
 	RepositoryInvite    Template = "repository-invite"
 )
+
+func Values() []Template {
+	return []Template{
+		AccountConfirmation,
+		ResetPassword,
+		OrganizationInvite,
+		RepositoryInvite,
+	}
+}

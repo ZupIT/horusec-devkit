@@ -12,17 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package types
+package cli
 
-type Type string
+import (
+	"encoding/json"
 
-const (
-	Vulnerability Type = "Vulnerability"
-	RiskAccepted  Type = "Risk Accepted"
-	FalsePositive Type = "False Positive"
-	Corrected     Type = "Corrected"
+	"github.com/ZupIT/horusec-devkit/pkg/entities/analysis"
 )
 
-func (t Type) ToString() string {
-	return string(t)
+type AnalysisData struct {
+	Analysis       *analysis.Analysis `json:"analysis"`
+	RepositoryName string             `json:"repositoryName"`
+}
+
+func (a *AnalysisData) ToBytes() []byte {
+	bytes, _ := json.Marshal(a)
+	return bytes
 }

@@ -1,4 +1,4 @@
-package enums
+package auth
 
 type IsAuthorizedType string
 

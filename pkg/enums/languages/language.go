@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// nolint:funlen has methods that need to have more then 15 lines
-package language
+package languages
 
 import "strings"
 
@@ -51,6 +50,7 @@ func ParseStringToLanguage(value string) (l Language) {
 	return Unknown
 }
 
+//nolint:funlen // method need to have more then 15 lines
 func Values() []Language {
 	return []Language{
 		Go,
@@ -75,6 +75,7 @@ func Values() []Language {
 	}
 }
 
+//nolint:funlen // method need to have more then 15 lines
 func mapEnableLanguages() map[string]Language {
 	return map[string]Language{
 		Go.ToString():         Go,
@@ -107,6 +108,7 @@ func (l Language) GetCustomImagesKeyByLanguage() string {
 	return l.mapConfigCustomImageJSONByLanguage()[l]
 }
 
+//nolint:funlen // method need to have more then 15 lines
 func (l Language) mapConfigCustomImageJSONByLanguage() map[Language]string {
 	return map[Language]string{
 		CSharp:     "csharp",

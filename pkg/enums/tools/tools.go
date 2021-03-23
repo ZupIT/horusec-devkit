@@ -46,6 +46,7 @@ func (t Tool) ToLowerCamel() string {
 	return strcase.ToLowerCamel(strcase.ToSnake(t.ToString()))
 }
 
+//nolint:funlen // method need to have more then 15 lines
 func Values() []Tool {
 	return []Tool{
 		HorusecEngine,
