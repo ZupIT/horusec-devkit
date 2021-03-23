@@ -17,15 +17,16 @@ THRESHOLD=$1
 PROJECT=$2
 
 go clean -testcache
-go test -v -coverpkg $PROJECT/... -coverprofile coverage.out $PROJECT/...
+go test -v -coverpkg "$PROJECT/..." -coverprofile coverage.out "$PROJECT/..."
 
 sed -i '/mock.go/d' coverage.out
 sed -i '/pb.go/d' coverage.out
+sed -i '/wire_gen.go/d' coverage.out
 
 COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}')
 COVERAGE=${COVERAGE%\%}
 
-if [ 1 -eq "$(echo $COVERAGE'>='$THRESHOLD | bc -l)" ]; then
+if [ 1 -eq "$(echo "$COVERAGE" '>=' "$THRESHOLD" | bc -l)" ]; then
   echo "SUCCESS! Coverage above threshold"
   echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
   exit 0

@@ -4,6 +4,7 @@ GO_FILES ?= $$(find . -name '*.go' | grep -v vendor)
 GOLANG_CI_LINT ?= ./bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-devkit
+HORUSEC ?= horusec
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -18,7 +19,7 @@ lint:
 
 coverage:
 	chmod +x scripts/coverage.sh
-	scripts/coverage.sh 0 "."
+	scripts/coverage.sh 99 "."
 
 test:
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
@@ -30,5 +31,13 @@ fix-imports:
     else
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
     endif
-	
-pipeline: fmt fix-imports lint test coverage
+
+security:
+    ifeq (, $(shell which $(HORUSEC)))
+		curl -fsSL https://horusec.io/bin/install.sh | bash
+		$(HORUSEC) start -p="./" -e="true"
+    else
+		$(HORUSEC) start -p="./" -e="true"
+    endif
+
+pipeline: fmt fix-imports lint test coverage security

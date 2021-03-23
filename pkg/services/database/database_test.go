@@ -6,12 +6,12 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/ZupIT/horusec-devkit/pkg/services/database/config"
+	"github.com/ZupIT/horusec-devkit/pkg/services/database/enums"
 )
 
 type testEntity struct {
@@ -300,6 +300,70 @@ func TestFind(t *testing.T) {
 		assert.Equal(t, 1, response.GetRowsAffected())
 		assert.Equal(t, newTestEntity(), response.GetData())
 	})
+
+	t.Run("should return error not found records when database return it", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WithArgs(sqlmock.AnyArg()).
+			WillReturnError(errors.New("record not found"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return error not found records when no rows affected", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnRows(sqlmock.NewRows([]string{"text"}))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return a error different than not found", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnError(errors.New("test"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Find(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
 }
 
 func TestUpdate(t *testing.T) {
@@ -370,6 +434,70 @@ func TestFirst(t *testing.T) {
 		assert.Equal(t, 1, response.GetRowsAffected())
 		assert.Equal(t, newTestEntity(), response.GetData())
 	})
+
+	t.Run("should return error not found records when database return it", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WithArgs(sqlmock.AnyArg()).
+			WillReturnError(errors.New("record not found"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return error not found records when no rows affected", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnRows(sqlmock.NewRows([]string{"text"}))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return a error different than not found", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnError(errors.New("test"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.First(newTestEntity(), map[string]interface{}{"text": "test"}, "test")
+
+		assert.Error(t, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
 }
 
 func TestRaw(t *testing.T) {
@@ -392,5 +520,68 @@ func TestRaw(t *testing.T) {
 		assert.NoError(t, response.GetError())
 		assert.Equal(t, 1, response.GetRowsAffected())
 		assert.Equal(t, newTestEntity(), response.GetData())
+	})
+
+	t.Run("should return error not found records when database return it", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnError(errors.New("record not found"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return error not found records when no rows affected", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnRows(sqlmock.NewRows([]string{"text"}))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return a error different than not found", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnError(errors.New("test"))
+
+		database := &Database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.Raw("SELECT * FROM \"test\"", newTestEntity())
+
+		assert.Error(t, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
 	})
 }

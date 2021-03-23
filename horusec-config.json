@@ -1,0 +1,11 @@
+{
+  "horusecCliFilesOrPathsToIgnore": [
+    "**/*_test.go",
+    "**/*_mock.go"
+  ],
+  "horusecCliFalsePositiveHashes": [
+    "58b585f9dc5f780056c22d48ad15740fd7e9592d312b340a449d3e7b6ff8349a",
+    "ac9452d2bee55dee7acb0d4dba10f0903059925f8cfde3c1895cc317a5870664",
+    "18b9bfeb2c0278bf23ee37f7e1c2aa512a912a031e6952e6e27856a446f799d3"
+  ]
+}

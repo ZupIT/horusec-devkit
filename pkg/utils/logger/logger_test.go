@@ -19,6 +19,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
 )
 
 func TestLogPanic(t *testing.T) {
@@ -54,6 +56,17 @@ func TestLogInfo(t *testing.T) {
 	})
 }
 
+func TestLogWarn(t *testing.T) {
+	t.Run("should log warning log without panic", func(t *testing.T) {
+		assert.NotPanics(t, func() { LogWarn("test") })
+	})
+
+	t.Run("should log warning log without panic", func(t *testing.T) {
+		args := map[string]interface{}{"test": "test"}
+		assert.NotPanics(t, func() { LogWarn("test", args) })
+	})
+}
+
 func TestLogPrint(t *testing.T) {
 	t.Run("should log print log without panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogPrint("test") })
@@ -62,7 +75,7 @@ func TestLogPrint(t *testing.T) {
 
 func TestSetLogLevel(t *testing.T) {
 	t.Run("should success set level", func(t *testing.T) {
-		assert.NotPanics(t, func() { SetLogLevel(WarnLevel.String()) })
+		assert.NotPanics(t, func() { SetLogLevel(enums.WarnLevel.String()) })
 	})
 
 	t.Run("should set info level when invalid value", func(t *testing.T) {
@@ -71,7 +84,7 @@ func TestSetLogLevel(t *testing.T) {
 }
 
 func TestLogPanicWithLevel(t *testing.T) {
-	SetLogLevel(PanicLevel.String())
+	SetLogLevel(enums.PanicLevel.String())
 	t.Run("should panic with error", func(t *testing.T) {
 		assert.Panics(t, func() { LogPanicWithLevel("test", errors.New("test")) })
 	})
@@ -85,7 +98,7 @@ func TestLogPanicWithLevel(t *testing.T) {
 }
 
 func TestLogErrorWithLevel(t *testing.T) {
-	SetLogLevel(ErrorLevel.String())
+	SetLogLevel(enums.ErrorLevel.String())
 	t.Run("should not panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogErrorWithLevel("test", errors.New("test")) })
 	})
@@ -99,7 +112,7 @@ func TestLogErrorWithLevel(t *testing.T) {
 }
 
 func TestLogWarnWithLevel(t *testing.T) {
-	SetLogLevel(WarnLevel.String())
+	SetLogLevel(enums.WarnLevel.String())
 	t.Run("should not panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogWarnWithLevel("test") })
 	})
@@ -110,7 +123,7 @@ func TestLogWarnWithLevel(t *testing.T) {
 }
 
 func TestLogInfoWithLevel(t *testing.T) {
-	SetLogLevel(InfoLevel.String())
+	SetLogLevel(enums.InfoLevel.String())
 	t.Run("should not panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogInfoWithLevel("test") })
 	})
@@ -121,7 +134,7 @@ func TestLogInfoWithLevel(t *testing.T) {
 }
 
 func TestLogDebugWithLevel(t *testing.T) {
-	SetLogLevel(DebugLevel.String())
+	SetLogLevel(enums.DebugLevel.String())
 	t.Run("should not panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogDebugWithLevel("test") })
 	})
@@ -132,7 +145,7 @@ func TestLogDebugWithLevel(t *testing.T) {
 }
 
 func TestLogTraceWithLevel(t *testing.T) {
-	SetLogLevel(TraceLevel.String())
+	SetLogLevel(enums.TraceLevel.String())
 	t.Run("should not trace", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogTraceWithLevel("test") })
 	})
