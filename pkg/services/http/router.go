@@ -16,19 +16,24 @@ package http
 
 import (
 	"compress/flate"
+	"fmt"
 	"net/http"
 	"time"
+
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 	"github.com/ZupIT/horusec-devkit/pkg/services/http/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
 )
 
 type IRouter interface {
+	ListenAndServe()
+	GetPort() string
 	GetMux() *chi.Mux
 	Route(pattern string, fn func(router chi.Router)) chi.Router
 }
@@ -57,6 +62,15 @@ func (r *Router) GetMux() *chi.Mux {
 
 func (r *Router) Route(pattern string, fn func(router chi.Router)) chi.Router {
 	return r.router.Route(pattern, fn)
+}
+
+func (r *Router) ListenAndServe() {
+	logger.LogInfo(fmt.Sprintf(enums.MessageServiceRunningOnPort, r.port))
+	logger.LogPanic(enums.MessageListenAndServeError, http.ListenAndServe(fmt.Sprintf(":%s", r.port), r.router))
+}
+
+func (r *Router) GetPort() string {
+	return r.port
 }
 
 func (r *Router) setRouterConfig() *Router {
