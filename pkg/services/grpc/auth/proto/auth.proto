@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package grpc;
 
-option go_package = "pkg/services/grpc/auth";
+option go_package = "pkg/services/grpc/auth/proto";
 
 service AuthService {
   rpc IsAuthorized (IsAuthorizedData) returns (IsAuthorizedResponse) {}

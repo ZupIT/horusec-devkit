@@ -24,7 +24,7 @@ import (
 	"google.golang.org/grpc"
 
 	authEnums "github.com/ZupIT/horusec-devkit/pkg/enums/auth"
-	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth"
+	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth/proto"
 	"github.com/ZupIT/horusec-devkit/pkg/services/middlewares/enums"
 	httpUtil "github.com/ZupIT/horusec-devkit/pkg/utils/http"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt"
@@ -42,20 +42,20 @@ type IAuthzMiddleware interface {
 }
 
 type AuthzMiddleware struct {
-	grpcClient auth.AuthServiceClient
+	grpcClient proto.AuthServiceClient
 	ctx        context.Context
 }
 
 func NewAuthzMiddleware(grpcCon grpc.ClientConnInterface) IAuthzMiddleware {
 	return &AuthzMiddleware{
-		grpcClient: auth.NewAuthServiceClient(grpcCon),
+		grpcClient: proto.NewAuthServiceClient(grpcCon),
 		ctx:        context.Background(),
 	}
 }
 
 func (a *AuthzMiddleware) IsApplicationAdmin(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authConfig, err := a.grpcClient.GetAuthConfig(a.ctx, &auth.GetAuthConfigData{})
+		authConfig, err := a.grpcClient.GetAuthConfig(a.ctx, &proto.GetAuthConfigData{})
 		if a.checkGetConfigResponse(err, w) != nil {
 			return
 		}
@@ -127,8 +127,8 @@ func (a *AuthzMiddleware) IsRepositoryAdmin(handler http.Handler) http.Handler {
 }
 
 func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
-	isAuthorizedType authEnums.IsAuthorizedType) *auth.IsAuthorizedData {
-	return &auth.IsAuthorizedData{
+	isAuthorizedType authEnums.IsAuthorizedType) *proto.IsAuthorizedData {
+	return &proto.IsAuthorizedData{
 		Token:        a.getJWTToken(r),
 		Type:         isAuthorizedType.ToString(),
 		CompanyID:    chi.URLParam(r, enums.CompanyID),
@@ -136,7 +136,7 @@ func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
 	}
 }
 
-func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *auth.IsAuthorizedResponse,
+func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.IsAuthorizedResponse,
 	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.IsAuthorizedType) error {
 	if err != nil {
 		logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)

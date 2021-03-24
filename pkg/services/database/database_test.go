@@ -40,20 +40,28 @@ func TestNewDatabaseReadAndWrite(t *testing.T) {
 			databaseConfig := &config.Config{}
 			databaseConfig.SetURI("test")
 
-			_, _, _ = NewDatabaseReadAndWrite(databaseConfig)
+			_, _ = NewDatabaseReadAndWrite(databaseConfig)
 		})
 	})
 
 	t.Run("should return error when invalid config", func(t *testing.T) {
-		_, _, err := NewDatabaseReadAndWrite(&config.Config{})
+		_, err := NewDatabaseReadAndWrite(&config.Config{})
 
 		assert.Error(t, err)
 	})
 }
 
+func TestSetConnections(t *testing.T) {
+	t.Run("should success set connections", func(t *testing.T) {
+		database := &database{}
+
+		assert.NotNil(t, database.setConnections())
+	})
+}
+
 func TestMakeConnectionWrite(t *testing.T) {
 	t.Run("should panic when failed to connect to database", func(t *testing.T) {
-		database := &Database{config: &config.Config{}}
+		database := &database{config: &config.Config{}}
 
 		assert.Panics(t, func() {
 			database.makeConnectionWrite()
@@ -63,7 +71,7 @@ func TestMakeConnectionWrite(t *testing.T) {
 
 func TestMakeConnectionRead(t *testing.T) {
 	t.Run("should panic when failed to connect to database", func(t *testing.T) {
-		database := &Database{config: &config.Config{}}
+		database := &database{config: &config.Config{}}
 
 		assert.Panics(t, func() {
 			database.makeConnectionRead()
@@ -79,7 +87,7 @@ func TestSetLogMode(t *testing.T) {
 		databaseConfig := config.NewDatabaseConfig()
 		databaseConfig.SetLogMode(false)
 
-		database := &Database{
+		database := &database{
 			config:          databaseConfig,
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -97,7 +105,7 @@ func TestSetLogMode(t *testing.T) {
 		databaseConfig := config.NewDatabaseConfig()
 		databaseConfig.SetLogMode(true)
 
-		database := &Database{
+		database := &database{
 			config:          databaseConfig,
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -116,7 +124,7 @@ func TestStartTransaction(t *testing.T) {
 
 		mock.ExpectBegin()
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -136,7 +144,7 @@ func TestRollbackTransaction(t *testing.T) {
 		mock.ExpectBegin()
 		mock.ExpectRollback()
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -157,7 +165,7 @@ func TestCommitTransaction(t *testing.T) {
 		mock.ExpectBegin()
 		mock.ExpectCommit()
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -177,7 +185,7 @@ func TestIsAvailable(t *testing.T) {
 
 		mock.ExpectPing()
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -192,7 +200,7 @@ func TestIsAvailable(t *testing.T) {
 
 		mock.ExpectPing().WillReturnError(errors.New("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -205,7 +213,7 @@ func TestIsAvailable(t *testing.T) {
 		db, _, err := sqlmock.New()
 		assert.NoError(t, err)
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: nil,
@@ -222,7 +230,7 @@ func TestIsAvailable(t *testing.T) {
 
 func TestPingDatabase(t *testing.T) {
 	t.Run("should return false when err is not nil", func(t *testing.T) {
-		database := &Database{}
+		database := &database{}
 
 		assert.False(t, database.pingDatabase(nil, errors.New("test")))
 	})
@@ -236,7 +244,7 @@ func TestCreate(t *testing.T) {
 		mock.ExpectExec("INSERT").
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -264,7 +272,7 @@ func TestCreateOrUpdate(t *testing.T) {
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -288,7 +296,7 @@ func TestFind(t *testing.T) {
 			WillReturnRows(sqlmock.NewRows([]string{"text"}).
 				AddRow("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -309,7 +317,7 @@ func TestFind(t *testing.T) {
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnError(errors.New("record not found"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -330,7 +338,7 @@ func TestFind(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnRows(sqlmock.NewRows([]string{"text"}))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -351,7 +359,7 @@ func TestFind(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnError(errors.New("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -375,7 +383,7 @@ func TestUpdate(t *testing.T) {
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -398,7 +406,7 @@ func TestDelete(t *testing.T) {
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -422,7 +430,7 @@ func TestFirst(t *testing.T) {
 			WillReturnRows(sqlmock.NewRows([]string{"text"}).
 				AddRow("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -443,7 +451,7 @@ func TestFirst(t *testing.T) {
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnError(errors.New("record not found"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -464,7 +472,7 @@ func TestFirst(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnRows(sqlmock.NewRows([]string{"text"}))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -485,7 +493,7 @@ func TestFirst(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnError(errors.New("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -509,7 +517,7 @@ func TestRaw(t *testing.T) {
 			WillReturnRows(sqlmock.NewRows([]string{"text"}).
 				AddRow("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -529,7 +537,7 @@ func TestRaw(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnError(errors.New("record not found"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -550,7 +558,7 @@ func TestRaw(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnRows(sqlmock.NewRows([]string{"text"}))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),
@@ -571,7 +579,7 @@ func TestRaw(t *testing.T) {
 		mock.ExpectQuery("SELECT").
 			WillReturnError(errors.New("test"))
 
-		database := &Database{
+		database := &database{
 			config:          config.NewDatabaseConfig(),
 			connectionRead:  getMockedConnection(db),
 			connectionWrite: getMockedConnection(db),

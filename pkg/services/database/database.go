@@ -14,29 +14,43 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
-type Database struct {
-	connectionWrite *gorm.DB
-	connectionRead  *gorm.DB
-	config          databaseConfig.IConfig
-}
-
-func NewDatabaseReadAndWrite(config databaseConfig.IConfig) (IDatabaseRead, IDatabaseWrite, error) {
-	if err := config.Validate(); err != nil {
-		return nil, nil, err
+type (
+	database struct {
+		connectionWrite *gorm.DB
+		connectionRead  *gorm.DB
+		config          databaseConfig.IConfig
 	}
 
-	database := &Database{config: config}
+	Connection struct {
+		Read  IDatabaseRead
+		Write IDatabaseWrite
+	}
+)
+
+func NewDatabaseReadAndWrite(config databaseConfig.IConfig) (*Connection, error) {
+	if err := config.Validate(); err != nil {
+		return nil, err
+	}
+
+	database := &database{config: config}
 	database.makeConnection()
 	database.setLogMode()
-	return database, database, nil
+	return database.setConnections(), nil
 }
 
-func (d *Database) makeConnection() {
+func (d *database) setConnections() *Connection {
+	return &Connection{
+		Read:  d,
+		Write: d,
+	}
+}
+
+func (d *database) makeConnection() {
 	d.makeConnectionWrite()
 	d.makeConnectionRead()
 }
 
-func (d *Database) makeConnectionWrite() {
+func (d *database) makeConnectionWrite() {
 	connectionWrite, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
 		logger.LogPanic(enums.MessageFailedToConnectToDatabase, err)
@@ -45,7 +59,7 @@ func (d *Database) makeConnectionWrite() {
 	d.connectionWrite = connectionWrite
 }
 
-func (d *Database) makeConnectionRead() {
+func (d *database) makeConnectionRead() {
 	connectionRead, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
 		logger.LogPanic(enums.MessageFailedToConnectToDatabase, err)
@@ -54,7 +68,7 @@ func (d *Database) makeConnectionRead() {
 	d.connectionRead = connectionRead
 }
 
-func (d *Database) setLogMode() {
+func (d *database) setLogMode() {
 	if d.config.GetLogMode() {
 		d.connectionWrite.Logger = d.connectionWrite.Logger.LogMode(gormLogger.Info)
 		d.connectionRead.Logger = d.connectionRead.Logger.LogMode(gormLogger.Info)
@@ -65,23 +79,23 @@ func (d *Database) setLogMode() {
 	d.connectionRead.Logger = d.connectionRead.Logger.LogMode(gormLogger.Error)
 }
 
-func (d *Database) StartTransaction() IDatabaseWrite {
-	return &Database{
+func (d *database) StartTransaction() IDatabaseWrite {
+	return &database{
 		connectionWrite: d.connectionWrite.Begin(),
 	}
 }
 
-func (d *Database) RollbackTransaction() response.IResponse {
+func (d *database) RollbackTransaction() response.IResponse {
 	result := d.connectionWrite.Rollback()
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
-func (d *Database) CommitTransaction() response.IResponse {
+func (d *database) CommitTransaction() response.IResponse {
 	result := d.connectionWrite.Commit()
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
-func (d *Database) IsAvailable() bool {
+func (d *database) IsAvailable() bool {
 	if d.connectionWrite == nil || d.connectionRead == nil {
 		return false
 	}
@@ -93,7 +107,7 @@ func (d *Database) IsAvailable() bool {
 	return d.pingDatabase(d.connectionRead.DB())
 }
 
-func (d *Database) pingDatabase(db *sql.DB, err error) bool {
+func (d *database) pingDatabase(db *sql.DB, err error) bool {
 	if err != nil {
 		logger.LogError(enums.MessageFailedToVerifyIsAvailable, err)
 		return false
@@ -102,19 +116,19 @@ func (d *Database) pingDatabase(db *sql.DB, err error) bool {
 	return db.Ping() == nil
 }
 
-func (d *Database) Create(data interface{}, table string) response.IResponse {
+func (d *database) Create(data interface{}, table string) response.IResponse {
 	result := d.connectionWrite.Table(table).Create(data)
 
 	return response.NewResponse(result.RowsAffected, result.Error, data)
 }
 
-func (d *Database) CreateOrUpdate(entity interface{}, where map[string]interface{}, table string) response.IResponse {
+func (d *database) CreateOrUpdate(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionWrite.Table(table).Where(where).Save(entity)
 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
-func (d *Database) Find(entity interface{}, where map[string]interface{}, table string) response.IResponse {
+func (d *database) Find(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).Find(entity)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
@@ -123,19 +137,19 @@ func (d *Database) Find(entity interface{}, where map[string]interface{}, table 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
-func (d *Database) Update(entity interface{}, where map[string]interface{}, table string) response.IResponse {
+func (d *database) Update(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionWrite.Table(table).Where(where).Updates(entity)
 
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
-func (d *Database) Delete(where map[string]interface{}, table string) response.IResponse {
+func (d *database) Delete(where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionWrite.Table(table).Where(where).Delete(nil)
 
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
-func (d *Database) First(entity interface{}, where map[string]interface{}, table string) response.IResponse {
+func (d *database) First(entity interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).First(entity)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
@@ -144,7 +158,7 @@ func (d *Database) First(entity interface{}, where map[string]interface{}, table
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
-func (d *Database) Raw(rawSQL string, entity interface{}) response.IResponse {
+func (d *database) Raw(rawSQL string, entity interface{}) response.IResponse {
 	result := d.connectionRead.Raw(rawSQL).Find(entity)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
@@ -153,7 +167,7 @@ func (d *Database) Raw(rawSQL string, entity interface{}) response.IResponse {
 	return response.NewResponse(result.RowsAffected, result.Error, entity)
 }
 
-func (d *Database) verifyNotFoundError(result *gorm.DB) error {
+func (d *database) verifyNotFoundError(result *gorm.DB) error {
 	if result.Error != nil {
 		if strings.EqualFold(result.Error.Error(), "record not found") {
 			return enums.ErrorNotFoundRecords
