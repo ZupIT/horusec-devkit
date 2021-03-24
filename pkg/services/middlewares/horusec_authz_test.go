@@ -24,7 +24,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
-	authGRPC "github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth"
+	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth/proto"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/jwt/entities"
 )
@@ -52,9 +52,9 @@ func TestNewAuthzMiddleware(t *testing.T) {
 
 func TestIsCompanyMember(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -74,10 +74,10 @@ func TestIsCompanyMember(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -97,9 +97,9 @@ func TestIsCompanyMember(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -119,9 +119,9 @@ func TestIsCompanyMember(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -143,9 +143,9 @@ func TestIsCompanyMember(t *testing.T) {
 
 func TestIsCompanyAdmin(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -165,10 +165,10 @@ func TestIsCompanyAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -188,9 +188,9 @@ func TestIsCompanyAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -210,9 +210,9 @@ func TestIsCompanyAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -234,9 +234,9 @@ func TestIsCompanyAdmin(t *testing.T) {
 
 func TestIsRepositoryMember(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -256,10 +256,10 @@ func TestIsRepositoryMember(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -279,9 +279,9 @@ func TestIsRepositoryMember(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -301,9 +301,9 @@ func TestIsRepositoryMember(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -325,9 +325,9 @@ func TestIsRepositoryMember(t *testing.T) {
 
 func TestIsRepositorySupervisor(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -347,10 +347,10 @@ func TestIsRepositorySupervisor(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -370,9 +370,9 @@ func TestIsRepositorySupervisor(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -392,9 +392,9 @@ func TestIsRepositorySupervisor(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -416,9 +416,9 @@ func TestIsRepositorySupervisor(t *testing.T) {
 
 func TestIsRepositoryAdmin(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -438,10 +438,10 @@ func TestIsRepositoryAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -461,9 +461,9 @@ func TestIsRepositoryAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -483,9 +483,9 @@ func TestIsRepositoryAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
@@ -507,10 +507,10 @@ func TestIsRepositoryAdmin(t *testing.T) {
 
 func TestIsApplicationAdmin(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("IsAuthorized").Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: true}, nil)
-		grpcMock.On("GetAuthConfig").Return(&authGRPC.
+		grpcMock.On("IsAuthorized").Return(&proto.IsAuthorizedResponse{IsAuthorized: true}, nil)
+		grpcMock.On("GetAuthConfig").Return(&proto.
 			GetAuthConfigResponse{AuthType: "test", EnableApplicationAdmin: true}, nil)
 
 		middleware := AuthzMiddleware{
@@ -531,11 +531,11 @@ func TestIsApplicationAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to verify request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
-		grpcMock.On("GetAuthConfig").Return(&authGRPC.
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, errors.New("test"))
+		grpcMock.On("GetAuthConfig").Return(&proto.
 			GetAuthConfigResponse{AuthType: "test", EnableApplicationAdmin: true}, nil)
 
 		middleware := AuthzMiddleware{
@@ -556,11 +556,11 @@ func TestIsApplicationAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
-		grpcMock.On("GetAuthConfig").Return(&authGRPC.
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("GetAuthConfig").Return(&proto.
 			GetAuthConfigResponse{AuthType: "test", EnableApplicationAdmin: true}, nil)
 
 		middleware := AuthzMiddleware{
@@ -581,11 +581,11 @@ func TestIsApplicationAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 401 unauthorized request with invalid token", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
 		grpcMock.On("IsAuthorized").
-			Return(&authGRPC.IsAuthorizedResponse{IsAuthorized: false}, nil)
-		grpcMock.On("GetAuthConfig").Return(&authGRPC.
+			Return(&proto.IsAuthorizedResponse{IsAuthorized: false}, nil)
+		grpcMock.On("GetAuthConfig").Return(&proto.
 			GetAuthConfigResponse{AuthType: "test", EnableApplicationAdmin: true}, nil)
 
 		middleware := AuthzMiddleware{
@@ -606,9 +606,9 @@ func TestIsApplicationAdmin(t *testing.T) {
 	})
 
 	t.Run("should return 500 when failed to get auth config", func(t *testing.T) {
-		grpcMock := &authGRPC.Mock{}
+		grpcMock := &proto.Mock{}
 
-		grpcMock.On("GetAuthConfig").Return(&authGRPC.GetAuthConfigResponse{}, errors.New("test"))
+		grpcMock.On("GetAuthConfig").Return(&proto.GetAuthConfigResponse{}, errors.New("test"))
 
 		middleware := AuthzMiddleware{
 			grpcClient: grpcMock,
