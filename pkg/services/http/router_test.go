@@ -44,3 +44,21 @@ func TestSetTimeout(t *testing.T) {
 		assert.NotNil(t, router.Route("/test", nil))
 	})
 }
+
+func TestListenAndServe(t *testing.T) {
+	t.Run("should panic when failed to serve", func(t *testing.T) {
+		router := NewHTTPRouter(&cors.Options{}, "test")
+
+		assert.Panics(t, func() {
+			router.ListenAndServe()
+		})
+	})
+}
+
+func TestGetPort(t *testing.T) {
+	t.Run("should success get router server port", func(t *testing.T) {
+		router := NewHTTPRouter(&cors.Options{}, "8000")
+
+		assert.Equal(t, "8000", router.GetPort())
+	})
+}
