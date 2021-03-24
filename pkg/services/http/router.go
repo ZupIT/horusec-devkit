@@ -20,15 +20,14 @@ import (
 	"net/http"
 	"time"
 
-
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 	"github.com/ZupIT/horusec-devkit/pkg/services/http/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 type IRouter interface {
