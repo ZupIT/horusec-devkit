@@ -42,6 +42,10 @@ func NewBroker(config brokerConfig.IConfig) (IBroker, error) {
 		return nil, err
 	}
 
+	if !config.GetEnableBroker() {
+		return &Broker{}, nil
+	}
+
 	broker := &Broker{config: config}
 	if err := broker.setupConnection(); err != nil {
 		return nil, errors.Wrap(err, enums.MessageFailedConnectBroker)
