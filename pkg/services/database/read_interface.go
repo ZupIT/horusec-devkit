@@ -6,7 +6,7 @@ import (
 
 type IDatabaseRead interface {
 	IsAvailable() bool
-	Find(entity interface{}, where map[string]interface{}, table string) response.IResponse
-	First(entity interface{}, where map[string]interface{}, table string) response.IResponse
-	Raw(rawSQL string, entity interface{}) response.IResponse
+	Find(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
+	First(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
+	Raw(rawSQL string, entityPointer interface{}) response.IResponse
 }

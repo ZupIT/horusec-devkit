@@ -116,31 +116,32 @@ func (d *database) pingDatabase(db *sql.DB, err error) bool {
 	return db.Ping() == nil
 }
 
-func (d *database) Create(data interface{}, table string) response.IResponse {
-	result := d.connectionWrite.Table(table).Create(data)
+func (d *database) Create(entityPointer interface{}, table string) response.IResponse {
+	result := d.connectionWrite.Table(table).Create(entityPointer)
 
-	return response.NewResponse(result.RowsAffected, result.Error, data)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
-func (d *database) CreateOrUpdate(entity interface{}, where map[string]interface{}, table string) response.IResponse {
-	result := d.connectionWrite.Table(table).Where(where).Save(entity)
+func (d *database) CreateOrUpdate(entityPointer interface{}, where map[string]interface{},
+	table string) response.IResponse {
+	result := d.connectionWrite.Table(table).Where(where).Save(entityPointer)
 
-	return response.NewResponse(result.RowsAffected, result.Error, entity)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
-func (d *database) Find(entity interface{}, where map[string]interface{}, table string) response.IResponse {
-	result := d.connectionRead.Table(table).Where(where).Find(entity)
+func (d *database) Find(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse {
+	result := d.connectionRead.Table(table).Where(where).Find(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
 	}
 
-	return response.NewResponse(result.RowsAffected, result.Error, entity)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
-func (d *database) Update(entity interface{}, where map[string]interface{}, table string) response.IResponse {
-	result := d.connectionWrite.Table(table).Where(where).Updates(entity)
+func (d *database) Update(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse {
+	result := d.connectionWrite.Table(table).Where(where).Updates(entityPointer)
 
-	return response.NewResponse(result.RowsAffected, result.Error, entity)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
 func (d *database) Delete(where map[string]interface{}, table string) response.IResponse {
@@ -149,22 +150,22 @@ func (d *database) Delete(where map[string]interface{}, table string) response.I
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
-func (d *database) First(entity interface{}, where map[string]interface{}, table string) response.IResponse {
-	result := d.connectionRead.Table(table).Where(where).First(entity)
+func (d *database) First(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse {
+	result := d.connectionRead.Table(table).Where(where).First(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
 	}
 
-	return response.NewResponse(result.RowsAffected, result.Error, entity)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
-func (d *database) Raw(rawSQL string, entity interface{}) response.IResponse {
-	result := d.connectionRead.Raw(rawSQL).Find(entity)
+func (d *database) Raw(rawSQL string, entityPointer interface{}) response.IResponse {
+	result := d.connectionRead.Raw(rawSQL).Find(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
 	}
 
-	return response.NewResponse(result.RowsAffected, result.Error, entity)
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
 func (d *database) verifyNotFoundError(result *gorm.DB) error {
