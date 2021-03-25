@@ -52,6 +52,15 @@ func TestNewBroker(t *testing.T) {
 		assert.Nil(t, broker)
 		assert.Error(t, err)
 	})
+
+	t.Run("Should return empty broker when broker is not enable", func(t *testing.T) {
+		configBroker := config.NewBrokerConfig()
+		configBroker.SetEnableBroker(false)
+		broker, err := NewBroker(configBroker)
+
+		assert.Empty(t, broker)
+		assert.NoError(t, err)
+	})
 }
 
 func TestSetupChannel(t *testing.T) {

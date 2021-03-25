@@ -15,6 +15,7 @@
 package logger
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -155,4 +156,8 @@ func LogDebugJSON(message string, content interface{}) {
 	}
 
 	LogDebugWithLevel(message, fmt.Sprintf("%v", content))
+}
+
+func LogSetOutput(stdout *bytes.Buffer) {
+	logrus.SetOutput(stdout)
 }
