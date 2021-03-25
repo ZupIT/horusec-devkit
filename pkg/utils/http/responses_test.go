@@ -17,13 +17,14 @@ package http
 import (
 	"bytes"
 	"errors"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/http/enums"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/http/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 func TestStatusOK(t *testing.T) {
