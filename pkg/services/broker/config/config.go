@@ -33,8 +33,6 @@ type IConfig interface {
 	SetUsername(username string)
 	GetPassword() string
 	SetPassword(password string)
-	GetEnableBroker() bool
-	SetEnableBroker(enabled bool)
 	GetConnectionString() string
 }
 
@@ -43,7 +41,6 @@ type Config struct {
 	port     string
 	username string
 	password string
-	enabled  bool
 }
 
 func NewBrokerConfig() IConfig {
@@ -52,7 +49,6 @@ func NewBrokerConfig() IConfig {
 	config.SetPort(env.GetEnvOrDefault(enums.EnvBrokerPort, "5672"))
 	config.SetUsername(env.GetEnvOrDefault(enums.EnvBrokerUsername, "guest"))
 	config.SetPassword(env.GetEnvOrDefault(enums.EnvBrokerPassword, "guest"))
-	config.SetEnableBroker(env.GetEnvOrDefaultBool(enums.EnvBrokerEnabled, true))
 
 	return config
 }
@@ -98,14 +94,6 @@ func (c *Config) GetPassword() string {
 
 func (c *Config) SetPassword(password string) {
 	c.password = password
-}
-
-func (c *Config) GetEnableBroker() bool {
-	return c.enabled
-}
-
-func (c *Config) SetEnableBroker(enabled bool) {
-	c.enabled = enabled
 }
 
 func (c *Config) GetConnectionString() string {

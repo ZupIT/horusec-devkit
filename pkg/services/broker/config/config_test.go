@@ -116,12 +116,3 @@ func TestGetAndSetHost(t *testing.T) {
 		assert.Equal(t, "test-host", config.GetHost())
 	})
 }
-
-func TestGetAndSetEnabled(t *testing.T) {
-	t.Run("should success set and get broker enabled", func(t *testing.T) {
-		config := NewBrokerConfig()
-		config.SetEnableBroker(false)
-
-		assert.False(t, config.GetEnableBroker())
-	})
-}
