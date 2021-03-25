@@ -19,7 +19,7 @@ lint:
 
 coverage:
 	chmod +x scripts/coverage.sh
-	scripts/coverage.sh 99 "."
+	scripts/coverage.sh 99.2 "."
 
 test:
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short

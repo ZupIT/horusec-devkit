@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	IsAuthorized(ctx context.Context, in *IsAuthorizedData, opts ...grpc.CallOption) (*IsAuthorizedResponse, error)
-	GetAccountID(ctx context.Context, in *GetAccountData, opts ...grpc.CallOption) (*GetAccountDataResponse, error)
+	GetAccountInfo(ctx context.Context, in *GetAccountData, opts ...grpc.CallOption) (*GetAccountDataResponse, error)
 	GetAuthConfig(ctx context.Context, in *GetAuthConfigData, opts ...grpc.CallOption) (*GetAuthConfigResponse, error)
 }
 
@@ -40,9 +40,9 @@ func (c *authServiceClient) IsAuthorized(ctx context.Context, in *IsAuthorizedDa
 	return out, nil
 }
 
-func (c *authServiceClient) GetAccountID(ctx context.Context, in *GetAccountData, opts ...grpc.CallOption) (*GetAccountDataResponse, error) {
+func (c *authServiceClient) GetAccountInfo(ctx context.Context, in *GetAccountData, opts ...grpc.CallOption) (*GetAccountDataResponse, error) {
 	out := new(GetAccountDataResponse)
-	err := c.cc.Invoke(ctx, "/grpc.AuthService/GetAccountID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.AuthService/GetAccountInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (c *authServiceClient) GetAuthConfig(ctx context.Context, in *GetAuthConfig
 // for forward compatibility
 type AuthServiceServer interface {
 	IsAuthorized(context.Context, *IsAuthorizedData) (*IsAuthorizedResponse, error)
-	GetAccountID(context.Context, *GetAccountData) (*GetAccountDataResponse, error)
+	GetAccountInfo(context.Context, *GetAccountData) (*GetAccountDataResponse, error)
 	GetAuthConfig(context.Context, *GetAuthConfigData) (*GetAuthConfigResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
@@ -75,8 +75,8 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) IsAuthorized(context.Context, *IsAuthorizedData) (*IsAuthorizedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorized not implemented")
 }
-func (UnimplementedAuthServiceServer) GetAccountID(context.Context, *GetAccountData) (*GetAccountDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAccountID not implemented")
+func (UnimplementedAuthServiceServer) GetAccountInfo(context.Context, *GetAccountData) (*GetAccountDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccountInfo not implemented")
 }
 func (UnimplementedAuthServiceServer) GetAuthConfig(context.Context, *GetAuthConfigData) (*GetAuthConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthConfig not implemented")
@@ -112,20 +112,20 @@ func _AuthService_IsAuthorized_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_GetAccountID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_GetAccountInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetAccountData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).GetAccountID(ctx, in)
+		return srv.(AuthServiceServer).GetAccountInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.AuthService/GetAccountID",
+		FullMethod: "/grpc.AuthService/GetAccountInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetAccountID(ctx, req.(*GetAccountData))
+		return srv.(AuthServiceServer).GetAccountInfo(ctx, req.(*GetAccountData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -157,8 +157,8 @@ var _AuthService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_IsAuthorized_Handler,
 		},
 		{
-			MethodName: "GetAccountID",
-			Handler:    _AuthService_GetAccountID_Handler,
+			MethodName: "GetAccountInfo",
+			Handler:    _AuthService_GetAccountInfo_Handler,
 		},
 		{
 			MethodName: "GetAuthConfig",

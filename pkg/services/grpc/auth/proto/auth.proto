@@ -6,7 +6,7 @@ option go_package = "pkg/services/grpc/auth/proto";
 
 service AuthService {
   rpc IsAuthorized (IsAuthorizedData) returns (IsAuthorizedResponse) {}
-  rpc GetAccountID (GetAccountData) returns (GetAccountDataResponse) {}
+  rpc GetAccountInfo (GetAccountData) returns (GetAccountDataResponse) {}
   rpc GetAuthConfig (GetAuthConfigData) returns (GetAuthConfigResponse) {}
 }
 
@@ -35,5 +35,5 @@ message GetAuthConfigData {}
 message GetAuthConfigResponse {
   bool enableApplicationAdmin = 1;
   string authType = 2;
-  bool disabledBroker = 3;
+  bool disableBroker = 3;
 }
