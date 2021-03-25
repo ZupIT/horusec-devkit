@@ -15,6 +15,7 @@
 package logger
 
 import (
+	"bytes"
 	"errors"
 	"testing"
 
@@ -168,5 +169,18 @@ func TestLogDebugJSON(t *testing.T) {
 
 	t.Run("should log json string when failed to marshal and not panic", func(t *testing.T) {
 		assert.NotPanics(t, func() { LogDebugJSON("test", make(chan int)) })
+	})
+}
+
+func TestLogSetOutput(t *testing.T) {
+	t.Run("Should set output instance and get on read output", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		LogSetOutput(output)
+		assert.Empty(t, output.String())
+
+		const textLogged = "Some aleatory text logged"
+		LogInfo(textLogged)
+
+		assert.Contains(t, output.String(), textLogged)
 	})
 }
