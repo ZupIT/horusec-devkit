@@ -1,0 +1,7 @@
+BEGIN;
+
+DROP TABLE IF EXISTS workspaces CASCADE;
+
+DROP TABLE IF EXISTS account_workspace CASCADE;
+
+COMMIT;
