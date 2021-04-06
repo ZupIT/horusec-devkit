@@ -160,7 +160,7 @@ func (d *database) First(entityPointer interface{}, where map[string]interface{}
 }
 
 func (d *database) Raw(rawSQL string, entityPointer interface{}, values ...interface{}) response.IResponse {
-	result := d.connectionRead.Raw(rawSQL, values).Find(entityPointer)
+	result := d.connectionRead.Raw(rawSQL, values).Scan(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
 	}
