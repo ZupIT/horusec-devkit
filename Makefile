@@ -5,6 +5,8 @@ GOLANG_CI_LINT ?= ./bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-devkit
 HORUSEC ?= horusec
+COMPOSE_FILE_NAME ?= docker-compose.yaml
+DOCKER_COMPOSE ?= docker-compose
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -39,5 +41,23 @@ security:
     else
 		$(HORUSEC) start -p="./" -e="true"
     endif
+
+compose: compose-down compose-up
+
+compose-down:
+	$(DOCKER_COMPOSE) -f deployments/$(COMPOSE_FILE_NAME) down -v
+
+compose-up:
+	$(DOCKER_COMPOSE) -f deployments/$(COMPOSE_FILE_NAME) up -d --build --force-recreate
+
+migrate: migrate-drop migrate-up
+
+migrate-up:
+	chmod +x ./scripts/migration-run.sh
+	./scripts/migration-run.sh up
+
+migrate-drop:
+	chmod +x ./scripts/migration-run.sh
+	./scripts/migration-run.sh drop -f
 
 pipeline: fmt fix-imports lint test coverage security
