@@ -159,8 +159,8 @@ func (d *database) First(entityPointer interface{}, where map[string]interface{}
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
 
-func (d *database) Raw(rawSQL string, entityPointer interface{}) response.IResponse {
-	result := d.connectionRead.Raw(rawSQL).Find(entityPointer)
+func (d *database) Raw(rawSQL string, entityPointer interface{}, values ...interface{}) response.IResponse {
+	result := d.connectionRead.Raw(rawSQL, values).Find(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
 		return response.NewResponse(result.RowsAffected, err, nil)
 	}
