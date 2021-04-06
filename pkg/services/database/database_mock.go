@@ -26,7 +26,7 @@ func (m *Mock) First(_ interface{}, _ map[string]interface{}, _ string) response
 	return args.Get(0).(response.IResponse)
 }
 
-func (m *Mock) Raw(_ string, _ interface{}) response.IResponse {
+func (m *Mock) Raw(_ string, _ interface{}, _ ...interface{}) response.IResponse {
 	args := m.MethodCalled("Raw")
 	return args.Get(0).(response.IResponse)
 }

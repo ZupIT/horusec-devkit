@@ -4,8 +4,8 @@ type IsAuthorizedType string
 
 const (
 	ApplicationAdmin     IsAuthorizedType = "IsApplicationAdmin"
-	CompanyAdmin         IsAuthorizedType = "IsCompanyAdmin"
-	CompanyMember        IsAuthorizedType = "IsCompanyMember"
+	WorkspaceAdmin       IsAuthorizedType = "IsWorkspaceAdmin"
+	WorkspaceMember      IsAuthorizedType = "IsWorkspaceMember"
 	RepositoryAdmin      IsAuthorizedType = "IsRepositoryAdmin"
 	RepositorySupervisor IsAuthorizedType = "IsRepositorySupervisor"
 	RepositoryMember     IsAuthorizedType = "IsRepositoryMember"
@@ -18,8 +18,8 @@ func (i IsAuthorizedType) ToString() string {
 func Values() []IsAuthorizedType {
 	return []IsAuthorizedType{
 		ApplicationAdmin,
-		CompanyAdmin,
-		CompanyMember,
+		WorkspaceAdmin,
+		WorkspaceMember,
 		RepositoryAdmin,
 		RepositorySupervisor,
 		RepositoryMember,

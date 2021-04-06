@@ -1,16 +1,19 @@
 package parser
 
 import (
+	"errors"
 	"io/ioutil"
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/ZupIT/horusec-devkit/pkg/entities/cli"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/parser/enums"
 )
 
-func TestNewAccountCompanyFromReadCLoser(t *testing.T) {
+func TestParseBodyToEntity(t *testing.T) {
 	t.Run("should success parse body to entity with no errors", func(t *testing.T) {
 		analysisData := cli.AnalysisData{RepositoryName: "test"}
 		response := &cli.AnalysisData{}
@@ -32,6 +35,20 @@ func TestNewAccountCompanyFromReadCLoser(t *testing.T) {
 	})
 }
 
+func TestCheckParseBodyToEntityError(t *testing.T) {
+	t.Run("should success return eof error", func(t *testing.T) {
+		assert.Equal(t, enums.ErrorBodyEmpty, checkParseBodyToEntityError(errors.New("eof")))
+	})
+
+	t.Run("should success return eof error", func(t *testing.T) {
+		assert.Equal(t, enums.ErrorBodyInvalid, checkParseBodyToEntityError(errors.New("invalid character")))
+	})
+
+	t.Run("should success return generic error", func(t *testing.T) {
+		assert.Equal(t, errors.New("test"), checkParseBodyToEntityError(errors.New("test")))
+	})
+}
+
 func TestParseEntityToIOReadCloser(t *testing.T) {
 	t.Run("should success parse entity to io read closer", func(t *testing.T) {
 		entity := &cli.AnalysisData{RepositoryName: "test"}
@@ -45,5 +62,13 @@ func TestParseEntityToIOReadCloser(t *testing.T) {
 		bytes, err := ParseEntityToIOReadCloser(make(chan string))
 		assert.Error(t, err)
 		assert.Nil(t, bytes)
+	})
+}
+
+func TestParseStringToUUID(t *testing.T) {
+	t.Run("should success parse string to uuid", func(t *testing.T) {
+		id := uuid.New()
+
+		assert.Equal(t, id, ParseStringToUUID(id.String()))
 	})
 }

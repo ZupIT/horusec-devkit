@@ -22,6 +22,8 @@ go test -v -coverpkg "$PROJECT/..." -coverprofile coverage.out "$PROJECT/..."
 sed -i '/mock.go/d' coverage.out
 sed -i '/pb.go/d' coverage.out
 sed -i '/wire_gen.go/d' coverage.out
+sed -i '/wire.go/d' coverage.out
+sed -i '/docs.go/d' coverage.out
 
 COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}')
 COVERAGE=${COVERAGE%\%}

@@ -13,7 +13,7 @@ service AuthService {
 message IsAuthorizedData {
   string token = 1;
   string type = 2;
-  string companyID = 3;
+  string workspaceID = 3;
   string repositoryID = 4;
 }
 

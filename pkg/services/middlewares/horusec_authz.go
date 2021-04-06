@@ -34,8 +34,8 @@ import (
 
 type IAuthzMiddleware interface {
 	IsApplicationAdmin(next http.Handler) http.Handler
-	IsCompanyMember(next http.Handler) http.Handler
-	IsCompanyAdmin(next http.Handler) http.Handler
+	IsWorkspaceMember(next http.Handler) http.Handler
+	IsWorkspaceAdmin(next http.Handler) http.Handler
 	IsRepositoryMember(next http.Handler) http.Handler
 	IsRepositoryAdmin(next http.Handler) http.Handler
 	IsRepositorySupervisor(next http.Handler) http.Handler
@@ -71,10 +71,10 @@ func (a *AuthzMiddleware) IsApplicationAdmin(handler http.Handler) http.Handler 
 	})
 }
 
-func (a *AuthzMiddleware) IsCompanyMember(handler http.Handler) http.Handler {
+func (a *AuthzMiddleware) IsWorkspaceMember(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.CompanyMember))
-		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.CompanyMember) != nil {
+		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.WorkspaceMember))
+		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.WorkspaceMember) != nil {
 			return
 		}
 
@@ -82,10 +82,10 @@ func (a *AuthzMiddleware) IsCompanyMember(handler http.Handler) http.Handler {
 	})
 }
 
-func (a *AuthzMiddleware) IsCompanyAdmin(handler http.Handler) http.Handler {
+func (a *AuthzMiddleware) IsWorkspaceAdmin(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.CompanyAdmin))
-		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.CompanyAdmin) != nil {
+		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.WorkspaceAdmin))
+		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.WorkspaceAdmin) != nil {
 			return
 		}
 
@@ -131,7 +131,7 @@ func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
 	return &proto.IsAuthorizedData{
 		Token:        a.getJWTToken(r),
 		Type:         isAuthorizedType.ToString(),
-		CompanyID:    chi.URLParam(r, enums.CompanyID),
+		WorkspaceID:  chi.URLParam(r, enums.WorkspaceID),
 		RepositoryID: chi.URLParam(r, enums.RepositoryID),
 	}
 }

@@ -1,6 +1,6 @@
 package enums
 
 const (
-	CompanyID    = "companyID"
+	WorkspaceID  = "workspaceID"
 	RepositoryID = "repositoryID"
 )

@@ -2,10 +2,13 @@ package parser
 
 import (
 	"encoding/json"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/parser/enums"
 	"io"
 	"io/ioutil"
 	"strings"
+
+	"github.com/google/uuid"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/parser/enums"
 )
 
 func ParseBodyToEntity(body io.ReadCloser, entityPointer interface{}) error {
@@ -13,15 +16,22 @@ func ParseBodyToEntity(body io.ReadCloser, entityPointer interface{}) error {
 	_ = body.Close()
 
 	if err != nil {
-		if strings.EqualFold(err.Error(), "eof") {
-			return enums.ErrorBodyEmpty
-		}
-		if strings.Contains(err.Error(), "invalid character") {
-			return enums.ErrorBodyInvalid
-		}
+		return checkParseBodyToEntityError(err)
 	}
 
 	return nil
+}
+
+func checkParseBodyToEntityError(err error) error {
+	if strings.EqualFold(err.Error(), enums.EOF) {
+		return enums.ErrorBodyEmpty
+	}
+
+	if strings.Contains(err.Error(), enums.InvalidCharacter) {
+		return enums.ErrorBodyInvalid
+	}
+
+	return err
 }
 
 func ParseEntityToIOReadCloser(entity interface{}) (io.ReadCloser, error) {
@@ -31,4 +41,9 @@ func ParseEntityToIOReadCloser(entity interface{}) (io.ReadCloser, error) {
 	}
 
 	return ioutil.NopCloser(strings.NewReader(string(bytes))), nil
+}
+
+func ParseStringToUUID(id string) uuid.UUID {
+	parsedID, _ := uuid.Parse(id)
+	return parsedID
 }
