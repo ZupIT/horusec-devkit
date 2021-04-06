@@ -14,10 +14,12 @@ func (m *Mock) IsBrokerDisabled() bool {
 	args := m.MethodCalled("IsBrokerDisabled")
 	return args.Get(0).(bool)
 }
+
 func (m *Mock) IsApplicationAdmEnabled() bool {
 	args := m.MethodCalled("IsApplicationAdmEnabled")
 	return args.Get(0).(bool)
 }
+
 func (m *Mock) GetAuthorizationType() auth.AuthorizationType {
 	args := m.MethodCalled("GetAuthorizationType")
 	return args.Get(0).(auth.AuthorizationType)
