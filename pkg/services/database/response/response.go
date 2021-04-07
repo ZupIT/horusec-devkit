@@ -14,6 +14,8 @@
 
 package response
 
+import "github.com/ZupIT/horusec-devkit/pkg/services/database/enums"
+
 type IResponse interface {
 	GetRowsAffected() int
 	GetData() interface{}
@@ -43,5 +45,13 @@ func (r *Response) GetData() interface{} {
 }
 
 func (r *Response) GetError() error {
+	return r.err
+}
+
+func (r *Response) GetErrorExceptNotFound() error {
+	if r.err != nil && r.err == enums.ErrorNotFoundRecords {
+		return nil
+	}
+
 	return r.err
 }

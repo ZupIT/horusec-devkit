@@ -19,6 +19,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/database/enums"
 )
 
 func TestNewResponse(t *testing.T) {
@@ -52,5 +54,19 @@ func TestGetData(t *testing.T) {
 		databaseResponse := &Response{data: "test"}
 
 		assert.Equal(t, "test", databaseResponse.GetData())
+	})
+}
+
+func TestGetErrorExceptNotFound(t *testing.T) {
+	t.Run("should return nil when not found error", func(t *testing.T) {
+		databaseResponse := &Response{err: enums.ErrorNotFoundRecords}
+
+		assert.NoError(t, databaseResponse.GetErrorExceptNotFound())
+	})
+
+	t.Run("should return error when it is something different than not found", func(t *testing.T) {
+		databaseResponse := &Response{err: errors.New("test")}
+
+		assert.Error(t, databaseResponse.GetErrorExceptNotFound())
 	})
 }
