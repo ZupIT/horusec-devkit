@@ -20,6 +20,7 @@ type IResponse interface {
 	GetRowsAffected() int
 	GetData() interface{}
 	GetError() error
+	GetErrorExceptNotFound() error
 }
 
 type Response struct {
