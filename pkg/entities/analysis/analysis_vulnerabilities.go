@@ -22,11 +22,12 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/entities/vulnerability"
 )
 
+//nolint
 type AnalysisVulnerabilities struct {
 	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id"`
 	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id"`
 	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at"`
-	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"` //nolint:lll // notations need more than 130 characters
+	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"`
 }
 
 func (a *AnalysisVulnerabilities) GetTable() string {
