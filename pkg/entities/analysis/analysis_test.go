@@ -108,7 +108,7 @@ func TestSetAllAnalysisVulnerabilitiesDefaultData(t *testing.T) {
 	t.Run("should success set data for each vulnerability", func(t *testing.T) {
 		analysis := &Analysis{
 			ID: uuid.New(),
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},
@@ -190,7 +190,7 @@ func TestHasErrors(t *testing.T) {
 func TestGetTotalVulnerabilities(t *testing.T) {
 	t.Run("should return a total of 2 vulnerabilities", func(t *testing.T) {
 		analysis := &Analysis{
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},
@@ -216,7 +216,7 @@ func TestGetDataWithoutVulnerabilities(t *testing.T) {
 			Errors:         "test",
 			CreatedAt:      time.Now(),
 			FinishedAt:     time.Now(),
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},

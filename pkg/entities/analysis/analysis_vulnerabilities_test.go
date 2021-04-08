@@ -12,7 +12,7 @@ import (
 
 func TestGetTableAnalysisVulnerabilities(t *testing.T) {
 	t.Run("should success get database table name", func(t *testing.T) {
-		analysisVulnerabilities := &RelationshipAnalysisVuln{}
+		analysisVulnerabilities := &AnalysisVulnerabilities{}
 
 		assert.Equal(t, "analysis_vulnerabilities", analysisVulnerabilities.GetTable())
 	})
@@ -20,7 +20,7 @@ func TestGetTableAnalysisVulnerabilities(t *testing.T) {
 
 func TestSetCreatedAtAnalysisVulnerabilities(t *testing.T) {
 	t.Run("should success set created at", func(t *testing.T) {
-		analysisVulnerabilities := &RelationshipAnalysisVuln{}
+		analysisVulnerabilities := &AnalysisVulnerabilities{}
 
 		analysisVulnerabilities.SetCreatedAt()
 		assert.NotEqual(t, time.Time{}, analysisVulnerabilities.CreatedAt)
@@ -29,7 +29,7 @@ func TestSetCreatedAtAnalysisVulnerabilities(t *testing.T) {
 
 func TestSetVulnerabilityIDAnalysisVulnerabilities(t *testing.T) {
 	t.Run("should success set vuln id in analysis vulnerabilities and vulnerability", func(t *testing.T) {
-		analysisVulnerabilities := &RelationshipAnalysisVuln{}
+		analysisVulnerabilities := &AnalysisVulnerabilities{}
 
 		analysisVulnerabilities.SetVulnerabilityID()
 		assert.NotEqual(t, uuid.Nil, analysisVulnerabilities.VulnerabilityID)
@@ -39,7 +39,7 @@ func TestSetVulnerabilityIDAnalysisVulnerabilities(t *testing.T) {
 
 func TestSetAnalysisIDAnalysisVulnerabilities(t *testing.T) {
 	t.Run("should success set vuln id in analysis vulnerabilities and vulnerability", func(t *testing.T) {
-		analysisVulnerabilities := &RelationshipAnalysisVuln{}
+		analysisVulnerabilities := &AnalysisVulnerabilities{}
 
 		analysisVulnerabilities.SetAnalysisID(uuid.New())
 		assert.NotEqual(t, uuid.Nil, analysisVulnerabilities.AnalysisID)
@@ -48,7 +48,7 @@ func TestSetAnalysisIDAnalysisVulnerabilities(t *testing.T) {
 
 func TestGetAnalysisVulnerabilitiesWithoutVulnerability(t *testing.T) {
 	t.Run("should success set vuln id in analysis vulnerabilities and vulnerability", func(t *testing.T) {
-		analysisVulnerabilities := &RelationshipAnalysisVuln{
+		analysisVulnerabilities := &AnalysisVulnerabilities{
 			VulnerabilityID: uuid.New(),
 			AnalysisID:      uuid.New(),
 			CreatedAt:       time.Now(),

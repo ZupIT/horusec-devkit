@@ -24,16 +24,16 @@ import (
 )
 
 type Analysis struct {
-	ID                      uuid.UUID                  `json:"id" gorm:"Column:analysis_id"`
-	RepositoryID            uuid.UUID                  `json:"repositoryID" gorm:"Column:repository_id"`
-	RepositoryName          string                     `json:"repositoryName" gorm:"Column:repository_name"`
-	WorkspaceID             uuid.UUID                  `json:"workspaceID" gorm:"Column:workspace_id"`
-	WorkspaceName           string                     `json:"workspaceName" gorm:"Column:workspace_name"`
-	Status                  analysis.Status            `json:"status" gorm:"Column:status"`
-	Errors                  string                     `json:"errors" gorm:"Column:errors"`
-	CreatedAt               time.Time                  `json:"createdAt" gorm:"Column:created_at"`
-	FinishedAt              time.Time                  `json:"finishedAt" gorm:"Column:finished_at"`
-	AnalysisVulnerabilities []RelationshipAnalysisVuln `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID;polymorphic:analysis_vulnerabilities"` //nolint:lll // notations need more than 130 characters
+	ID                      uuid.UUID                 `json:"id" gorm:"Column:analysis_id"`
+	RepositoryID            uuid.UUID                 `json:"repositoryID" gorm:"Column:repository_id"`
+	RepositoryName          string                    `json:"repositoryName" gorm:"Column:repository_name"`
+	WorkspaceID             uuid.UUID                 `json:"workspaceID" gorm:"Column:workspace_id"`
+	WorkspaceName           string                    `json:"workspaceName" gorm:"Column:workspace_name"`
+	Status                  analysis.Status           `json:"status" gorm:"Column:status"`
+	Errors                  string                    `json:"errors" gorm:"Column:errors"`
+	CreatedAt               time.Time                 `json:"createdAt" gorm:"Column:created_at"`
+	FinishedAt              time.Time                 `json:"finishedAt" gorm:"Column:finished_at"`
+	AnalysisVulnerabilities []AnalysisVulnerabilities `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID"` //nolint:lll // notations need more than 130 characters
 }
 
 func (a *Analysis) GetTable() string {
