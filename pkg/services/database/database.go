@@ -132,7 +132,7 @@ func (d *database) CreateOrUpdate(entityPointer interface{}, where map[string]in
 func (d *database) Find(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).Find(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
-		return response.NewResponse(result.RowsAffected, err, nil)
+		return response.NewResponse(0, err, nil)
 	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
@@ -153,7 +153,7 @@ func (d *database) Delete(where map[string]interface{}, table string) response.I
 func (d *database) First(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse {
 	result := d.connectionRead.Table(table).Where(where).First(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
-		return response.NewResponse(result.RowsAffected, err, nil)
+		return response.NewResponse(0, err, nil)
 	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
@@ -162,7 +162,7 @@ func (d *database) First(entityPointer interface{}, where map[string]interface{}
 func (d *database) Raw(rawSQL string, entityPointer interface{}, values ...interface{}) response.IResponse {
 	result := d.connectionRead.Raw(rawSQL, values...).Scan(entityPointer)
 	if err := d.verifyNotFoundError(result); err != nil {
-		return response.NewResponse(result.RowsAffected, err, nil)
+		return response.NewResponse(0, err, nil)
 	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
@@ -170,7 +170,8 @@ func (d *database) Raw(rawSQL string, entityPointer interface{}, values ...inter
 
 func (d *database) verifyNotFoundError(result *gorm.DB) error {
 	if result.Error != nil {
-		if strings.EqualFold(result.Error.Error(), "record not found") {
+		if strings.EqualFold(result.Error.Error(), "record not found") ||
+			strings.EqualFold(result.Error.Error(), "record not found; record not found") {
 			return enums.ErrorNotFoundRecords
 		}
 
