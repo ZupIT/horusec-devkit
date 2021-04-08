@@ -26,7 +26,7 @@ type RelationshipAnalysisVuln struct {
 	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id"`
 	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id"`
 	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at"`
-	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID;polymorphicValue:analysis_vulnerabilities;polymorphic:analysis_vulnerabilities"` //nolint:lll // notations need more than 130 characters
+	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"` //nolint:lll // notations need more than 130 characters
 }
 
 func (a *RelationshipAnalysisVuln) GetTable() string {
