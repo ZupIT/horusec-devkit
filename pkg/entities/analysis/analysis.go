@@ -33,7 +33,7 @@ type Analysis struct {
 	Errors                  string                     `json:"errors" gorm:"Column:errors"`
 	CreatedAt               time.Time                  `json:"createdAt" gorm:"Column:created_at"`
 	FinishedAt              time.Time                  `json:"finishedAt" gorm:"Column:finished_at"`
-	AnalysisVulnerabilities []RelationshipAnalysisVuln `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID;polymorphicValue:analysis_vulnerabilities"` //nolint:lll // notations need more than 130 characters
+	AnalysisVulnerabilities []RelationshipAnalysisVuln `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID;polymorphic:analysis_vulnerabilities"` //nolint:lll // notations need more than 130 characters
 }
 
 func (a *Analysis) GetTable() string {
