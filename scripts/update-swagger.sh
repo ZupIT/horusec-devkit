@@ -16,7 +16,7 @@
 validateSwagger () {
     if ! swag &> /dev/null
     then
-        go get -v github.com/swaggo/swag/cmd/swag@v1.6.7
+        go get -v github.com/swaggo/swag/cmd/swag@v1.7.0
     fi
     if ! swag &> /dev/null
     then
@@ -28,7 +28,7 @@ validateSwagger () {
 }
 
 updateDocs () {
-    swag init -g ./cmd/app/main.go -o "./docs"
+    swag init -g ./cmd/app/main.go --parseDependency
 }
 
 validateSwagger
