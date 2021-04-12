@@ -42,14 +42,6 @@ security:
 		$(HORUSEC) start -p="./" -e="true"
     endif
 
-compose: compose-down compose-up
-
-compose-down:
-	$(DOCKER_COMPOSE) -f deployments/$(COMPOSE_FILE_NAME) down -v
-
-compose-up:
-	$(DOCKER_COMPOSE) -f deployments/$(COMPOSE_FILE_NAME) up -d --build --force-recreate
-
 migrate: migrate-drop migrate-up
 
 migrate-up:

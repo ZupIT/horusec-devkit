@@ -24,7 +24,7 @@ validateSwagger () {
         exit 1
     fi
 
-    echo "Lib swag installed with success!"
+    echo "swag installed with success!"
 }
 
 updateDocs () {
