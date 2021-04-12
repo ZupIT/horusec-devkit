@@ -31,6 +31,17 @@ func TestToString(t *testing.T) {
 	})
 }
 
+func TestIsValid(t *testing.T) {
+	t.Run("should success check if severity is valid", func(t *testing.T) {
+		assert.True(t, Critical.IsValid())
+		assert.True(t, High.IsValid())
+		assert.True(t, Medium.IsValid())
+		assert.True(t, Low.IsValid())
+		assert.True(t, Info.IsValid())
+		assert.False(t, Unknown.IsValid())
+	})
+}
+
 func TestMap(t *testing.T) {
 	t.Run("should success parse to map", func(t *testing.T) {
 		mapValues := Map()

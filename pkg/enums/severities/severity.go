@@ -29,6 +29,10 @@ func (s Severity) ToString() string {
 	return string(s)
 }
 
+func (s Severity) IsValid() bool {
+	return s != Unknown
+}
+
 func Map() map[string]Severity {
 	return map[string]Severity{
 		Critical.ToString(): Critical,
