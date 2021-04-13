@@ -22,11 +22,11 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/entities/vulnerability"
 )
 
-//nolint
+//nolint:lll,golint // notations need more than 130 characters and struct used on gorm
 type AnalysisVulnerabilities struct {
-	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id"`
-	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id"`
-	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at"`
+	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id" example:"00000000-0000-0000-0000-000000000000"`
+	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id" example:"00000000-0000-0000-0000-000000000000"`
+	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at" example:"2021-12-30T23:59:59Z"`
 	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"`
 }
 
