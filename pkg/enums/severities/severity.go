@@ -14,6 +14,8 @@
 
 package severities
 
+import "strings"
+
 type Severity string
 
 const (
@@ -54,7 +56,7 @@ func GetSeverityByString(severity string) Severity {
 
 func Contains(severity string) bool {
 	for _, value := range Values() {
-		if value.ToString() == severity {
+		if strings.EqualFold(value.ToString(), severity) {
 			return true
 		}
 	}
