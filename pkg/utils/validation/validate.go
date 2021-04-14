@@ -8,7 +8,7 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/enums/auth"
 )
 
-func CheckInvalidLdapGroups(authType auth.AuthorizationType, groups, permissions []string) error {
+func CheckInvalidLdapGroups(authType auth.AuthenticationType, groups, permissions []string) error {
 	if authType == auth.Ldap && isInvalidGroup(groups, permissions) {
 		return enums.ErrorInvalidLdapGroup
 	}

@@ -80,6 +80,6 @@ func TestGetAuthorizationType(t *testing.T) {
 			},
 		}
 
-		assert.Equal(t, auth.Ldap, config.GetAuthorizationType())
+		assert.Equal(t, auth.Ldap, config.GetAuthenticationType())
 	})
 }

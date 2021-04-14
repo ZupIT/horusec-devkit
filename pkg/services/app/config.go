@@ -12,7 +12,7 @@ import (
 type IConfig interface {
 	IsBrokerDisabled() bool
 	IsApplicationAdmEnabled() bool
-	GetAuthorizationType() auth.AuthorizationType
+	GetAuthenticationType() auth.AuthenticationType
 }
 
 type Config struct {
@@ -49,6 +49,6 @@ func (c *Config) IsApplicationAdmEnabled() bool {
 	return c.GetEnableApplicationAdmin()
 }
 
-func (c *Config) GetAuthorizationType() auth.AuthorizationType {
-	return auth.AuthorizationType(c.GetAuthType())
+func (c *Config) GetAuthenticationType() auth.AuthenticationType {
+	return auth.AuthenticationType(c.GetAuthType())
 }

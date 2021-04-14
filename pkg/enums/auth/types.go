@@ -14,15 +14,15 @@
 
 package auth
 
-type AuthorizationType string
+type AuthenticationType string
 
 const (
-	Keycloak AuthorizationType = "keycloak"
-	Ldap     AuthorizationType = "ldap"
-	Horusec  AuthorizationType = "horusec"
+	Keycloak AuthenticationType = "keycloak"
+	Ldap     AuthenticationType = "ldap"
+	Horusec  AuthenticationType = "horusec"
 )
 
-func (a AuthorizationType) IsInvalid() bool {
+func (a AuthenticationType) IsInvalid() bool {
 	for _, v := range a.Values() {
 		if v == a {
 			return false
@@ -32,19 +32,19 @@ func (a AuthorizationType) IsInvalid() bool {
 	return true
 }
 
-func (a AuthorizationType) Values() []AuthorizationType {
-	return []AuthorizationType{
+func (a AuthenticationType) Values() []AuthenticationType {
+	return []AuthenticationType{
 		Keycloak,
 		Ldap,
 		Horusec,
 	}
 }
 
-func (a AuthorizationType) ToString() string {
+func (a AuthenticationType) ToString() string {
 	return string(a)
 }
 
-func GetAuthTypeByString(authType string) (a AuthorizationType) {
+func GetAuthTypeByString(authType string) (a AuthenticationType) {
 	for _, v := range a.Values() {
 		if v.ToString() == authType {
 			return v

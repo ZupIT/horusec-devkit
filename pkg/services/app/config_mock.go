@@ -20,7 +20,7 @@ func (m *Mock) IsApplicationAdmEnabled() bool {
 	return args.Get(0).(bool)
 }
 
-func (m *Mock) GetAuthorizationType() auth.AuthorizationType {
-	args := m.MethodCalled("GetAuthorizationType")
-	return args.Get(0).(auth.AuthorizationType)
+func (m *Mock) GetAuthenticationType() auth.AuthenticationType {
+	args := m.MethodCalled("GetAuthenticationType")
+	return args.Get(0).(auth.AuthenticationType)
 }

@@ -22,7 +22,7 @@ import (
 
 func TestIsInvalid(t *testing.T) {
 	t.Run("should true when invalid type", func(t *testing.T) {
-		assert.True(t, AuthorizationType("test").IsInvalid())
+		assert.True(t, AuthenticationType("test").IsInvalid())
 	})
 
 	t.Run("should false when valid type", func(t *testing.T) {
@@ -34,7 +34,7 @@ func TestIsInvalid(t *testing.T) {
 
 func TestValues(t *testing.T) {
 	t.Run("should 3 valid auth types", func(t *testing.T) {
-		var testType AuthorizationType
+		var testType AuthenticationType
 		assert.Len(t, testType.Values(), 3)
 	})
 }
@@ -55,6 +55,6 @@ func TestGetAuthTypeByString(t *testing.T) {
 	})
 
 	t.Run("should return type empty when not exists", func(t *testing.T) {
-		assert.Equal(t, AuthorizationType(""), GetAuthTypeByString("test"))
+		assert.Equal(t, AuthenticationType(""), GetAuthTypeByString("test"))
 	})
 }
