@@ -1,22 +1,22 @@
 package auth
 
-type IsAuthorizedType string
+type AuthorizationType string
 
 const (
-	ApplicationAdmin     IsAuthorizedType = "IsApplicationAdmin"
-	WorkspaceAdmin       IsAuthorizedType = "IsWorkspaceAdmin"
-	WorkspaceMember      IsAuthorizedType = "IsWorkspaceMember"
-	RepositoryAdmin      IsAuthorizedType = "IsRepositoryAdmin"
-	RepositorySupervisor IsAuthorizedType = "IsRepositorySupervisor"
-	RepositoryMember     IsAuthorizedType = "IsRepositoryMember"
+	ApplicationAdmin     AuthorizationType = "IsApplicationAdmin"
+	WorkspaceAdmin       AuthorizationType = "IsWorkspaceAdmin"
+	WorkspaceMember      AuthorizationType = "IsWorkspaceMember"
+	RepositoryAdmin      AuthorizationType = "IsRepositoryAdmin"
+	RepositorySupervisor AuthorizationType = "IsRepositorySupervisor"
+	RepositoryMember     AuthorizationType = "IsRepositoryMember"
 )
 
-func (i IsAuthorizedType) ToString() string {
+func (i AuthorizationType) ToString() string {
 	return string(i)
 }
 
-func Values() []IsAuthorizedType {
-	return []IsAuthorizedType{
+func Values() []AuthorizationType {
+	return []AuthorizationType{
 		ApplicationAdmin,
 		WorkspaceAdmin,
 		WorkspaceMember,

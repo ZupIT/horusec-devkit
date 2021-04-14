@@ -127,7 +127,7 @@ func (a *AuthzMiddleware) IsRepositoryAdmin(handler http.Handler) http.Handler {
 }
 
 func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
-	isAuthorizedType authEnums.IsAuthorizedType) *proto.IsAuthorizedData {
+	isAuthorizedType authEnums.AuthorizationType) *proto.IsAuthorizedData {
 	return &proto.IsAuthorizedData{
 		Token:        a.getJWTToken(r),
 		Type:         isAuthorizedType.ToString(),
@@ -137,7 +137,7 @@ func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
 }
 
 func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.IsAuthorizedResponse,
-	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.IsAuthorizedType) error {
+	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.AuthorizationType) error {
 	if err != nil {
 		logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)
 		httpUtil.StatusInternalServerError(w, enums.ErrorFailedToVerifyRequest)
@@ -153,7 +153,7 @@ func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.I
 	return nil
 }
 
-func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType authEnums.IsAuthorizedType) {
+func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType authEnums.AuthorizationType) {
 	logger.LogWarn(fmt.Sprintf(enums.MessageUnauthorizedHTTPRequest, a.getAccountID(r),
 		r.URL, r.Method, isAuthorizedType))
 }
