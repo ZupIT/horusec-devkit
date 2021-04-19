@@ -21,7 +21,7 @@ if [[ -z "$MIGRATION_FILE_NAME" ]]
 then
     echo "Migration file name param not found."
 fi
-if [[ -z "$MIGRATION_FILE_NAME" ]]
+if [[ -z "$MIGRATION_PATH" ]]
 then
     MIGRATION_PATH="./pkg/services/database/migrations"
 fi
