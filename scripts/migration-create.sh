@@ -30,5 +30,3 @@ docker cp migrate:/migrations $MIGRATION_PATH
 docker rm migrate
 mv $MIGRATION_PATH/migrations/* $MIGRATION_PATH/
 rm -rf "$MIGRATION_PATH/migrations"
-
-createMigration
