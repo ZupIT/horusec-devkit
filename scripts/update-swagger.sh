@@ -13,6 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+MAIN_DIRECTORY=$1
+if [[ -z "$MAIN_DIRECTORY" ]]
+then
+    MAIN_DIRECTORY="./cmd/app/main.go"
+fi
+
 validateSwagger () {
     if ! swag &> /dev/null
     then
@@ -28,7 +34,7 @@ validateSwagger () {
 }
 
 updateDocs () {
-    swag init -g ./cmd/app/main.go --parseDependency
+    swag init -g "$MAIN_DIRECTORY" --parseDependency
 }
 
 validateSwagger
