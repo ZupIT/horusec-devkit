@@ -1,8 +1,9 @@
 package exchange
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestKind_ToString(t *testing.T) {
