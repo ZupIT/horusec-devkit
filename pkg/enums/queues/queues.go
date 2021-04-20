@@ -19,12 +19,14 @@ import "strings"
 type Queue string
 
 const (
+	HorusecNewAnalysis     Queue = "horusec-new-analysis"
 	HorusecEmail           Queue = "horusec-email"
 	HorusecWebhookDispatch Queue = "horusec-webhook-dispatch"
 )
 
 func Values() []Queue {
 	return []Queue{
+		HorusecNewAnalysis,
 		HorusecEmail,
 		HorusecWebhookDispatch,
 	}
