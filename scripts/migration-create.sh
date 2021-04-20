@@ -14,12 +14,16 @@
 # limitations under the License.
 
 
-MIGRATION_PATH="./pkg/services/database/migrations"
 MIGRATION_FILE_NAME=$1
+MIGRATION_PATH=$2
 
 if [[ -z "$MIGRATION_FILE_NAME" ]]
 then
     echo "Migration file name param not found."
+fi
+if [[ -z "$MIGRATION_PATH" ]]
+then
+    MIGRATION_PATH="./pkg/services/database/migrations"
 fi
 
 docker run --name migrate \
@@ -30,5 +34,3 @@ docker cp migrate:/migrations $MIGRATION_PATH
 docker rm migrate
 mv $MIGRATION_PATH/migrations/* $MIGRATION_PATH/
 rm -rf "$MIGRATION_PATH/migrations"
-
-createMigration

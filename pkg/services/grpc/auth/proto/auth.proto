@@ -27,7 +27,8 @@ message GetAccountData {
 
 message GetAccountDataResponse {
   string accountID = 1;
-  repeated string permissions = 2;
+  bool isApplicationAdmin = 2;
+  repeated string permissions = 3;
 }
 
 message GetAuthConfigData {}
