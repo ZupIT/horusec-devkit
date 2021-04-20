@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
+
 	"github.com/google/uuid"
 
 	"github.com/ZupIT/horusec-devkit/pkg/utils/parser/enums"
@@ -31,6 +33,10 @@ func checkParseBodyToEntityError(err error) error {
 		return enums.ErrorBodyInvalid
 	}
 
+	if strings.Contains(err.Error(), enums.InvalidJSONInput) {
+		return enums.ErrorBodyInvalid
+	}
+
 	return err
 }
 
@@ -46,4 +52,12 @@ func ParseEntityToIOReadCloser(entity interface{}) (io.ReadCloser, error) {
 func ParseStringToUUID(id string) uuid.UUID {
 	parsedID, _ := uuid.Parse(id)
 	return parsedID
+}
+
+func ParsePacketToEntity(body packet.IPacket, entityPointer interface{}) error {
+	err := json.Unmarshal(body.GetBody(), entityPointer)
+	if err != nil {
+		return checkParseBodyToEntityError(err)
+	}
+	return nil
 }

@@ -6,6 +6,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/streadway/amqp"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
@@ -70,5 +74,23 @@ func TestParseStringToUUID(t *testing.T) {
 		id := uuid.New()
 
 		assert.Equal(t, id, ParseStringToUUID(id.String()))
+	})
+}
+
+func TestParsePacketToEntity(t *testing.T) {
+	t.Run("Should success parse body packet to entity pointer", func(t *testing.T) {
+		pkg := packet.NewPacket(&amqp.Delivery{})
+		pkg.SetBody((&cli.AnalysisData{RepositoryName: "test"}).ToBytes())
+		entity := cli.AnalysisData{}
+		err := ParsePacketToEntity(pkg, &entity)
+		assert.NoError(t, err)
+		assert.Equal(t, "test", entity.RepositoryName)
+	})
+	t.Run("Should error on parse body packet to entity pointer", func(t *testing.T) {
+		pkg := packet.NewPacket(&amqp.Delivery{})
+		pkg.SetBody(nil)
+		entity := cli.AnalysisData{}
+		err := ParsePacketToEntity(pkg, &entity)
+		assert.Error(t, err)
 	})
 }
