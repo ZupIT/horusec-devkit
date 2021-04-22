@@ -51,7 +51,6 @@ func TestMap(t *testing.T) {
 		assert.Equal(t, High, mapValues["HIGH"])
 		assert.Equal(t, Medium, mapValues["MEDIUM"])
 		assert.Equal(t, Low, mapValues["LOW"])
-		assert.Equal(t, Unknown, mapValues["UNKNOWN"])
 		assert.Equal(t, Info, mapValues["INFO"])
 	})
 }
@@ -77,7 +76,6 @@ func TestContains(t *testing.T) {
 		assert.True(t, Contains("HIGH"))
 		assert.True(t, Contains("MEDIUM"))
 		assert.True(t, Contains("LOW"))
-		assert.True(t, Contains("UNKNOWN"))
 		assert.True(t, Contains("INFO"))
 	})
 
@@ -87,7 +85,7 @@ func TestContains(t *testing.T) {
 }
 
 func TestValues(t *testing.T) {
-	t.Run("should return 6 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 6)
+	t.Run("should return 5 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 5)
 	})
 }

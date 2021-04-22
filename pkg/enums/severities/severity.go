@@ -41,7 +41,6 @@ func Map() map[string]Severity {
 		High.ToString():     High,
 		Medium.ToString():   Medium,
 		Low.ToString():      Low,
-		Unknown.ToString():  Unknown,
 		Info.ToString():     Info,
 	}
 }
@@ -71,6 +70,5 @@ func Values() []Severity {
 		Medium,
 		Low,
 		Info,
-		Unknown,
 	}
 }
