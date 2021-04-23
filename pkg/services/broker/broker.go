@@ -151,26 +151,26 @@ func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) erro
 	return b.publish(queue, body, exchange)
 }
 
-func (b *Broker) Consume(queue, exchange, exchangeKing string, handler func(packet brokerPacket.IPacket)) {
+func (b *Broker) Consume(queue, exchange, exchangeKind string, handler func(packet brokerPacket.IPacket)) {
 	for {
 		if err := b.setupChannel(); err != nil {
 			logger.LogPanic(enums.MessageFailedCreateChannelConsume, err)
 		}
 
 		b.setConsumerPrefetch()
-		b.declareQueueAndBind(queue, exchange, exchangeKing)
+		b.declareQueueAndBind(queue, exchange, exchangeKind)
 		b.handleDeliveries(queue, handler)
 	}
 }
 
-func (b *Broker) declareQueueAndBind(queue, exchange, exchangeKing string) {
+func (b *Broker) declareQueueAndBind(queue, exchange, exchangeKind string) {
 	if _, err := b.channel.QueueDeclare(queue, true, false, false,
 		false, nil); err != nil {
 		logger.LogPanic(enums.MessageFailedCreateQueueConsume, err)
 	}
 
-	if exchange != "" && exchangeKing != "" {
-		b.declareExchangeAndBind(queue, exchange, exchangeKing)
+	if exchange != "" && exchangeKind != "" {
+		b.declareExchangeAndBind(queue, exchange, exchangeKind)
 	}
 }
 
@@ -193,8 +193,8 @@ func (b *Broker) setConsumerPrefetch() {
 	}
 }
 
-func (b *Broker) declareExchangeAndBind(queue, exchange, exchangeKing string) {
-	if err := b.exchangeDeclare(exchange, exchangeKing); err != nil {
+func (b *Broker) declareExchangeAndBind(queue, exchange, exchangeKind string) {
+	if err := b.exchangeDeclare(exchange, exchangeKind); err != nil {
 		logger.LogPanic(enums.MessageFailedToDeclareExchangeQueue, err)
 	}
 
