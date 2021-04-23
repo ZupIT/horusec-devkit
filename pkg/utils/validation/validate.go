@@ -6,8 +6,8 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/enums/auth"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
 )
 
 func CheckInvalidLdapGroups(authType auth.AuthenticationType, groups, permissions []string) error {
@@ -34,13 +34,18 @@ func isInvalidGroup(groups, permissions []string) bool {
 	return true
 }
 
+// nolint // necessary magic number and valid suspicious regex
 func PasswordValidationRules() []validation.Rule {
 	return []validation.Rule{
 		validation.Required,
 		validation.Length(8, 255),
-		validation.Match(regexp.MustCompile(`[A-Z]`)).Error(enums.MessageMustContainUppercaseCharacter),
-		validation.Match(regexp.MustCompile(`[a-z]`)).Error(enums.MessageMustContainLowercaseCharacter),
-		validation.Match(regexp.MustCompile(`[0-9]`)).Error(enums.MessageMustContainNumericCharacter),
-		validation.Match(regexp.MustCompile(`[!@#$&*-._]`)).Error(enums.MessageMustContainEspecialCharacter),
+		validation.Match(regexp.MustCompile(enums.RegexUppercaseCharacter)).
+			Error(enums.MessageMustContainUppercaseCharacter),
+		validation.Match(regexp.MustCompile(enums.RegexLowercaseCharacter)).
+			Error(enums.MessageMustContainLowercaseCharacter),
+		validation.Match(regexp.MustCompile(enums.RegexNumericCharacter)).
+			Error(enums.MessageMustContainNumericCharacter),
+		validation.Match(regexp.MustCompile(enums.RegexEspecialCharacter)).
+			Error(enums.MessageMustContainEspecialCharacter),
 	}
 }

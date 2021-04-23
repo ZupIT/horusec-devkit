@@ -6,8 +6,8 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/enums/auth"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
 )
 
 func TestIsInvalidLdapGroups(t *testing.T) {
