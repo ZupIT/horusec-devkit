@@ -1,10 +1,12 @@
 package utils
 
 import (
+	"regexp"
 	"strings"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 
+	"github.com/ZupIT/horusec-devkit/pkg/utils/validation/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/enums/auth"
 )
 
@@ -30,4 +32,15 @@ func isInvalidGroup(groups, permissions []string) bool {
 	}
 
 	return true
+}
+
+func PasswordValidationRules() []validation.Rule {
+	return []validation.Rule{
+		validation.Required,
+		validation.Length(8, 255),
+		validation.Match(regexp.MustCompile(`[A-Z]`)).Error(enums.MessageMustContainUppercaseCharacter),
+		validation.Match(regexp.MustCompile(`[a-z]`)).Error(enums.MessageMustContainLowercaseCharacter),
+		validation.Match(regexp.MustCompile(`[0-9]`)).Error(enums.MessageMustContainNumericCharacter),
+		validation.Match(regexp.MustCompile(`[!@#$&*-._]`)).Error(enums.MessageMustContainEspecialCharacter),
+	}
 }
