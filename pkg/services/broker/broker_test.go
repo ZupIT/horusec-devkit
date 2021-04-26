@@ -21,10 +21,8 @@ import (
 	"github.com/streadway/amqp"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/app"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
-	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/auth/proto"
 )
 
 func getTestConfig() *config.Config {
@@ -42,30 +40,17 @@ func testConsumer(_ packet.IPacket) {}
 
 func TestNewBroker(t *testing.T) {
 	t.Run("should return error when failed to connect", func(t *testing.T) {
-		appConfig := &app.Config{GetAuthConfigResponse: &proto.GetAuthConfigResponse{DisableBroker: false}}
-
-		broker, err := NewBroker(getTestConfig(), appConfig)
+		broker, err := NewBroker(getTestConfig())
 
 		assert.Nil(t, broker)
 		assert.Error(t, err)
 	})
 
 	t.Run("should return error when invalid config", func(t *testing.T) {
-		appConfig := &app.Config{GetAuthConfigResponse: &proto.GetAuthConfigResponse{DisableBroker: false}}
-
-		broker, err := NewBroker(&config.Config{}, appConfig)
+		broker, err := NewBroker(&config.Config{})
 
 		assert.Nil(t, broker)
 		assert.Error(t, err)
-	})
-
-	t.Run("should return no error and no connection when disabled broker", func(t *testing.T) {
-		appConfig := &app.Config{GetAuthConfigResponse: &proto.GetAuthConfigResponse{DisableBroker: true}}
-
-		broker, err := NewBroker(&config.Config{}, appConfig)
-
-		assert.Nil(t, broker)
-		assert.Nil(t, err)
 	})
 }
 

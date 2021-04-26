@@ -18,7 +18,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/streadway/amqp"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/app"
 	brokerConfig "github.com/ZupIT/horusec-devkit/pkg/services/broker/config"
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
 	brokerPacket "github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
@@ -38,11 +37,7 @@ type Broker struct {
 	config     brokerConfig.IConfig
 }
 
-func NewBroker(config brokerConfig.IConfig, appConfig app.IConfig) (IBroker, error) {
-	if appConfig.IsBrokerDisabled() {
-		return nil, nil
-	}
-
+func NewBroker(config brokerConfig.IConfig) (IBroker, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
