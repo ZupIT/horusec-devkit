@@ -32,7 +32,7 @@ func (s Severity) ToString() string {
 }
 
 func (s Severity) IsValid() bool {
-	return s != Unknown
+	return Contains(s.ToString())
 }
 
 func Map() map[string]Severity {
@@ -41,6 +41,7 @@ func Map() map[string]Severity {
 		High.ToString():     High,
 		Medium.ToString():   Medium,
 		Low.ToString():      Low,
+		Unknown.ToString():  Unknown,
 		Info.ToString():     Info,
 	}
 }
@@ -69,6 +70,7 @@ func Values() []Severity {
 		High,
 		Medium,
 		Low,
+		Unknown,
 		Info,
 	}
 }
