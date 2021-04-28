@@ -54,10 +54,10 @@ func ParseStringToUUID(id string) uuid.UUID {
 	return parsedID
 }
 
-func ParsePacketToEntity(body packet.IPacket, entityPointer interface{}) error {
-	err := json.Unmarshal(body.GetBody(), entityPointer)
-	if err != nil {
+func ParsePacketToEntity(packet packet.IPacket, entityPointer interface{}) error {
+	if err := json.Unmarshal(packet.GetBody(), entityPointer); err != nil {
 		return checkParseBodyToEntityError(err)
 	}
+
 	return nil
 }

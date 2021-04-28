@@ -78,19 +78,19 @@ func TestParseStringToUUID(t *testing.T) {
 }
 
 func TestParsePacketToEntity(t *testing.T) {
-	t.Run("Should success parse body packet to entity pointer", func(t *testing.T) {
+	t.Run("should success parse packet to entity", func(t *testing.T) {
 		pkg := packet.NewPacket(&amqp.Delivery{})
 		pkg.SetBody((&cli.AnalysisData{RepositoryName: "test"}).ToBytes())
-		entity := cli.AnalysisData{}
-		err := ParsePacketToEntity(pkg, &entity)
-		assert.NoError(t, err)
+
+		entity := &cli.AnalysisData{}
+		assert.NoError(t, ParsePacketToEntity(pkg, &entity))
 		assert.Equal(t, "test", entity.RepositoryName)
 	})
-	t.Run("Should error on parse body packet to entity pointer", func(t *testing.T) {
+
+	t.Run("should error parsing invalid data", func(t *testing.T) {
 		pkg := packet.NewPacket(&amqp.Delivery{})
-		pkg.SetBody(nil)
-		entity := cli.AnalysisData{}
-		err := ParsePacketToEntity(pkg, &entity)
-		assert.Error(t, err)
+
+		entity := &cli.AnalysisData{}
+		assert.Error(t, ParsePacketToEntity(pkg, &entity))
 	})
 }
