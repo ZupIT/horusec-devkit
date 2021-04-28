@@ -105,11 +105,11 @@ func (l Language) ToString() string {
 }
 
 func (l Language) GetCustomImagesKeyByLanguage() string {
-	return l.mapConfigCustomImageJSONByLanguage()[l]
+	return l.MapLanguagesEnableInCLI()[l]
 }
 
 //nolint:funlen // method need to have more then 15 lines
-func (l Language) mapConfigCustomImageJSONByLanguage() map[Language]string {
+func (l Language) MapLanguagesEnableInCLI() map[Language]string {
 	return map[Language]string{
 		CSharp:     "csharp",
 		Leaks:      "leaks",
