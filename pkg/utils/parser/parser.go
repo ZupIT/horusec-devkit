@@ -6,10 +6,9 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
-
 	"github.com/google/uuid"
 
+	brokerPacket "github.com/ZupIT/horusec-devkit/pkg/services/broker/packet"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/parser/enums"
 )
 
@@ -54,7 +53,7 @@ func ParseStringToUUID(id string) uuid.UUID {
 	return parsedID
 }
 
-func ParsePacketToEntity(packet packet.IPacket, entityPointer interface{}) error {
+func ParsePacketToEntity(packet brokerPacket.IPacket, entityPointer interface{}) error {
 	if err := json.Unmarshal(packet.GetBody(), entityPointer); err != nil {
 		return checkParseBodyToEntityError(err)
 	}

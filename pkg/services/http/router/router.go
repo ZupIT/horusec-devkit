@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package http
+package router
 
 import (
 	"compress/flate"
@@ -25,7 +25,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/http/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/router/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )

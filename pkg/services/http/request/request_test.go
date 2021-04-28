@@ -1,4 +1,4 @@
-package http
+package request
 
 import (
 	"crypto/tls"
@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/entities"
 )
 
 type test struct {
@@ -40,7 +42,7 @@ func TestDoRequest(t *testing.T) {
 
 		response, err := requestService.DoRequest(request, &tls.Config{})
 		assert.Error(t, err)
-		assert.Nil(t, response)
+		assert.Equal(t, &entities.HTTPResponse{Response: (*http.Response)(nil)}, response)
 	})
 }
 

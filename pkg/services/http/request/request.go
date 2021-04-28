@@ -1,4 +1,4 @@
-package http
+package request
 
 import (
 	"bytes"
@@ -9,13 +9,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/http/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/entities"
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 type IRequest interface {
 	NewHTTPRequest(method, url string, body interface{}, headers map[string]string) (*http.Request, error)
-	DoRequest(request *http.Request, tlsConfig *tls.Config) (*http.Response, error)
+	DoRequest(request *http.Request, tlsConfig *tls.Config) (*entities.HTTPResponse, error)
 }
 
 type Request struct {
@@ -28,14 +29,14 @@ func NewHTTPRequestService(timeout int) IRequest {
 	}
 }
 
-func (r *Request) DoRequest(request *http.Request, tlsConfig *tls.Config) (*http.Response, error) {
+func (r *Request) DoRequest(request *http.Request, tlsConfig *tls.Config) (*entities.HTTPResponse, error) {
 	response, err := r.setClient(tlsConfig).Do(request)
 	if err != nil {
 		logger.LogError(enums.MessageFailedToMakeHTTPRequest, err)
-		return response, err
+		return r.newHTTPResponse(response), err
 	}
 
-	return response, nil
+	return r.newHTTPResponse(response), nil
 }
 
 func (r *Request) setClient(tlsConfig *tls.Config) *http.Client {
@@ -53,6 +54,10 @@ func (r *Request) getTransport(tlsConfig *tls.Config) *http.Transport {
 	return &http.Transport{
 		TLSClientConfig: tlsConfig,
 	}
+}
+
+func (r *Request) newHTTPResponse(response *http.Response) *entities.HTTPResponse {
+	return &entities.HTTPResponse{Response: response}
 }
 
 func (r *Request) NewHTTPRequest(method, url string, body interface{},
