@@ -4,6 +4,8 @@ import (
 	"crypto/tls"
 	"net/http"
 
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/entities"
+
 	"github.com/stretchr/testify/mock"
 
 	mockUtils "github.com/ZupIT/horusec-devkit/pkg/utils/mock"
@@ -18,7 +20,7 @@ func (m *Mock) NewHTTPRequest(_, _ string, _ interface{}, _ map[string]string) (
 	return args.Get(0).(*http.Request), mockUtils.ReturnNilOrError(args, 1)
 }
 
-func (m *Mock) DoRequest(_ *http.Request, _ *tls.Config) (*http.Response, error) {
+func (m *Mock) DoRequest(_ *http.Request, _ *tls.Config) (*entities.HTTPResponse, error) {
 	args := m.MethodCalled("DoRequest")
-	return args.Get(0).(*http.Response), mockUtils.ReturnNilOrError(args, 1)
+	return args.Get(0).(*entities.HTTPResponse), mockUtils.ReturnNilOrError(args, 1)
 }
