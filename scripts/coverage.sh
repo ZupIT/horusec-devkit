@@ -32,11 +32,11 @@ COVERAGE=${COVERAGE%\%}
 if [ 1 -eq "$(echo "$COVERAGE" '>=' "$THRESHOLD" | bc -l)" ]; then
   echo "SUCCESS! Coverage above threshold"
   echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
-  rm "$PROJECT/coverage.out"
+  rm coverage.out
   exit 0
 fi
 
 echo "FAILS! Coverage below threshold"
 echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
-rm "$PROJECT/coverage.out"
+rm coverage.out
 exit 1
