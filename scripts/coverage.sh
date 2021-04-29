@@ -14,11 +14,10 @@
 # limitations under the License.
 
 THRESHOLD=$1
-GO_FILES=$2
-PROJECT=$3
+PROJECT=$2
 
 go clean -testcache
-go test -v -coverpkg $GO_FILES -coverprofile coverage.out $GO_FILES
+go test -v -coverpkg "$PROJECT/..." -coverprofile coverage.out "$PROJECT/..."
 
 sed -i '/mock.go/d' coverage.out
 sed -i '/pb.go/d' coverage.out
