@@ -17,7 +17,7 @@ THRESHOLD=$1
 PROJECT=$2
 
 go clean -testcache
-go test -v -coverpkg "$PROJECT/..." -coverprofile coverage.out "$PROJECT/..."
+go test -v -coverpkg "$PROJECT" -coverprofile coverage.out "$PROJECT"
 
 sed -i '/mock.go/d' coverage.out
 sed -i '/pb.go/d' coverage.out
