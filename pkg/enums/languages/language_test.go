@@ -40,13 +40,14 @@ func TestParseStringToLanguage(t *testing.T) {
 		assert.Equal(t, Yaml, ParseStringToLanguage("YAML"))
 		assert.Equal(t, Elixir, ParseStringToLanguage("Elixir"))
 		assert.Equal(t, Shell, ParseStringToLanguage("Shell"))
+		assert.Equal(t, Nginx, ParseStringToLanguage("Nginx"))
 		assert.Equal(t, Unknown, ParseStringToLanguage(""))
 	})
 }
 
 func TestValues(t *testing.T) {
-	t.Run("should return 19 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 19)
+	t.Run("should return 20 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 20)
 	})
 }
 
@@ -72,6 +73,7 @@ func TestMapEnableLanguages(t *testing.T) {
 		assert.Equal(t, Yaml, mapLanguages["YAML"])
 		assert.Equal(t, Elixir, mapLanguages["Elixir"])
 		assert.Equal(t, Shell, mapLanguages["Shell"])
+		assert.Equal(t, Nginx, mapLanguages["Nginx"])
 		assert.Equal(t, Unknown, mapLanguages["Unknown"])
 	})
 }
@@ -96,6 +98,7 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "YAML", Yaml.ToString())
 		assert.Equal(t, "Elixir", Elixir.ToString())
 		assert.Equal(t, "Shell", Shell.ToString())
+		assert.Equal(t, "Nginx", Nginx.ToString())
 		assert.Equal(t, "Unknown", Unknown.ToString())
 	})
 }
@@ -117,5 +120,6 @@ func TestGetCustomImagesKeyByLanguage(t *testing.T) {
 		assert.Equal(t, "yaml", Yaml.GetCustomImagesKeyByLanguage())
 		assert.Equal(t, "elixir", Elixir.GetCustomImagesKeyByLanguage())
 		assert.Equal(t, "shell", Shell.GetCustomImagesKeyByLanguage())
+		assert.Equal(t, "nginx", Nginx.GetCustomImagesKeyByLanguage())
 	})
 }
