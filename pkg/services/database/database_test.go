@@ -241,8 +241,10 @@ func TestCreate(t *testing.T) {
 		db, mock, err := sqlmock.New()
 		assert.NoError(t, err)
 
+		mock.ExpectBegin()
 		mock.ExpectExec("INSERT").
-			WillReturnResult(sqlmock.NewResult(1, 1))
+			WillReturnResult(sqlmock.NewResult(int64(1), int64(1)))
+		mock.ExpectCommit()
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -263,6 +265,8 @@ func TestCreateOrUpdate(t *testing.T) {
 		db, mock, err := sqlmock.New()
 		assert.NoError(t, err)
 
+		mock.ExpectBegin()
+		mock.ExpectCommit()
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnRows(sqlmock.NewRows([]string{"text"}).
@@ -379,6 +383,8 @@ func TestUpdate(t *testing.T) {
 		db, mock, err := sqlmock.New()
 		assert.NoError(t, err)
 
+		mock.ExpectBegin()
+		mock.ExpectCommit()
 		mock.ExpectExec("UPDATE").
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnResult(sqlmock.NewResult(1, 1))
@@ -402,9 +408,11 @@ func TestDelete(t *testing.T) {
 		db, mock, err := sqlmock.New()
 		assert.NoError(t, err)
 
+		mock.ExpectBegin()
 		mock.ExpectExec("DELETE").
 			WithArgs(sqlmock.AnyArg()).
 			WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
