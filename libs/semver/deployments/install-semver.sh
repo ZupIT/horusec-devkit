@@ -30,7 +30,10 @@ installSemver () {
     if ! semver &> /dev/null;
     then
         echo "Installing semver..."
-        sudo cp ./semver "$INSTALL_PATH"
+        # TODO: change path to get from master
+        curl -fsSL -o semver https://github.com/ZupIT/horusec-devkit/raw/develop/libs/semver/semver
+        chmod +x ./semver
+        sudo mv ./semver "$INSTALL_PATH"
     fi
 }
 
