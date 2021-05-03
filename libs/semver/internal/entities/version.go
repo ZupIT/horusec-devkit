@@ -17,9 +17,10 @@ package entities
 import (
 	"errors"
 	"fmt"
+	"regexp"
+
 	"github.com/ZupIT/horusec-devkit/libs/semver/internal/enum/phases"
 	"github.com/ZupIT/horusec-devkit/libs/semver/internal/utils/str"
-	"regexp"
 )
 
 type Version struct {

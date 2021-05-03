@@ -15,9 +15,10 @@
 package commands
 
 import (
-	"github.com/ZupIT/horusec-devkit/libs/semver/internal/entities"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/ZupIT/horusec-devkit/libs/semver/internal/entities"
 )
 
 type InitCommandI interface {

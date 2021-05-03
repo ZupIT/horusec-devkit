@@ -242,7 +242,7 @@ func TestCreate(t *testing.T) {
 		assert.NoError(t, err)
 
 		mock.ExpectExec("INSERT").
-			WillReturnResult(sqlmock.NewResult(1, 1))
+			WillReturnResult(sqlmock.NewResult(int64(1), int64(1)))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),

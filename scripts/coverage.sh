@@ -25,6 +25,7 @@ sed -i '/wire_gen.go/d' coverage.out
 sed -i '/wire.go/d' coverage.out
 sed -i '/docs.go/d' coverage.out
 sed -i '/main.go/d' coverage.out
+sed -i '/libs/d' coverage.out
 
 COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}')
 COVERAGE=${COVERAGE%\%}

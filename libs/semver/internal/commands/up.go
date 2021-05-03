@@ -16,10 +16,12 @@ package commands
 
 import (
 	"fmt"
-	"github.com/ZupIT/horusec-devkit/libs/semver/internal/entities"
-	"github.com/ZupIT/horusec-devkit/libs/semver/internal/enum/phases"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/ZupIT/horusec-devkit/libs/semver/internal/entities"
+	"github.com/ZupIT/horusec-devkit/libs/semver/internal/enum/phases"
 )
 
 type UpVersionCommandI interface {

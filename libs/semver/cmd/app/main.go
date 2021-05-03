@@ -16,10 +16,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/ZupIT/horusec-devkit/libs/semver/internal/commands"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
+
+	"github.com/ZupIT/horusec-devkit/libs/semver/internal/commands"
 )
 
 var (
