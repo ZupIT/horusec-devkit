@@ -23,12 +23,15 @@ message IsAuthorizedResponse {
 
 message GetAccountData {
   string token = 1;
+  string email = 2;
 }
 
 message GetAccountDataResponse {
   string accountID = 1;
   bool isApplicationAdmin = 2;
   repeated string permissions = 3;
+  string email = 4;
+  string username = 5;
 }
 
 message GetAuthConfigData {}
