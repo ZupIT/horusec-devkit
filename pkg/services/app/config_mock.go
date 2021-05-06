@@ -10,8 +10,8 @@ type Mock struct {
 	mock.Mock
 }
 
-func (m *Mock) IsBrokerDisabled() bool {
-	args := m.MethodCalled("IsBrokerDisabled")
+func (m *Mock) IsEmailsDisabled() bool {
+	args := m.MethodCalled("IsEmailsDisabled")
 	return args.Get(0).(bool)
 }
 

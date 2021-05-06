@@ -52,4 +52,7 @@ migrate-drop:
 	chmod +x ./scripts/migration-run.sh
 	./scripts/migration-run.sh drop -f
 
+update-auth-grpc:
+	protoc --go_out=.  --go-grpc_out=.  ./pkg/services/grpc/auth/proto/auth.proto
+
 pipeline: fmt fix-imports lint test coverage security
