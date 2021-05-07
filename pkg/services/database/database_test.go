@@ -619,7 +619,7 @@ func TestFindPreload(t *testing.T) {
 		}
 
 		response := database.FindPreload(newTestEntity(), map[string]interface{}{"text": "test"},
-			[]string{}, "test")
+			map[string][]interface{}{}, "test")
 
 		assert.NoError(t, response.GetError())
 		assert.Equal(t, 1, response.GetRowsAffected())
@@ -641,7 +641,7 @@ func TestFindPreload(t *testing.T) {
 		}
 
 		response := database.FindPreload(newTestEntity(), map[string]interface{}{"text": "test"},
-			[]string{}, "test")
+			map[string][]interface{}{}, "test")
 
 		assert.Error(t, response.GetError())
 		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
@@ -663,7 +663,7 @@ func TestFindPreload(t *testing.T) {
 		}
 
 		response := database.FindPreload(newTestEntity(), map[string]interface{}{"text": "test"},
-			[]string{}, "test")
+			map[string][]interface{}{}, "test")
 
 		assert.Error(t, response.GetError())
 		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
@@ -685,7 +685,7 @@ func TestFindPreload(t *testing.T) {
 		}
 
 		response := database.FindPreload(newTestEntity(), map[string]interface{}{"text": "test"},
-			[]string{""}, "test")
+			map[string][]interface{}{"": {}}, "test")
 
 		assert.Error(t, response.GetError())
 		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())

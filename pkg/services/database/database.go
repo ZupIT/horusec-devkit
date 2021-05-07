@@ -185,11 +185,11 @@ func (d *database) verifyNotFoundError(result *gorm.DB) error {
 	return nil
 }
 
-func (d *database) FindPreload(entityPointer interface{}, where map[string]interface{}, preloads []string,
-	table string) response.IResponse {
+func (d *database) FindPreload(entityPointer interface{}, where map[string]interface{},
+	preloads map[string][]interface{}, table string) response.IResponse {
 	query := d.connectionRead.Table(table).Where(where)
-	for _, preload := range preloads {
-		query = query.Preload(preload)
+	for key, preload := range preloads {
+		query = query.Preload(key, preload...)
 	}
 
 	result := query.Find(entityPointer)
