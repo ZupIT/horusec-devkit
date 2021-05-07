@@ -10,7 +10,7 @@ import (
 )
 
 type IConfig interface {
-	IsBrokerDisabled() bool
+	IsEmailsDisabled() bool
 	IsApplicationAdmEnabled() bool
 	GetAuthenticationType() auth.AuthenticationType
 }
@@ -41,8 +41,8 @@ func (c *Config) getAuthConfig() IConfig {
 	return c
 }
 
-func (c *Config) IsBrokerDisabled() bool {
-	return c.GetDisableBroker()
+func (c *Config) IsEmailsDisabled() bool {
+	return c.GetDisableEmails()
 }
 
 func (c *Config) IsApplicationAdmEnabled() bool {
