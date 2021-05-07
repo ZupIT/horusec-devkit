@@ -19,13 +19,12 @@ import "strings"
 type Queue string
 
 const (
-	HorusecAnalyticAuthors               Queue = "horusec-analytic::news-authors"
-	HorusecAnalyticRepositories          Queue = "horusec-analytic::news-repositories"
-	HorusecAnalyticLanguages             Queue = "horusec-analytic::news-languages"
-	HorusecAnalyticTimes                 Queue = "horusec-analytic::news-times"
-	HorusecUpdateVulnerabilityOnAnalytic Queue = "horusec-analytic::update-vulnerability"
-	HorusecEmail                         Queue = "horusec-email"
-	HorusecWebhook                       Queue = "horusec-webhook"
+	HorusecAnalyticAuthors      Queue = "horusec-analytic::news-authors"
+	HorusecAnalyticRepositories Queue = "horusec-analytic::news-repositories"
+	HorusecAnalyticLanguages    Queue = "horusec-analytic::news-languages"
+	HorusecAnalyticTimes        Queue = "horusec-analytic::news-times"
+	HorusecEmail                Queue = "horusec-email"
+	HorusecWebhook              Queue = "horusec-webhook"
 )
 
 func Values() []Queue {
@@ -34,7 +33,6 @@ func Values() []Queue {
 		HorusecAnalyticRepositories,
 		HorusecAnalyticLanguages,
 		HorusecAnalyticTimes,
-		HorusecUpdateVulnerabilityOnAnalytic,
 		HorusecEmail,
 		HorusecWebhook,
 	}
