@@ -48,15 +48,15 @@ func TestGetAuthConfig(t *testing.T) {
 	})
 }
 
-func TestIsBrokerDisabled(t *testing.T) {
-	t.Run("should return true for disabled broker", func(t *testing.T) {
+func TestIsEmailsDisabled(t *testing.T) {
+	t.Run("should return true when emails are not enabled", func(t *testing.T) {
 		config := &Config{
 			GetAuthConfigResponse: &proto.GetAuthConfigResponse{
-				DisableBroker: true,
+				DisableEmails: true,
 			},
 		}
 
-		assert.True(t, config.IsBrokerDisabled())
+		assert.True(t, config.IsEmailsDisabled())
 	})
 }
 
