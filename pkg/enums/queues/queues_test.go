@@ -21,8 +21,8 @@ import (
 )
 
 func TestValues(t *testing.T) {
-	t.Run("should return 2 valid queue values", func(t *testing.T) {
-		assert.Len(t, Values(), 2)
+	t.Run("should return 6 valid queue values", func(t *testing.T) {
+		assert.Len(t, Values(), 6)
 	})
 }
 

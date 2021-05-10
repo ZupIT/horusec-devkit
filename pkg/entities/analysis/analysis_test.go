@@ -108,7 +108,7 @@ func TestSetAllAnalysisVulnerabilitiesDefaultData(t *testing.T) {
 	t.Run("should success set data for each vulnerability", func(t *testing.T) {
 		analysis := &Analysis{
 			ID: uuid.New(),
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},
@@ -128,12 +128,12 @@ func TestSetAllAnalysisVulnerabilitiesDefaultData(t *testing.T) {
 	})
 }
 
-func TestSetCompanyName(t *testing.T) {
-	t.Run("should success set company name", func(t *testing.T) {
+func TestSetWorkspaceName(t *testing.T) {
+	t.Run("should success set workspace name", func(t *testing.T) {
 		analysis := &Analysis{}
 
-		analysis.SetCompanyName("test")
-		assert.Equal(t, "test", analysis.CompanyName)
+		analysis.SetWorkspaceName("test")
+		assert.Equal(t, "test", analysis.WorkspaceName)
 	})
 }
 
@@ -190,7 +190,7 @@ func TestHasErrors(t *testing.T) {
 func TestGetTotalVulnerabilities(t *testing.T) {
 	t.Run("should return a total of 2 vulnerabilities", func(t *testing.T) {
 		analysis := &Analysis{
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},
@@ -210,13 +210,13 @@ func TestGetDataWithoutVulnerabilities(t *testing.T) {
 			ID:             uuid.New(),
 			RepositoryID:   uuid.New(),
 			RepositoryName: "test",
-			CompanyID:      uuid.New(),
-			CompanyName:    "test",
+			WorkspaceID:    uuid.New(),
+			WorkspaceName:  "test",
 			Status:         "test",
 			Errors:         "test",
 			CreatedAt:      time.Now(),
 			FinishedAt:     time.Now(),
-			AnalysisVulnerabilities: []RelationshipAnalysisVuln{
+			AnalysisVulnerabilities: []AnalysisVulnerabilities{
 				{
 					Vulnerability: vulnerabilityEntities.Vulnerability{},
 				},
@@ -228,8 +228,8 @@ func TestGetDataWithoutVulnerabilities(t *testing.T) {
 		assert.NotEmpty(t, result.ID)
 		assert.NotEmpty(t, result.RepositoryID)
 		assert.NotEmpty(t, result.RepositoryName)
-		assert.NotEmpty(t, result.CompanyID)
-		assert.NotEmpty(t, result.CompanyName)
+		assert.NotEmpty(t, result.WorkspaceID)
+		assert.NotEmpty(t, result.WorkspaceName)
 		assert.NotEmpty(t, result.Status)
 		assert.NotEmpty(t, result.Errors)
 		assert.NotEmpty(t, result.CreatedAt)

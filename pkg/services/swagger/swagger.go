@@ -25,8 +25,8 @@ type Swagger struct {
 func NewSwagger(router *chi.Mux, defaultPort string) ISwagger {
 	return &Swagger{
 		router: router,
-		port:   env.GetEnvOrDefault("HORUSEC_PORT", defaultPort),
-		host:   env.GetEnvOrDefault("HORUSEC_SWAGGER_HOST", "localhost"),
+		port:   env.GetEnvOrDefault(enums.EnvHorusecPort, defaultPort),
+		host:   env.GetEnvOrDefault(enums.EnvHorusecSwaggerHost, "localhost"),
 	}
 }
 

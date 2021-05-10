@@ -7,8 +7,8 @@ type IDatabaseWrite interface {
 	RollbackTransaction() response.IResponse
 	CommitTransaction() response.IResponse
 	IsAvailable() bool
-	Create(data interface{}, table string) response.IResponse
-	CreateOrUpdate(entity interface{}, where map[string]interface{}, table string) response.IResponse
-	Update(entity interface{}, where map[string]interface{}, table string) response.IResponse
+	Create(entityPointer interface{}, table string) response.IResponse
+	CreateOrUpdate(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
+	Update(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
 	Delete(where map[string]interface{}, table string) response.IResponse
 }

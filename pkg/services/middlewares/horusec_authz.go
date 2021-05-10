@@ -34,8 +34,8 @@ import (
 
 type IAuthzMiddleware interface {
 	IsApplicationAdmin(next http.Handler) http.Handler
-	IsCompanyMember(next http.Handler) http.Handler
-	IsCompanyAdmin(next http.Handler) http.Handler
+	IsWorkspaceMember(next http.Handler) http.Handler
+	IsWorkspaceAdmin(next http.Handler) http.Handler
 	IsRepositoryMember(next http.Handler) http.Handler
 	IsRepositoryAdmin(next http.Handler) http.Handler
 	IsRepositorySupervisor(next http.Handler) http.Handler
@@ -71,10 +71,10 @@ func (a *AuthzMiddleware) IsApplicationAdmin(handler http.Handler) http.Handler 
 	})
 }
 
-func (a *AuthzMiddleware) IsCompanyMember(handler http.Handler) http.Handler {
+func (a *AuthzMiddleware) IsWorkspaceMember(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.CompanyMember))
-		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.CompanyMember) != nil {
+		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.WorkspaceMember))
+		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.WorkspaceMember) != nil {
 			return
 		}
 
@@ -82,10 +82,10 @@ func (a *AuthzMiddleware) IsCompanyMember(handler http.Handler) http.Handler {
 	})
 }
 
-func (a *AuthzMiddleware) IsCompanyAdmin(handler http.Handler) http.Handler {
+func (a *AuthzMiddleware) IsWorkspaceAdmin(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.CompanyAdmin))
-		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.CompanyAdmin) != nil {
+		response, err := a.grpcClient.IsAuthorized(a.ctx, a.setAuthorizedData(r, authEnums.WorkspaceAdmin))
+		if a.checkIsAuthorizedResponse(err, response, w, r, authEnums.WorkspaceAdmin) != nil {
 			return
 		}
 
@@ -127,17 +127,17 @@ func (a *AuthzMiddleware) IsRepositoryAdmin(handler http.Handler) http.Handler {
 }
 
 func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
-	isAuthorizedType authEnums.IsAuthorizedType) *proto.IsAuthorizedData {
+	isAuthorizedType authEnums.AuthorizationType) *proto.IsAuthorizedData {
 	return &proto.IsAuthorizedData{
 		Token:        a.getJWTToken(r),
 		Type:         isAuthorizedType.ToString(),
-		CompanyID:    chi.URLParam(r, enums.CompanyID),
+		WorkspaceID:  chi.URLParam(r, enums.WorkspaceID),
 		RepositoryID: chi.URLParam(r, enums.RepositoryID),
 	}
 }
 
 func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.IsAuthorizedResponse,
-	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.IsAuthorizedType) error {
+	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.AuthorizationType) error {
 	if err != nil {
 		logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)
 		httpUtil.StatusInternalServerError(w, enums.ErrorFailedToVerifyRequest)
@@ -153,7 +153,7 @@ func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.I
 	return nil
 }
 
-func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType authEnums.IsAuthorizedType) {
+func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType authEnums.AuthorizationType) {
 	logger.LogWarn(fmt.Sprintf(enums.MessageUnauthorizedHTTPRequest, a.getAccountID(r),
 		r.URL, r.Method, isAuthorizedType))
 }

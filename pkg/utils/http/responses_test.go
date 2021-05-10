@@ -15,12 +15,16 @@
 package http
 
 import (
+	"bytes"
 	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/http/enums"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 func TestStatusOK(t *testing.T) {
@@ -86,6 +90,39 @@ func TestStatusInternalServerError(t *testing.T) {
 		StatusInternalServerError(w, errors.New("test"))
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+	t.Run("should return status code 500 with body of invalid health broker", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		logger.LogSetOutput(output)
+		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
+		w := httptest.NewRecorder()
+
+		StatusInternalServerError(w, enums.ErrorBrokerIsNotHealth)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, output.String(), enums.ErrorBrokerIsNotHealth.Error())
+	})
+	t.Run("should return status code 500 with body of invalid health database", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		logger.LogSetOutput(output)
+		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
+		w := httptest.NewRecorder()
+
+		StatusInternalServerError(w, enums.ErrorDatabaseIsNotHealth)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, output.String(), enums.ErrorDatabaseIsNotHealth.Error())
+	})
+	t.Run("should return status code 500 with body of invalid health grpc", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		logger.LogSetOutput(output)
+		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
+		w := httptest.NewRecorder()
+
+		StatusInternalServerError(w, enums.ErrorGrpcIsNotHealth)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, output.String(), enums.ErrorGrpcIsNotHealth.Error())
 	})
 }
 

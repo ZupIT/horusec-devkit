@@ -22,32 +22,33 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/entities/vulnerability"
 )
 
-type RelationshipAnalysisVuln struct {
-	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id"`
-	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id"`
-	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at"`
-	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"` //nolint:lll // notations need more than 130 characters
+//nolint:lll,golint // notations need more than 130 characters and struct used on gorm
+type AnalysisVulnerabilities struct {
+	VulnerabilityID uuid.UUID                   `json:"vulnerabilityID" gorm:"Column:vulnerability_id" example:"00000000-0000-0000-0000-000000000000"`
+	AnalysisID      uuid.UUID                   `json:"analysisID" gorm:"Column:analysis_id" example:"00000000-0000-0000-0000-000000000000"`
+	CreatedAt       time.Time                   `json:"createdAt" gorm:"Column:created_at" example:"2021-12-30T23:59:59Z"`
+	Vulnerability   vulnerability.Vulnerability `json:"vulnerabilities" gorm:"foreignKey:VulnerabilityID;references:VulnerabilityID"`
 }
 
-func (a *RelationshipAnalysisVuln) GetTable() string {
+func (a *AnalysisVulnerabilities) GetTable() string {
 	return "analysis_vulnerabilities"
 }
 
-func (a *RelationshipAnalysisVuln) SetCreatedAt() {
+func (a *AnalysisVulnerabilities) SetCreatedAt() {
 	a.CreatedAt = time.Now()
 }
 
-func (a *RelationshipAnalysisVuln) SetVulnerabilityID() {
+func (a *AnalysisVulnerabilities) SetVulnerabilityID() {
 	a.Vulnerability.GenerateID()
 	a.VulnerabilityID = a.Vulnerability.VulnerabilityID
 }
 
-func (a *RelationshipAnalysisVuln) SetAnalysisID(id uuid.UUID) {
+func (a *AnalysisVulnerabilities) SetAnalysisID(id uuid.UUID) {
 	a.AnalysisID = id
 }
 
-func (a *RelationshipAnalysisVuln) GetAnalysisVulnerabilitiesWithoutVulnerability() *RelationshipAnalysisVuln {
-	return &RelationshipAnalysisVuln{
+func (a *AnalysisVulnerabilities) GetAnalysisVulnerabilitiesWithoutVulnerability() *AnalysisVulnerabilities {
+	return &AnalysisVulnerabilities{
 		VulnerabilityID: a.VulnerabilityID,
 		AnalysisID:      a.AnalysisID,
 		CreatedAt:       a.CreatedAt,

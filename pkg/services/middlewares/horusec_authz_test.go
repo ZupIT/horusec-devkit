@@ -50,7 +50,7 @@ func TestNewAuthzMiddleware(t *testing.T) {
 	})
 }
 
-func TestIsCompanyMember(t *testing.T) {
+func TestIsWorkspaceMember(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
 		grpcMock := &proto.Mock{}
 
@@ -60,7 +60,7 @@ func TestIsCompanyMember(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyMember(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceMember(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -83,7 +83,7 @@ func TestIsCompanyMember(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyMember(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceMember(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -105,7 +105,7 @@ func TestIsCompanyMember(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyMember(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceMember(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -127,7 +127,7 @@ func TestIsCompanyMember(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyMember(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceMember(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -141,7 +141,7 @@ func TestIsCompanyMember(t *testing.T) {
 	})
 }
 
-func TestIsCompanyAdmin(t *testing.T) {
+func TestIsWorkspaceAdmin(t *testing.T) {
 	t.Run("should return 200 when valid request", func(t *testing.T) {
 		grpcMock := &proto.Mock{}
 
@@ -151,7 +151,7 @@ func TestIsCompanyAdmin(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyAdmin(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceAdmin(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -174,7 +174,7 @@ func TestIsCompanyAdmin(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyAdmin(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceAdmin(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -196,7 +196,7 @@ func TestIsCompanyAdmin(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyAdmin(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceAdmin(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 
@@ -218,7 +218,7 @@ func TestIsCompanyAdmin(t *testing.T) {
 			grpcClient: grpcMock,
 		}
 
-		handler := middleware.IsCompanyAdmin(http.HandlerFunc(testHandler))
+		handler := middleware.IsWorkspaceAdmin(http.HandlerFunc(testHandler))
 
 		req, _ := http.NewRequest("GET", "http://test", nil)
 

@@ -22,6 +22,10 @@ go test -v -coverpkg "$PROJECT/..." -coverprofile coverage.out "$PROJECT/..."
 sed -i '/mock.go/d' coverage.out
 sed -i '/pb.go/d' coverage.out
 sed -i '/wire_gen.go/d' coverage.out
+sed -i '/wire.go/d' coverage.out
+sed -i '/docs.go/d' coverage.out
+sed -i '/main.go/d' coverage.out
+sed -i '/libs/d' coverage.out
 
 COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}')
 COVERAGE=${COVERAGE%\%}
@@ -29,11 +33,11 @@ COVERAGE=${COVERAGE%\%}
 if [ 1 -eq "$(echo "$COVERAGE" '>=' "$THRESHOLD" | bc -l)" ]; then
   echo "SUCCESS! Coverage above threshold"
   echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
-  rm "$PROJECT/coverage.out"
+  rm coverage.out
   exit 0
 fi
 
 echo "FAILS! Coverage below threshold"
 echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
-rm "$PROJECT/coverage.out"
+rm coverage.out
 exit 1

@@ -33,9 +33,9 @@ func (m *Mock) IsAuthorized(
 	return args.Get(0).(*IsAuthorizedResponse), mockUtils.ReturnNilOrError(args, 1)
 }
 
-func (m *Mock) GetAccountID(_ context.Context, _ *GetAccountData,
+func (m *Mock) GetAccountInfo(_ context.Context, _ *GetAccountData,
 	_ ...grpc.CallOption) (*GetAccountDataResponse, error) {
-	args := m.MethodCalled("GetAccountID")
+	args := m.MethodCalled("GetAccountInfo")
 	return args.Get(0).(*GetAccountDataResponse), mockUtils.ReturnNilOrError(args, 1)
 }
 

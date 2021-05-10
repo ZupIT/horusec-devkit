@@ -23,17 +23,18 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/enums/analysis"
 )
 
+//nolint:lll // notations need more than 130 characters
 type Analysis struct {
-	ID                      uuid.UUID                  `json:"id" gorm:"Column:analysis_id"`
-	RepositoryID            uuid.UUID                  `json:"repositoryID" gorm:"Column:repository_id"`
-	RepositoryName          string                     `json:"repositoryName" gorm:"Column:repository_name"`
-	CompanyID               uuid.UUID                  `json:"companyID" gorm:"Column:company_id"`
-	CompanyName             string                     `json:"companyName" gorm:"Column:company_name"`
-	Status                  analysis.Status            `json:"status" gorm:"Column:status"`
-	Errors                  string                     `json:"errors" gorm:"Column:errors"`
-	CreatedAt               time.Time                  `json:"createdAt" gorm:"Column:created_at"`
-	FinishedAt              time.Time                  `json:"finishedAt" gorm:"Column:finished_at"`
-	AnalysisVulnerabilities []RelationshipAnalysisVuln `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID"` //nolint:lll // notations need more than 130 characters
+	ID                      uuid.UUID                 `json:"id" gorm:"Column:analysis_id" example:"00000000-0000-0000-0000-000000000000"`
+	RepositoryID            uuid.UUID                 `json:"repositoryID" gorm:"Column:repository_id" example:"00000000-0000-0000-0000-000000000000"`
+	RepositoryName          string                    `json:"repositoryName" gorm:"Column:repository_name" example:"my-project"`
+	WorkspaceID             uuid.UUID                 `json:"workspaceID" gorm:"Column:workspace_id" example:"00000000-0000-0000-0000-000000000000"`
+	WorkspaceName           string                    `json:"workspaceName" gorm:"Column:workspace_name" example:"my-workspace"`
+	Status                  analysis.Status           `json:"status" gorm:"Column:status" enums:"running,success,error" example:"success"`
+	Errors                  string                    `json:"errors" gorm:"Column:errors"`
+	CreatedAt               time.Time                 `json:"createdAt" gorm:"Column:created_at" example:"2021-12-30T23:59:59Z"`
+	FinishedAt              time.Time                 `json:"finishedAt" gorm:"Column:finished_at" example:"2021-12-30T23:59:59Z"`
+	AnalysisVulnerabilities []AnalysisVulnerabilities `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID"`
 }
 
 func (a *Analysis) GetTable() string {
@@ -63,8 +64,8 @@ func (a *Analysis) Map() map[string]interface{} {
 		"createdAt":               a.CreatedAt,
 		"repositoryID":            a.RepositoryID,
 		"repositoryName":          a.RepositoryName,
-		"companyName":             a.CompanyName,
-		"companyID":               a.CompanyID,
+		"workspaceName":           a.WorkspaceName,
+		"workspaceID":             a.WorkspaceID,
 		"status":                  a.Status,
 		"errors":                  a.Errors,
 		"finishedAt":              a.FinishedAt,
@@ -96,8 +97,8 @@ func (a *Analysis) SetAllAnalysisVulnerabilitiesDefaultData() {
 	}
 }
 
-func (a *Analysis) SetCompanyName(companyName string) {
-	a.CompanyName = companyName
+func (a *Analysis) SetWorkspaceName(workspaceName string) {
+	a.WorkspaceName = workspaceName
 }
 
 func (a *Analysis) SetRepositoryName(repositoryName string) {
@@ -132,8 +133,8 @@ func (a *Analysis) GetDataWithoutVulnerabilities() *Analysis {
 		ID:             a.ID,
 		RepositoryID:   a.RepositoryID,
 		RepositoryName: a.RepositoryName,
-		CompanyID:      a.CompanyID,
-		CompanyName:    a.CompanyName,
+		WorkspaceID:    a.WorkspaceID,
+		WorkspaceName:  a.WorkspaceName,
 		Status:         a.Status,
 		Errors:         a.Errors,
 		CreatedAt:      a.CreatedAt,

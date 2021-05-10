@@ -26,8 +26,8 @@ const (
 	Python     Language = "Python"
 	Java       Language = "Java"
 	Kotlin     Language = "Kotlin"
-	Javascript Language = "Javascript"
-	Typescript Language = "Typescript"
+	Javascript Language = "JavaScript"
+	Typescript Language = "TypeScript"
 	Leaks      Language = "Leaks"
 	HCL        Language = "HCL"
 	C          Language = "C"
@@ -37,6 +37,7 @@ const (
 	Yaml       Language = "YAML"
 	Elixir     Language = "Elixir"
 	Shell      Language = "Shell"
+	Nginx      Language = "Nginx"
 	Unknown    Language = "Unknown"
 )
 
@@ -71,6 +72,7 @@ func Values() []Language {
 		Yaml,
 		Elixir,
 		Shell,
+		Nginx,
 		Unknown,
 	}
 }
@@ -96,6 +98,7 @@ func mapEnableLanguages() map[string]Language {
 		Yaml.ToString():       Yaml,
 		Elixir.ToString():     Elixir,
 		Shell.ToString():      Shell,
+		Nginx.ToString():      Nginx,
 		Unknown.ToString():    Unknown,
 	}
 }
@@ -105,11 +108,11 @@ func (l Language) ToString() string {
 }
 
 func (l Language) GetCustomImagesKeyByLanguage() string {
-	return l.mapConfigCustomImageJSONByLanguage()[l]
+	return l.MapLanguagesEnableInCLI()[l]
 }
 
 //nolint:funlen // method need to have more then 15 lines
-func (l Language) mapConfigCustomImageJSONByLanguage() map[Language]string {
+func (l Language) MapLanguagesEnableInCLI() map[Language]string {
 	return map[Language]string{
 		CSharp:     "csharp",
 		Leaks:      "leaks",
@@ -127,5 +130,6 @@ func (l Language) mapConfigCustomImageJSONByLanguage() map[Language]string {
 		Kotlin:     "kotlin",
 		Yaml:       "yaml",
 		Dart:       "dart",
+		Nginx:      "nginx",
 	}
 }

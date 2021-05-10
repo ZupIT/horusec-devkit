@@ -9,7 +9,7 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
-func NewAuthGRPCConnection() *grpc.ClientConn {
+func NewAuthGRPCConnection() grpc.ClientConnInterface {
 	conn, err := makeConnection()
 	if err != nil {
 		logger.LogPanic(enums.MessageFailedToConnectToAuthGRPC, err)
@@ -18,7 +18,7 @@ func NewAuthGRPCConnection() *grpc.ClientConn {
 	return conn
 }
 
-func makeConnection() (*grpc.ClientConn, error) {
+func makeConnection() (grpc.ClientConnInterface, error) {
 	if env.GetEnvOrDefaultBool(enums.HorusecGRPCConnectionUsesCerts, false) {
 		return setupWithCerts()
 	}
@@ -26,12 +26,12 @@ func makeConnection() (*grpc.ClientConn, error) {
 	return setupWithoutCerts()
 }
 
-func setupWithoutCerts() (*grpc.ClientConn, error) {
+func setupWithoutCerts() (grpc.ClientConnInterface, error) {
 	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthURL, enums.HorusecDefaultAuthHost),
 		grpc.WithInsecure())
 }
 
-func setupWithCerts() (*grpc.ClientConn, error) {
+func setupWithCerts() (grpc.ClientConnInterface, error) {
 	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthURL, enums.HorusecDefaultAuthHost),
 		grpc.WithTransportCredentials(getCredentials()))
 }

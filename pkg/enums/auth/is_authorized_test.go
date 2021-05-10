@@ -12,11 +12,11 @@ func TestToStringIsAuthorizedType(t *testing.T) {
 	})
 
 	t.Run("should success parse to string", func(t *testing.T) {
-		assert.Equal(t, "IsCompanyAdmin", CompanyAdmin.ToString())
+		assert.Equal(t, "IsWorkspaceAdmin", WorkspaceAdmin.ToString())
 	})
 
 	t.Run("should success parse to string", func(t *testing.T) {
-		assert.Equal(t, "IsCompanyMember", CompanyMember.ToString())
+		assert.Equal(t, "IsWorkspaceMember", WorkspaceMember.ToString())
 	})
 
 	t.Run("should success parse to string", func(t *testing.T) {

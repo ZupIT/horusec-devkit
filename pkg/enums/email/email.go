@@ -17,3 +17,7 @@ func Values() []Template {
 		RepositoryInvite,
 	}
 }
+
+func (t Template) ToString() string {
+	return string(t)
+}

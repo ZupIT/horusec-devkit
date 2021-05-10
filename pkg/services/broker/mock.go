@@ -35,7 +35,9 @@ func (m *Mock) Publish(_, _, _ string, _ []byte) error {
 	return mockUtils.ReturnNilOrError(args, 0)
 }
 
-func (m *Mock) Consume(_, _, _ string, _ func(packet brokerPacket.IPacket)) {
+func (m *Mock) Consume(_, _, _ string, handler func(packet brokerPacket.IPacket)) {
+	args := m.MethodCalled("ConsumeHandlerFunc")
+	handler(args.Get(0).(brokerPacket.IPacket))
 	_ = m.MethodCalled("Consume")
 }
 

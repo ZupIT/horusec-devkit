@@ -5,6 +5,8 @@ GOLANG_CI_LINT ?= ./bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-devkit
 HORUSEC ?= horusec
+COMPOSE_FILE_NAME ?= docker-compose.yaml
+DOCKER_COMPOSE ?= docker-compose
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -19,7 +21,7 @@ lint:
 
 coverage:
 	chmod +x scripts/coverage.sh
-	scripts/coverage.sh 99 "."
+	scripts/coverage.sh 99.3 "."
 
 test:
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
@@ -39,5 +41,18 @@ security:
     else
 		$(HORUSEC) start -p="./" -e="true"
     endif
+
+migrate: migrate-drop migrate-up
+
+migrate-up:
+	chmod +x ./scripts/migration-run.sh
+	./scripts/migration-run.sh up
+
+migrate-drop:
+	chmod +x ./scripts/migration-run.sh
+	./scripts/migration-run.sh drop -f
+
+update-auth-grpc:
+	protoc --go_out=.  --go-grpc_out=.  ./pkg/services/grpc/auth/proto/auth.proto
 
 pipeline: fmt fix-imports lint test coverage security
