@@ -56,6 +56,10 @@ If this is our first repository that you visit, or would like to know more about
 check out some of our other projects.
 
 - [Horusec CLI](https://github.com/ZupIT/horusec)
-- [Horusec WEB](https://github.com/ZupIT/horusec-platform)
+- [Horusec Platform](https://github.com/ZupIT/horusec-platform)
+- [Horusec Engine](https://github.com/ZupIT/horusec-engine)
+- [Horusec Operator](https://github.com/ZupIT/horusec-operator)
+- [Horusec Admin](https://github.com/ZupIT/horusec-admin)
+- [Horusec VsCode](https://github.com/ZupIT/horusec-vscode-plugin)
 
 This project exists thanks to all the contributors. You rock! ❤️🚀

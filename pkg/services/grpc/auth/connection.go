@@ -41,12 +41,12 @@ func makeConnection() (grpc.ClientConnInterface, error) {
 }
 
 func setupWithoutCerts() (grpc.ClientConnInterface, error) {
-	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthURL, enums.HorusecDefaultAuthHost),
+	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthGRPCURL, enums.HorusecDefaultAuthHost),
 		grpc.WithInsecure())
 }
 
 func setupWithCerts() (grpc.ClientConnInterface, error) {
-	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthURL, enums.HorusecDefaultAuthHost),
+	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthGRPCURL, enums.HorusecDefaultAuthHost),
 		grpc.WithTransportCredentials(getCredentials()))
 }
 
