@@ -19,16 +19,12 @@ import "strings"
 type Queue string
 
 const (
-	HorusecAnalyticNewAnalysisByAuthors       Queue = "horusec-analytic::new-analysis-by-author"
-	HorusecAnalyticNewAnalysisByRepository    Queue = "horusec-analytic::new-analysis-by-repository"
-	HorusecAnalyticNewAnalysisByLanguage      Queue = "horusec-analytic::new-analysis-by-language"
-	HorusecAnalyticNewAnalysisByTime          Queue = "horusec-analytic::new-analysis-by-time"
-	HorusecAnalyticUpdateAnalysisByAuthors    Queue = "horusec-analytic::update-analysis-by-author"
-	HorusecAnalyticUpdateAnalysisByRepository Queue = "horusec-analytic::update-analysis-by-repository"
-	HorusecAnalyticUpdateAnalysisByLanguage   Queue = "horusec-analytic::update-analysis-by-language"
-	HorusecAnalyticUpdateAnalysisByTime       Queue = "horusec-analytic::update-analysis-by-time"
-	HorusecEmail                              Queue = "horusec-email"
-	HorusecWebhook                            Queue = "horusec-webhook"
+	HorusecAnalyticNewAnalysisByAuthors    Queue = "horusec-analytic::new-analysis-by-author"
+	HorusecAnalyticNewAnalysisByRepository Queue = "horusec-analytic::new-analysis-by-repository"
+	HorusecAnalyticNewAnalysisByLanguage   Queue = "horusec-analytic::new-analysis-by-language"
+	HorusecAnalyticNewAnalysisByTime       Queue = "horusec-analytic::new-analysis-by-time"
+	HorusecEmail                           Queue = "horusec-email"
+	HorusecWebhook                         Queue = "horusec-webhook"
 )
 
 func Values() []Queue {
@@ -37,10 +33,6 @@ func Values() []Queue {
 		HorusecAnalyticNewAnalysisByRepository,
 		HorusecAnalyticNewAnalysisByLanguage,
 		HorusecAnalyticNewAnalysisByTime,
-		HorusecAnalyticUpdateAnalysisByAuthors,
-		HorusecAnalyticUpdateAnalysisByRepository,
-		HorusecAnalyticUpdateAnalysisByLanguage,
-		HorusecAnalyticUpdateAnalysisByTime,
 		HorusecEmail,
 		HorusecWebhook,
 	}

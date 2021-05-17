@@ -23,6 +23,5 @@ import (
 func TestEqualValuesExchangeName(t *testing.T) {
 	t.Run("should return equal exchange names", func(t *testing.T) {
 		assert.Equal(t, "new-analysis", NewAnalysis)
-		assert.Equal(t, "update-analysis", UpdateAnalysis)
 	})
 }

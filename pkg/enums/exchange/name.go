@@ -15,6 +15,5 @@
 package exchange
 
 const (
-	NewAnalysis    = "new-analysis"
-	UpdateAnalysis = "update-analysis"
+	NewAnalysis = "new-analysis"
 )
