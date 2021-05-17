@@ -17,7 +17,8 @@ package exchange
 type Name string
 
 const (
-	NewAnalysis Name = "new-analysis"
+	NewAnalysis    Name = "new-analysis"
+	UpdateAnalysis Name = "update-analysis"
 )
 
 func (n Name) ToString() string {

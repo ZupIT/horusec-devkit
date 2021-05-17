@@ -19,20 +19,28 @@ import "strings"
 type Queue string
 
 const (
-	HorusecAnalyticAuthors      Queue = "horusec-analytic::news-authors"
-	HorusecAnalyticRepositories Queue = "horusec-analytic::news-repositories"
-	HorusecAnalyticLanguages    Queue = "horusec-analytic::news-languages"
-	HorusecAnalyticTimes        Queue = "horusec-analytic::news-times"
-	HorusecEmail                Queue = "horusec-email"
-	HorusecWebhook              Queue = "horusec-webhook"
+	HorusecAnalyticNewAnalysisByAuthors       Queue = "horusec-analytic::new-analysis-by-author"
+	HorusecAnalyticNewAnalysisByRepository    Queue = "horusec-analytic::new-analysis-by-repository"
+	HorusecAnalyticNewAnalysisByLanguage      Queue = "horusec-analytic::new-analysis-by-language"
+	HorusecAnalyticNewAnalysisByTime          Queue = "horusec-analytic::new-analysis-by-time"
+	HorusecAnalyticUpdateAnalysisByAuthors    Queue = "horusec-analytic::update-analysis-by-author"
+	HorusecAnalyticUpdateAnalysisByRepository Queue = "horusec-analytic::update-analysis-by-repository"
+	HorusecAnalyticUpdateAnalysisByLanguage   Queue = "horusec-analytic::update-analysis-by-language"
+	HorusecAnalyticUpdateAnalysisByTime       Queue = "horusec-analytic::update-analysis-by-time"
+	HorusecEmail                              Queue = "horusec-email"
+	HorusecWebhook                            Queue = "horusec-webhook"
 )
 
 func Values() []Queue {
 	return []Queue{
-		HorusecAnalyticAuthors,
-		HorusecAnalyticRepositories,
-		HorusecAnalyticLanguages,
-		HorusecAnalyticTimes,
+		HorusecAnalyticNewAnalysisByAuthors,
+		HorusecAnalyticNewAnalysisByRepository,
+		HorusecAnalyticNewAnalysisByLanguage,
+		HorusecAnalyticNewAnalysisByTime,
+		HorusecAnalyticUpdateAnalysisByAuthors,
+		HorusecAnalyticUpdateAnalysisByRepository,
+		HorusecAnalyticUpdateAnalysisByLanguage,
+		HorusecAnalyticUpdateAnalysisByTime,
 		HorusecEmail,
 		HorusecWebhook,
 	}

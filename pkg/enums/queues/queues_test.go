@@ -22,7 +22,7 @@ import (
 
 func TestValues(t *testing.T) {
 	t.Run("should return 6 valid queue values", func(t *testing.T) {
-		assert.Len(t, Values(), 6)
+		assert.Len(t, Values(), 10)
 	})
 }
 
