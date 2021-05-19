@@ -14,13 +14,7 @@
 
 package exchange
 
-type Kind string
-
 const (
-	Topic  Kind = "topic"
-	Fanout Kind = "fanout"
+	Topic  = "topic"
+	Fanout = "fanout"
 )
-
-func (k Kind) ToString() string {
-	return string(k)
-}
