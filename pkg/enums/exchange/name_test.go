@@ -20,8 +20,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestName_ToString(t *testing.T) {
-	t.Run("should parse exchange name with success", func(t *testing.T) {
-		assert.Equal(t, "new-analysis", NewAnalysis.ToString())
+func TestEqualValuesExchangeName(t *testing.T) {
+	t.Run("should return equal exchange names", func(t *testing.T) {
+		assert.Equal(t, "new-analysis", NewAnalysis)
 	})
 }

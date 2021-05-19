@@ -14,13 +14,6 @@
 
 package exchange
 
-type Name string
-
 const (
-	NewAnalysis    Name = "new-analysis"
-	UpdateAnalysis Name = "update-analysis"
+	NewAnalysis = "new-analysis"
 )
-
-func (n Name) ToString() string {
-	return string(n)
-}
