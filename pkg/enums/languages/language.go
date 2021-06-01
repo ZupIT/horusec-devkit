@@ -38,6 +38,7 @@ const (
 	Elixir     Language = "Elixir"
 	Shell      Language = "Shell"
 	Nginx      Language = "Nginx"
+	Swift      Language = "Swift"
 	Unknown    Language = "Unknown"
 )
 
@@ -73,6 +74,7 @@ func Values() []Language {
 		Elixir,
 		Shell,
 		Nginx,
+		Swift,
 		Unknown,
 	}
 }
@@ -99,6 +101,7 @@ func mapEnableLanguages() map[string]Language {
 		Elixir.ToString():     Elixir,
 		Shell.ToString():      Shell,
 		Nginx.ToString():      Nginx,
+		Swift.ToString():      Swift,
 		Unknown.ToString():    Unknown,
 	}
 }
@@ -131,5 +134,6 @@ func (l Language) MapLanguagesEnableInCLI() map[Language]string {
 		Yaml:       "yaml",
 		Dart:       "dart",
 		Nginx:      "nginx",
+		Swift:      "swift",
 	}
 }
