@@ -19,23 +19,24 @@ import "github.com/iancoleman/strcase"
 type Tool string
 
 const (
-	HorusecEngine    Tool = "HorusecEngine"
-	GoSec            Tool = "GoSec"
-	SecurityCodeScan Tool = "SecurityCodeScan"
-	Brakeman         Tool = "Brakeman"
-	Safety           Tool = "Safety"
-	Bandit           Tool = "Bandit"
-	NpmAudit         Tool = "NpmAudit"
-	YarnAudit        Tool = "YarnAudit"
-	GitLeaks         Tool = "GitLeaks"
-	TfSec            Tool = "TfSec"
-	Semgrep          Tool = "Semgrep"
-	Flawfinder       Tool = "Flawfinder"
-	PhpCS            Tool = "PhpCS"
-	MixAudit         Tool = "MixAudit"
-	Sobelow          Tool = "Sobelow"
-	ShellCheck       Tool = "ShellCheck"
-	BundlerAudit     Tool = "BundlerAudit"
+	HorusecEngine        Tool = "HorusecEngine"
+	GoSec                Tool = "GoSec"
+	SecurityCodeScan     Tool = "SecurityCodeScan"
+	Brakeman             Tool = "Brakeman"
+	Safety               Tool = "Safety"
+	Bandit               Tool = "Bandit"
+	NpmAudit             Tool = "NpmAudit"
+	YarnAudit            Tool = "YarnAudit"
+	GitLeaks             Tool = "GitLeaks"
+	TfSec                Tool = "TfSec"
+	Semgrep              Tool = "Semgrep"
+	Flawfinder           Tool = "Flawfinder"
+	PhpCS                Tool = "PhpCS"
+	MixAudit             Tool = "MixAudit"
+	Sobelow              Tool = "Sobelow"
+	ShellCheck           Tool = "ShellCheck"
+	BundlerAudit         Tool = "BundlerAudit"
+	OwaspDependencyCheck Tool = "OwaspDependencyCheck"
 )
 
 func (t Tool) ToString() string {
@@ -66,5 +67,6 @@ func Values() []Tool {
 		Sobelow,
 		ShellCheck,
 		BundlerAudit,
+		OwaspDependencyCheck,
 	}
 }
