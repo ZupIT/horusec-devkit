@@ -14,10 +14,14 @@
 
 package str
 
-import "strconv"
+import (
+	"strconv"
+
+	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
+)
 
 func ParseUIntOrDefault(s string) uint {
-	value, err := strconv.ParseUint(s, 10, 64)
+	value, err := strconv.ParseUint(s, ozzovalidation.Length10, ozzovalidation.Length64)
 	if err != nil {
 		return 0
 	}

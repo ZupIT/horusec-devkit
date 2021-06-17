@@ -20,6 +20,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -47,7 +49,7 @@ type Router struct {
 func NewHTTPRouter(corsOptions *cors.Options, defaultPort string) IRouter {
 	router := &Router{
 		port:        env.GetEnvOrDefault(enums.HorusecPort, defaultPort),
-		timeout:     time.Duration(env.GetEnvOrDefaultInt(enums.HorusecRouterTimeout, 10)) * time.Second,
+		timeout:     time.Duration(env.GetEnvOrDefaultInt(enums.HorusecRouterTimeout, ozzovalidation.Length10)) * time.Second,
 		corsOptions: corsOptions,
 		router:      chi.NewRouter(),
 	}
