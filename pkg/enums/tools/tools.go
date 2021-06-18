@@ -37,6 +37,7 @@ const (
 	ShellCheck           Tool = "ShellCheck"
 	BundlerAudit         Tool = "BundlerAudit"
 	OwaspDependencyCheck Tool = "OwaspDependencyCheck"
+	DotnetCli            Tool = "DotnetCli"
 )
 
 func (t Tool) ToString() string {
@@ -68,5 +69,6 @@ func Values() []Tool {
 		ShellCheck,
 		BundlerAudit,
 		OwaspDependencyCheck,
+		DotnetCli,
 	}
 }
