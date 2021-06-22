@@ -41,6 +41,7 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "BundlerAudit", BundlerAudit.ToString())
 		assert.Equal(t, "OwaspDependencyCheck", OwaspDependencyCheck.ToString())
 		assert.Equal(t, "DotnetCli", DotnetCli.ToString())
+		assert.Equal(t, "Nancy", Nancy.ToString())
 	})
 }
 
@@ -65,11 +66,12 @@ func TestToLowerCase(t *testing.T) {
 		assert.Equal(t, "bundlerAudit", BundlerAudit.ToLowerCamel())
 		assert.Equal(t, "owaspDependencyCheck", OwaspDependencyCheck.ToLowerCamel())
 		assert.Equal(t, "dotnetCli", DotnetCli.ToLowerCamel())
+		assert.Equal(t, "nancy", Nancy.ToLowerCamel())
 	})
 }
 
 func TestValues(t *testing.T) {
-	t.Run("should return 19 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 19)
+	t.Run("should return 20 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 20)
 	})
 }
