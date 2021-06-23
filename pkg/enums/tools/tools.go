@@ -1,4 +1,4 @@
-// Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
+// Copyright 2021 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ const (
 	BundlerAudit         Tool = "BundlerAudit"
 	OwaspDependencyCheck Tool = "OwaspDependencyCheck"
 	DotnetCli            Tool = "DotnetCli"
+	Nancy                Tool = "Nancy"
 )
 
 func (t Tool) ToString() string {
@@ -70,5 +71,6 @@ func Values() []Tool {
 		BundlerAudit,
 		OwaspDependencyCheck,
 		DotnetCli,
+		Nancy,
 	}
 }
