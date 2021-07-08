@@ -17,6 +17,7 @@ package logger
 import (
 	"bytes"
 	"errors"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -175,6 +176,17 @@ func TestLogDebugJSON(t *testing.T) {
 func TestLogSetOutput(t *testing.T) {
 	t.Run("Should set output instance and get on read output", func(t *testing.T) {
 		output := bytes.NewBufferString("")
+		LogSetOutput(output)
+		assert.Empty(t, output.String())
+
+		const textLogged = "Some aleatory text logged"
+		LogInfo(textLogged)
+
+		assert.Contains(t, output.String(), textLogged)
+	})
+	t.Run("Should set output instance using environment variable", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		os.Setenv(LOG_PATH_ENV, "/tmp")
 		LogSetOutput(output)
 		assert.Empty(t, output.String())
 
