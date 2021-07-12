@@ -188,6 +188,12 @@ func TestLogSetOutput(t *testing.T) {
 	t.Run("Should set output instance with file and get on read output and file", func(t *testing.T) {
 		output := bytes.NewBufferString("")
 		file, err := os.Create("./testSetOutput")
+		defer func() {
+			err := os.Remove(file.Name())
+			if err != nil {
+				t.Error()
+			}
+		}()
 		if err != nil {
 			t.Error(err)
 		}
