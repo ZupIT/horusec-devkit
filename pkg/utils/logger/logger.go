@@ -18,19 +18,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
+	"github.com/sirupsen/logrus"
 	"io"
 	"log"
 	"os"
-	"path/filepath"
-	"time"
-
-	"github.com/sirupsen/logrus"
-
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
 )
-
-const LOG_PATH_ENV = "LOG_PATH"
-const DEFAULT_LOG_PATH = ""
 
 func LogPanic(msg string, err error, args ...map[string]interface{}) {
 	if err != nil {
@@ -164,56 +157,18 @@ func LogDebugJSON(message string, content interface{}) {
 	LogDebugWithLevel(message, fmt.Sprintf("%v", content))
 }
 
-func LogSetOutput(stdout *bytes.Buffer) {
-	var file *os.File
-	var logPath = os.Getenv(LOG_PATH_ENV)
-	if logPath == "" {
-		dir, err := getDirName()
-		if err != nil {
-			logrus.Error(err)
-		}
-		fileName := dir + "/horusec-log-" + time.Now().Format("2006-01-02 15:04:05") + ".log"
-		file, err = os.Create(fileName)
-		if err != nil {
-			logrus.Error(err)
-		}
-
-	} else {
-		var err error
-		if _, err := os.Stat(logPath); os.IsNotExist(err) {
-			logrus.Error(err)
-		}
-
-		fileName := logPath + "/horusec-log-" + time.Now().Format("2006-01-02 15:04:05") + ".log"
-		file, err = os.Create(fileName)
-		file, err = os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-		if err != nil {
-			logrus.Error(err)
-		}
-	}
-
+func LogSetOutput(stdout *bytes.Buffer, file *os.File) error {
+	var err error
 	if file == nil {
 		logrus.SetOutput(stdout)
-		logrus.Info("Starting without log file")
 	} else {
+		file, err = os.OpenFile(file.Name(), os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+		if err != nil {
+			logrus.Error(err)
+			return err
+		}
 		mw := io.MultiWriter(stdout, file)
 		logrus.SetOutput(mw)
 	}
-
-}
-
-func getDirName() (string, error) {
-	var dirAbsPath string
-	ex, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-
-	exReal, err := filepath.EvalSymlinks(ex)
-	if err != nil {
-		return "", err
-	}
-	dirAbsPath = filepath.Dir(exReal)
-
-	return dirAbsPath, nil
+	return nil
 }

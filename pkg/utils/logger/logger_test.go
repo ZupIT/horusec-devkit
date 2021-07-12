@@ -174,9 +174,9 @@ func TestLogDebugJSON(t *testing.T) {
 }
 
 func TestLogSetOutput(t *testing.T) {
-	t.Run("Should set output instance and get on read output", func(t *testing.T) {
+	t.Run("Should set output instance without file and get on read output", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		LogSetOutput(output)
+		_ = LogSetOutput(output, nil)
 		assert.Empty(t, output.String())
 
 		const textLogged = "Some aleatory text logged"
@@ -184,15 +184,40 @@ func TestLogSetOutput(t *testing.T) {
 
 		assert.Contains(t, output.String(), textLogged)
 	})
-	t.Run("Should set output instance using environment variable", func(t *testing.T) {
+	t.Run("Should set output instance with file and get on read output and file", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		os.Setenv(LOG_PATH_ENV, "/tmp")
-		LogSetOutput(output)
+		file, err := os.Create("./testSetOutput")
+		if err != nil {
+			t.Error(err)
+		}
+		_ = LogSetOutput(output, file)
 		assert.Empty(t, output.String())
 
 		const textLogged = "Some aleatory text logged"
 		LogInfo(textLogged)
-
+		byteSlice := make([]byte, 300)
+		_, err = file.Read(byteSlice)
+		if err != nil {
+			t.Error(err)
+		}
 		assert.Contains(t, output.String(), textLogged)
+		assert.Contains(t, string(byteSlice), textLogged)
+		err = os.Remove(file.Name())
+		if err != nil {
+			t.Error(err)
+		}
 	})
+	t.Run("Should set output instance with invalid file and panic", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		assert.Panics(t, func() {
+			_ = LogSetOutput(output, &os.File{})
+		})
+	})
+	t.Run("Should set output instance with invalid file and get error", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		file := os.NewFile(1, "testSetOutputAndGetError")
+		err := LogSetOutput(output, file)
+		assert.Error(t, err)
+	})
+
 }
