@@ -93,7 +93,7 @@ func TestStatusInternalServerError(t *testing.T) {
 	})
 	t.Run("should return status code 500 with body of invalid health broker", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		_ = logger.LogSetOutput(output, nil)
+		logger.LogSetOutput(output)
 		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
 		w := httptest.NewRecorder()
 
@@ -104,7 +104,7 @@ func TestStatusInternalServerError(t *testing.T) {
 	})
 	t.Run("should return status code 500 with body of invalid health database", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		_ = logger.LogSetOutput(output, nil)
+		logger.LogSetOutput(output)
 		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
 		w := httptest.NewRecorder()
 
@@ -115,7 +115,7 @@ func TestStatusInternalServerError(t *testing.T) {
 	})
 	t.Run("should return status code 500 with body of invalid health grpc", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		_ = logger.LogSetOutput(output, nil)
+		logger.LogSetOutput(output)
 		_, _ = http.NewRequest(http.MethodPost, "/test", nil)
 		w := httptest.NewRecorder()
 

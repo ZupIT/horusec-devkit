@@ -17,6 +17,7 @@ package logger
 import (
 	"bytes"
 	"errors"
+	"io/ioutil"
 	"os"
 	"testing"
 
@@ -176,7 +177,7 @@ func TestLogDebugJSON(t *testing.T) {
 func TestLogSetOutput(t *testing.T) {
 	t.Run("Should set output instance without file and get on read output", func(t *testing.T) {
 		output := bytes.NewBufferString("")
-		_ = LogSetOutput(output, nil)
+		LogSetOutput(output)
 		assert.Empty(t, output.String())
 
 		const textLogged = "Some aleatory text logged"
@@ -190,34 +191,24 @@ func TestLogSetOutput(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		_ = LogSetOutput(output, file)
+		LogSetOutput(output, file)
 		assert.Empty(t, output.String())
 
 		const textLogged = "Some aleatory text logged"
 		LogInfo(textLogged)
-		byteSlice := make([]byte, 300)
-		_, err = file.Read(byteSlice)
+		byteSlice, err := ioutil.ReadFile(file.Name())
 		if err != nil {
 			t.Error(err)
 		}
 		assert.Contains(t, output.String(), textLogged)
 		assert.Contains(t, string(byteSlice), textLogged)
-		err = os.Remove(file.Name())
-		if err != nil {
-			t.Error(err)
-		}
+
 	})
-	t.Run("Should set output instance with invalid file and panic", func(t *testing.T) {
-		output := bytes.NewBufferString("")
+	t.Run("Should set output instance with invalid writer and panic", func(t *testing.T) {
 		assert.Panics(t, func() {
-			_ = LogSetOutput(output, &os.File{})
+			LogSetOutput(nil, &os.File{})
+			LogInfo("Should panic")
 		})
-	})
-	t.Run("Should set output instance with invalid file and get error", func(t *testing.T) {
-		output := bytes.NewBufferString("")
-		file := os.NewFile(1, "testSetOutputAndGetError")
-		err := LogSetOutput(output, file)
-		assert.Error(t, err)
 	})
 
 }

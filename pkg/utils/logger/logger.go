@@ -15,14 +15,12 @@
 package logger
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
 	"github.com/sirupsen/logrus"
 	"io"
 	"log"
-	"os"
 )
 
 func LogPanic(msg string, err error, args ...map[string]interface{}) {
@@ -157,18 +155,7 @@ func LogDebugJSON(message string, content interface{}) {
 	LogDebugWithLevel(message, fmt.Sprintf("%v", content))
 }
 
-func LogSetOutput(stdout *bytes.Buffer, file *os.File) error {
-	var err error
-	if file == nil {
-		logrus.SetOutput(stdout)
-	} else {
-		file, err = os.OpenFile(file.Name(), os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-		if err != nil {
-			logrus.Error(err)
-			return err
-		}
-		mw := io.MultiWriter(stdout, file)
-		logrus.SetOutput(mw)
-	}
-	return nil
+func LogSetOutput(writers ...io.Writer) {
+	mw := io.MultiWriter(writers...)
+	logrus.SetOutput(mw)
 }
