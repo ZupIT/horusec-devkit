@@ -21,8 +21,8 @@ import (
 	"time"
 
 	jwtMiddleware "github.com/auth0/go-jwt-middleware"
-	"github.com/dgrijalva/jwt-go"
 	jwtGO "github.com/form3tech-oss/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
