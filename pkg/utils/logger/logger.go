@@ -17,10 +17,12 @@ package logger
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
-	"github.com/sirupsen/logrus"
 	"io"
 	"log"
+
+	"github.com/sirupsen/logrus"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger/enums"
 )
 
 func LogPanic(msg string, err error, args ...map[string]interface{}) {
