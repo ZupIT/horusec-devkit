@@ -17,6 +17,8 @@ package logger
 import (
 	"bytes"
 	"errors"
+	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -173,7 +175,7 @@ func TestLogDebugJSON(t *testing.T) {
 }
 
 func TestLogSetOutput(t *testing.T) {
-	t.Run("Should set output instance and get on read output", func(t *testing.T) {
+	t.Run("Should set output instance without file and get on read output", func(t *testing.T) {
 		output := bytes.NewBufferString("")
 		LogSetOutput(output)
 		assert.Empty(t, output.String())
@@ -183,4 +185,36 @@ func TestLogSetOutput(t *testing.T) {
 
 		assert.Contains(t, output.String(), textLogged)
 	})
+	t.Run("Should set output instance with file and get on read output and file", func(t *testing.T) {
+		output := bytes.NewBufferString("")
+		file, err := os.Create("./testSetOutput")
+		if err != nil {
+			t.Error(err)
+		}
+		defer func() {
+			err := os.Remove(file.Name())
+			if err != nil {
+				t.Error()
+			}
+		}()
+		LogSetOutput(output, file)
+		assert.Empty(t, output.String())
+
+		const textLogged = "Some aleatory text logged"
+		LogInfo(textLogged)
+		byteSlice, err := ioutil.ReadFile(file.Name())
+		if err != nil {
+			t.Error(err)
+		}
+		assert.Contains(t, output.String(), textLogged)
+		assert.Contains(t, string(byteSlice), textLogged)
+
+	})
+	t.Run("Should set output instance with invalid writer and panic", func(t *testing.T) {
+		assert.Panics(t, func() {
+			LogSetOutput(nil, &os.File{})
+			LogInfo("Should panic")
+		})
+	})
+
 }

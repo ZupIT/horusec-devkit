@@ -15,9 +15,9 @@
 package logger
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/sirupsen/logrus"
@@ -52,7 +52,6 @@ func LogInfo(msg string, args ...interface{}) {
 		logrus.Info(msg, args)
 		return
 	}
-
 	logrus.Info(msg)
 }
 
@@ -158,6 +157,7 @@ func LogDebugJSON(message string, content interface{}) {
 	LogDebugWithLevel(message, fmt.Sprintf("%v", content))
 }
 
-func LogSetOutput(stdout *bytes.Buffer) {
-	logrus.SetOutput(stdout)
+func LogSetOutput(writers ...io.Writer) {
+	mw := io.MultiWriter(writers...)
+	logrus.SetOutput(mw)
 }
