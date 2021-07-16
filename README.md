@@ -48,6 +48,13 @@ To finish, the utils refers to an abstraction which instantiation or connection 
 Just import and use it, simply and quickly.
 An example is our abstraction from the logrus library, that we adapted to make it more comfortable to use.
 
+## Communication
+
+We have a few channels for contact, feel free to reach out to us at:
+
+- [GitHub Issues](https://github.com/ZupIT/horusec-devkit/issues)
+- [Zup Open Source Forum](https://forum.zup.com.br)
+
 ## Contributing
 
 Feel free to use, recommend improvements, or contribute to new implementations.
