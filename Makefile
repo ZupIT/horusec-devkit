@@ -7,6 +7,7 @@ GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-devkit
 HORUSEC ?= horusec
 COMPOSE_FILE_NAME ?= docker-compose.yaml
 DOCKER_COMPOSE ?= docker-compose
+ADDLICENSE ?= addlicense
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -56,3 +57,11 @@ update-auth-grpc:
 	protoc --go_out=.  --go-grpc_out=.  ./pkg/services/grpc/auth/proto/auth.proto
 
 pipeline: fmt fix-imports lint test coverage security
+
+license:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -check -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
+
+license-fix:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
