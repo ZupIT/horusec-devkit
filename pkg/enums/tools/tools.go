@@ -39,6 +39,7 @@ const (
 	OwaspDependencyCheck Tool = "OwaspDependencyCheck"
 	DotnetCli            Tool = "DotnetCli"
 	Nancy                Tool = "Nancy"
+	Trivy                Tool = "Trivy"
 )
 
 func (t Tool) ToString() string {
@@ -72,5 +73,6 @@ func Values() []Tool {
 		OwaspDependencyCheck,
 		DotnetCli,
 		Nancy,
+		Trivy,
 	}
 }

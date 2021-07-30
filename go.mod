@@ -5,7 +5,8 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
-	github.com/form3tech-oss/jwt-go v3.2.3+incompatible // indirect
+	github.com/auth0/go-jwt-middleware v1.0.1
+	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.2.0
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
@@ -16,7 +17,6 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/google/uuid v1.3.0
 	github.com/gopherjs/gopherjs v0.0.0-20210420193930-a4630ec28c79 // indirect
-	github.com/gorilla/mux v1.7.4 // indirect
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jackc/pgx/v4 v4.12.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
@@ -34,7 +34,6 @@ require (
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/http-swagger v1.0.0
-	github.com/urfave/negroni v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
