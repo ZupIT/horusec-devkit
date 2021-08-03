@@ -38,6 +38,7 @@ type IRouter interface {
 	GetPort() string
 	GetMux() *chi.Mux
 	Route(pattern string, fn func(router chi.Router)) chi.Router
+	SetJaeger(serviceName string, logError, logInfo bool)
 }
 
 type Router struct {
@@ -45,7 +46,8 @@ type Router struct {
 	timeout     time.Duration
 	corsOptions *cors.Options
 	router      *chi.Mux
-	tracer      tracer.Jaeger
+	jaeger      tracer.Jaeger
+	serviceName string
 }
 
 func NewHTTPRouter(corsOptions *cors.Options, defaultPort string) IRouter {
@@ -58,7 +60,13 @@ func NewHTTPRouter(corsOptions *cors.Options, defaultPort string) IRouter {
 
 	return router.setRouterConfig()
 }
-
+func (r *Router) SetJaeger(serviceName string, logError, logInfo bool) {
+	r.jaeger = tracer.Jaeger{
+		Name:     serviceName,
+		LogError: logError,
+		LogInfo:  logInfo,
+	}
+}
 func (r *Router) GetMux() *chi.Mux {
 	return r.router
 }
@@ -68,15 +76,16 @@ func (r *Router) Route(pattern string, fn func(router chi.Router)) chi.Router {
 }
 
 func (r *Router) ListenAndServe() {
-	jaegerCloser, err := r.tracer.Config()
+	jaegerCloser, err := r.jaeger.Config()
 	if err != nil {
-		logger.LogPanic(enums.ErrorWithJaeger, err)
+		logger.LogError(enums.ErrorWithJaeger, err)
+	} else {
+		defer func() {
+			if err := jaegerCloser.Close(); err != nil {
+				logger.LogPanic(enums.ErrorWithJaeger, err)
+			}
+		}()
 	}
-	defer func() {
-		if err := jaegerCloser.Close(); err != nil {
-			logger.LogPanic(enums.ErrorWithJaeger, err)
-		}
-	}()
 	logger.LogInfo(fmt.Sprintf(enums.MessageServiceRunningOnPort, r.port))
 	logger.LogPanic(enums.MessageListenAndServeError, http.ListenAndServe(fmt.Sprintf(":%s", r.port), r.router))
 }
