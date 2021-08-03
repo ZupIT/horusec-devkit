@@ -17,6 +17,7 @@ package router
 import (
 	"compress/flate"
 	"fmt"
+	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
 	"net/http"
 	"time"
 
@@ -44,6 +45,7 @@ type Router struct {
 	timeout     time.Duration
 	corsOptions *cors.Options
 	router      *chi.Mux
+	tracer      tracer.Jaeger
 }
 
 func NewHTTPRouter(corsOptions *cors.Options, defaultPort string) IRouter {
@@ -66,6 +68,15 @@ func (r *Router) Route(pattern string, fn func(router chi.Router)) chi.Router {
 }
 
 func (r *Router) ListenAndServe() {
+	jaegerCloser, err := r.tracer.Config()
+	if err != nil {
+		logger.LogPanic(enums.ErrorWithJaeger, err)
+	}
+	defer func() {
+		if err := jaegerCloser.Close(); err != nil {
+			logger.LogPanic(enums.ErrorWithJaeger, err)
+		}
+	}()
 	logger.LogInfo(fmt.Sprintf(enums.MessageServiceRunningOnPort, r.port))
 	logger.LogPanic(enums.MessageListenAndServeError, http.ListenAndServe(fmt.Sprintf(":%s", r.port), r.router))
 }
