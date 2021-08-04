@@ -2,13 +2,15 @@ package tracer
 
 import (
 	"errors"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
+	"io"
+	"time"
+
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go/config"
 	"github.com/uber/jaeger-client-go/zipkin"
 	jaegerPrometheus "github.com/uber/jaeger-lib/metrics/prometheus"
-	"io"
-	"time"
+
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 type (

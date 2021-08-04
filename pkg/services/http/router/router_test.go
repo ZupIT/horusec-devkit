@@ -17,19 +17,22 @@ package router
 import (
 	"testing"
 
-	"github.com/go-chi/cors"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
+
+	"github.com/go-chi/cors"
 )
 
 func TestNewHTTPRouter(t *testing.T) {
 	t.Run("should return a new router service with default config", func(t *testing.T) {
-		assert.NotNil(t, NewHTTPRouter(&cors.Options{}, "8000"))
+		assert.NotNil(t, NewHTTPRouter(&cors.Options{}, "8000", tracer.Jaeger{Name: "test"}))
 	})
 }
 
 func TestGetMux(t *testing.T) {
 	t.Run("should return a chi mux instance", func(t *testing.T) {
-		router := NewHTTPRouter(&cors.Options{}, "8000")
+		router := NewHTTPRouter(&cors.Options{}, "8000", tracer.Jaeger{Name: "test"})
 
 		assert.NotNil(t, router)
 		assert.NotNil(t, router.GetMux())
@@ -38,7 +41,7 @@ func TestGetMux(t *testing.T) {
 
 func TestSetTimeout(t *testing.T) {
 	t.Run("should return a chi router interface", func(t *testing.T) {
-		router := NewHTTPRouter(&cors.Options{}, "8000")
+		router := NewHTTPRouter(&cors.Options{}, "8000", tracer.Jaeger{Name: "test"})
 
 		assert.NotNil(t, router)
 		assert.NotNil(t, router.Route("/test", nil))
@@ -47,7 +50,7 @@ func TestSetTimeout(t *testing.T) {
 
 func TestListenAndServe(t *testing.T) {
 	t.Run("should panic when failed to serve", func(t *testing.T) {
-		router := NewHTTPRouter(&cors.Options{}, "test")
+		router := NewHTTPRouter(&cors.Options{}, "test", tracer.Jaeger{Name: "test"})
 
 		assert.Panics(t, func() {
 			router.ListenAndServe()
@@ -57,7 +60,7 @@ func TestListenAndServe(t *testing.T) {
 
 func TestGetPort(t *testing.T) {
 	t.Run("should success get router server port", func(t *testing.T) {
-		router := NewHTTPRouter(&cors.Options{}, "8000")
+		router := NewHTTPRouter(&cors.Options{}, "8000", tracer.Jaeger{Name: "test"})
 
 		assert.Equal(t, "8000", router.GetPort())
 	})

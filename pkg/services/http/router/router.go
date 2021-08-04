@@ -17,14 +17,18 @@ package router
 import (
 	"compress/flate"
 	"fmt"
-	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
+	"io"
 	"net/http"
 	"time"
 
+	"github.com/opentracing/opentracing-go"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
+
 	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
@@ -38,7 +42,7 @@ type IRouter interface {
 	GetPort() string
 	GetMux() *chi.Mux
 	Route(pattern string, fn func(router chi.Router)) chi.Router
-	SetJaeger(serviceName string, logError, logInfo bool)
+	setJaeger() (io.Closer, error)
 }
 
 type Router struct {
@@ -47,25 +51,26 @@ type Router struct {
 	corsOptions *cors.Options
 	router      *chi.Mux
 	jaeger      tracer.Jaeger
-	serviceName string
 }
 
-func NewHTTPRouter(corsOptions *cors.Options, defaultPort string) IRouter {
+func NewHTTPRouter(corsOptions *cors.Options, defaultPort string, jaeger tracer.Jaeger) IRouter {
 	router := &Router{
 		port:        env.GetEnvOrDefault(enums.HorusecPort, defaultPort),
 		timeout:     time.Duration(env.GetEnvOrDefaultInt(enums.HorusecRouterTimeout, ozzovalidation.Length10)) * time.Second,
 		corsOptions: corsOptions,
 		router:      chi.NewRouter(),
+		jaeger:      jaeger,
 	}
-
+	_, _ = router.setJaeger()
 	return router.setRouterConfig()
 }
-func (r *Router) SetJaeger(serviceName string, logError, logInfo bool) {
-	r.jaeger = tracer.Jaeger{
-		Name:     serviceName,
-		LogError: logError,
-		LogInfo:  logInfo,
+func (r *Router) setJaeger() (io.Closer, error) {
+	jaegerCloser, err := r.jaeger.Config()
+	if err != nil {
+		logger.LogError(enums.ErrorWithJaeger, err)
+		return nil, err
 	}
+	return jaegerCloser, nil
 }
 func (r *Router) GetMux() *chi.Mux {
 	return r.router
@@ -76,16 +81,6 @@ func (r *Router) Route(pattern string, fn func(router chi.Router)) chi.Router {
 }
 
 func (r *Router) ListenAndServe() {
-	jaegerCloser, err := r.jaeger.Config()
-	if err != nil {
-		logger.LogError(enums.ErrorWithJaeger, err)
-	} else {
-		defer func() {
-			if err := jaegerCloser.Close(); err != nil {
-				logger.LogPanic(enums.ErrorWithJaeger, err)
-			}
-		}()
-	}
 	logger.LogInfo(fmt.Sprintf(enums.MessageServiceRunningOnPort, r.port))
 	logger.LogPanic(enums.MessageListenAndServeError, http.ListenAndServe(fmt.Sprintf(":%s", r.port), r.router))
 }
@@ -102,6 +97,7 @@ func (r *Router) setRouterConfig() *Router {
 	r.enableCompress()
 	r.enableRequestID()
 	r.enableCORS()
+	r.enableTrace()
 	r.routeMetrics()
 	return r
 }
@@ -140,4 +136,8 @@ func (r *Router) routeMetrics() {
 
 func (r *Router) getCorsHandler(next http.Handler) http.Handler {
 	return cors.New(*r.corsOptions).Handler(next)
+}
+
+func (r *Router) enableTrace() {
+	r.router.Use(tracer.Tracer(opentracing.GlobalTracer()))
 }

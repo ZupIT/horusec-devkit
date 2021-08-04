@@ -17,7 +17,7 @@ package swagger
 import (
 	"fmt"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/swagger/enums"
