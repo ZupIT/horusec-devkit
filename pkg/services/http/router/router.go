@@ -21,6 +21,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"github.com/opentracing/opentracing-go"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
@@ -30,7 +32,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/http/router/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
@@ -42,15 +43,16 @@ type IRouter interface {
 	GetPort() string
 	GetMux() *chi.Mux
 	Route(pattern string, fn func(router chi.Router)) chi.Router
-	setJaeger() (io.Closer, error)
+	CloseJaeger() error
 }
 
 type Router struct {
-	port        string
-	timeout     time.Duration
-	corsOptions *cors.Options
-	router      *chi.Mux
-	jaeger      tracer.Jaeger
+	port         string
+	timeout      time.Duration
+	corsOptions  *cors.Options
+	router       *chi.Mux
+	jaeger       tracer.Jaeger
+	jaegerCloser io.Closer
 }
 
 func NewHTTPRouter(corsOptions *cors.Options, defaultPort string, jaeger tracer.Jaeger) IRouter {
@@ -61,11 +63,16 @@ func NewHTTPRouter(corsOptions *cors.Options, defaultPort string, jaeger tracer.
 		router:      chi.NewRouter(),
 		jaeger:      jaeger,
 	}
-	_, _ = router.setJaeger()
+	router.jaegerCloser, _ = router.SetJaeger(false)
 	return router.setRouterConfig()
 }
-func (r *Router) setJaeger() (io.Closer, error) {
-	jaegerCloser, err := r.jaeger.Config()
+
+func (r *Router) CloseJaeger() error {
+	return r.jaegerCloser.Close()
+}
+
+func (r *Router) SetJaeger(setPrometheus bool) (io.Closer, error) {
+	jaegerCloser, err := r.jaeger.Config(setPrometheus)
 	if err != nil {
 		logger.LogError(enums.ErrorWithJaeger, err)
 		return nil, err

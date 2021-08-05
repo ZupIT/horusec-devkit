@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
+	"strings"
 
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/urfave/negroni"
+
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
@@ -14,69 +16,84 @@ import (
 func Tracer(tr opentracing.Tracer) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			operationName := GetOperationName(r.Context())
-			if operationName == "" {
-				operationName = fmt.Sprintf("%s %s", r.Method, r.URL.Path)
+			if isHealthRoute(r) || isSwaggerRoute(r) {
+				return
 			}
-			// Pass request through tracer
-			serverSpanCtx, _ := tr.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
-			span, traceCtx := opentracing.StartSpanFromContextWithTracer(r.Context(), tr, operationName, ext.RPCServerOption(serverSpanCtx))
+			span, traceCtx := createSpanAndContext(r, tr)
 			defer span.Finish()
-
-			defer func() {
-				if err := recover(); err != nil {
-					ext.HTTPStatusCode.Set(span, uint16(500))
-					ext.Error.Set(span, true)
-					span.SetTag("error.type", "panic")
-					span.LogKV(
-						"event", "error",
-						"error.kind", "panic",
-						"message", err,
-						"stack", string(debug.Stack()),
-					)
-					span.Finish()
-
-					panic(err)
-				}
-			}()
-
-			ext.SpanKind.Set(span, ext.SpanKindRPCServerEnum)
-			ext.HTTPMethod.Set(span, r.Method)
-			ext.HTTPUrl.Set(span, r.URL.Path)
-
-			resourceName := r.URL.Path
-			resourceName = r.Method + " " + resourceName
-			span.SetTag("resource.name", resourceName)
-
-			// pass the span through the request context and serve the request to the next middleware
-			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
-			next.ServeHTTP(ww, r.WithContext(traceCtx))
-
-			// set the status code
-			status := ww.Status()
-			ext.HTTPStatusCode.Set(span, uint16(status))
-
-			if status >= 500 && status < 600 {
-				// mark 5xx server error
-				ext.Error.Set(span, true)
-				span.SetTag("error.type", fmt.Sprintf("%d: %s", status, http.StatusText(status)))
-				span.LogKV(
-					"event", "error",
-					"message", fmt.Sprintf("%d: %s", status, http.StatusText(status)),
-				)
-			}
-			//TODO: to be decided
-			//if status >= 400 && status < 500 {
-			//	// mark 4xx server error
-			//	ext.Error.Set(span, true)
-			//	span.SetTag("error.type", fmt.Sprintf("%d: %s", status, http.StatusText(status)))
-			//	span.LogKV(
-			//		"event", "error",
-			//		"message", fmt.Sprintf("%d: %s", status, http.StatusText(status)),
-			//	)
-			//}
+			defer setSpanIfPanic(span)
+			status := setHTTPSpans(traceCtx, w, r, span, next)
+			setSpanErrorIfStatus(status, span)
 		})
 	}
+}
+
+func createSpanAndContext(r *http.Request, tr opentracing.Tracer) (opentracing.Span, context.Context) {
+	operationName, serverSpanCtx := getContextFromHeader(r, tr)
+	span, traceCtx := opentracing.StartSpanFromContextWithTracer(r.Context(),
+		tr, operationName, ext.RPCServerOption(serverSpanCtx))
+	return span, traceCtx
+}
+
+func setSpanIfPanic(span opentracing.Span) {
+	if err := recover(); err != nil {
+		ext.HTTPStatusCode.Set(span, http.StatusInternalServerError)
+		ext.Error.Set(span, true)
+		span.SetTag("error.type", "panic")
+		span.LogKV(
+			"event", "error",
+			"error.kind", "panic",
+			"message", err,
+			"stack", string(debug.Stack()),
+		)
+		span.Finish()
+		panic(err)
+	}
+}
+
+func setHTTPSpans(traceCtx context.Context, w http.ResponseWriter, r *http.Request,
+	span opentracing.Span, next http.Handler) int {
+	ext.HTTPMethod.Set(span, r.Method)
+	ext.HTTPUrl.Set(span, r.URL.Path)
+
+	resourceName := r.URL.Path
+	resourceName = r.Method + " " + resourceName
+	span.SetTag("resource.name", resourceName)
+
+	ww := negroni.NewResponseWriter(w)
+	next.ServeHTTP(ww, r.WithContext(traceCtx))
+
+	status := ww.Status()
+	ext.HTTPStatusCode.Set(span, uint16(status))
+	return status
+}
+
+func getContextFromHeader(r *http.Request, tr opentracing.Tracer) (string, opentracing.SpanContext) {
+	operationName := GetOperationName(r.Context())
+	if operationName == "" {
+		operationName = fmt.Sprintf("%s %s", r.Method, r.URL.Path)
+	}
+	serverSpanCtx, _ := tr.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
+	return operationName, serverSpanCtx
+}
+
+func setSpanErrorIfStatus(status int, span opentracing.Span) {
+	if status >= 400 && status < 600 {
+		ext.Error.Set(span, true)
+		span.SetTag("error.type", fmt.Sprintf("%d: %s", status, http.StatusText(status)))
+		span.LogKV(
+			"event", "error",
+			"message", fmt.Sprintf("%d: %s", status, http.StatusText(status)),
+		)
+	}
+}
+
+func isSwaggerRoute(r *http.Request) bool {
+	return strings.Contains(r.URL.Path, "swagger")
+}
+
+func isHealthRoute(r *http.Request) bool {
+	return strings.Contains(r.URL.Path, "health")
 }
 
 type contextKey struct{}
