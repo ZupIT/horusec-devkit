@@ -29,6 +29,7 @@ const (
 	YarnAudit            Tool = "YarnAudit"
 	GitLeaks             Tool = "GitLeaks"
 	TfSec                Tool = "TfSec"
+	Checkov              Tool = "Checkov"
 	Semgrep              Tool = "Semgrep"
 	Flawfinder           Tool = "Flawfinder"
 	PhpCS                Tool = "PhpCS"
@@ -62,6 +63,7 @@ func Values() []Tool {
 		YarnAudit,
 		GitLeaks,
 		TfSec,
+		Checkov,
 		Semgrep,
 		Flawfinder,
 		PhpCS,
