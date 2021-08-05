@@ -43,6 +43,7 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "OwaspDependencyCheck", OwaspDependencyCheck.ToString())
 		assert.Equal(t, "DotnetCli", DotnetCli.ToString())
 		assert.Equal(t, "Nancy", Nancy.ToString())
+		assert.Equal(t, "Trivy", Trivy.ToString())
 	})
 }
 
@@ -69,6 +70,7 @@ func TestToLowerCase(t *testing.T) {
 		assert.Equal(t, "owaspDependencyCheck", OwaspDependencyCheck.ToLowerCamel())
 		assert.Equal(t, "dotnetCli", DotnetCli.ToLowerCamel())
 		assert.Equal(t, "nancy", Nancy.ToLowerCamel())
+		assert.Equal(t, "trivy", Trivy.ToLowerCamel())
 	})
 }
 
