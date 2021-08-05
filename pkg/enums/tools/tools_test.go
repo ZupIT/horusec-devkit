@@ -32,6 +32,7 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "YarnAudit", YarnAudit.ToString())
 		assert.Equal(t, "GitLeaks", GitLeaks.ToString())
 		assert.Equal(t, "TfSec", TfSec.ToString())
+		assert.Equal(t, "Checkov", Checkov.ToString())
 		assert.Equal(t, "Semgrep", Semgrep.ToString())
 		assert.Equal(t, "Flawfinder", Flawfinder.ToString())
 		assert.Equal(t, "PhpCS", PhpCS.ToString())
@@ -57,6 +58,7 @@ func TestToLowerCase(t *testing.T) {
 		assert.Equal(t, "yarnAudit", YarnAudit.ToLowerCamel())
 		assert.Equal(t, "gitLeaks", GitLeaks.ToLowerCamel())
 		assert.Equal(t, "tfSec", TfSec.ToLowerCamel())
+		assert.Equal(t, "checkov", Checkov.ToLowerCamel())
 		assert.Equal(t, "semgrep", Semgrep.ToLowerCamel())
 		assert.Equal(t, "flawfinder", Flawfinder.ToLowerCamel())
 		assert.Equal(t, "phpCs", PhpCS.ToLowerCamel())
@@ -71,7 +73,7 @@ func TestToLowerCase(t *testing.T) {
 }
 
 func TestValues(t *testing.T) {
-	t.Run("should return 20 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 20)
+	t.Run("should return 21 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 21)
 	})
 }
