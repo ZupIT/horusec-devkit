@@ -13,19 +13,18 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 )
 
-func Tracer(tr opentracing.Tracer) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if isHealthRoute(r) || isSwaggerRoute(r) {
-				return
-			}
-			span, traceCtx := createSpanAndContext(r, tr)
-			defer span.Finish()
-			defer setSpanIfPanic(span)
-			status := setHTTPSpans(traceCtx, w, r, span, next)
-			setSpanErrorIfStatus(status, span)
-		})
-	}
+func Tracer(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if isHealthRoute(r) || isSwaggerRoute(r) {
+			next.ServeHTTP(w, r)
+			return
+		}
+		span, traceCtx := createSpanAndContext(r, opentracing.GlobalTracer())
+		defer span.Finish()
+		defer setSpanIfPanic(span, w)
+		status := setHTTPSpans(traceCtx, w, r, span, next)
+		setSpanErrorIfStatus(status, span)
+	})
 }
 
 func createSpanAndContext(r *http.Request, tr opentracing.Tracer) (opentracing.Span, context.Context) {
@@ -35,7 +34,7 @@ func createSpanAndContext(r *http.Request, tr opentracing.Tracer) (opentracing.S
 	return span, traceCtx
 }
 
-func setSpanIfPanic(span opentracing.Span) {
+func setSpanIfPanic(span opentracing.Span, w http.ResponseWriter) {
 	if err := recover(); err != nil {
 		ext.HTTPStatusCode.Set(span, http.StatusInternalServerError)
 		ext.Error.Set(span, true)
@@ -47,7 +46,7 @@ func setSpanIfPanic(span opentracing.Span) {
 			"stack", string(debug.Stack()),
 		)
 		span.Finish()
-		panic(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
@@ -96,10 +95,9 @@ func isHealthRoute(r *http.Request) bool {
 	return strings.Contains(r.URL.Path, "health")
 }
 
-type contextKey struct{}
+type ContextValue string
 
-var ActiveOperationName = contextKey{}
-var ActiveOperationNameString = "operationName"
+const ActiveOperationName ContextValue = "operationName"
 
 func AddOperationName(ctx context.Context, operationName string) context.Context {
 	return context.WithValue(ctx, ActiveOperationName, operationName)
@@ -107,10 +105,6 @@ func AddOperationName(ctx context.Context, operationName string) context.Context
 
 func GetOperationName(ctx context.Context) string {
 	val := ctx.Value(ActiveOperationName)
-	if sp, ok := val.(string); ok {
-		return sp
-	}
-	val = ctx.Value(ActiveOperationNameString)
 	if sp, ok := val.(string); ok {
 		return sp
 	}

@@ -23,8 +23,6 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/opentracing/opentracing-go"
-
 	"github.com/ZupIT/horusec-devkit/pkg/services/tracer"
 
 	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
@@ -146,5 +144,5 @@ func (r *Router) getCorsHandler(next http.Handler) http.Handler {
 }
 
 func (r *Router) enableTrace() {
-	r.router.Use(tracer.Tracer(opentracing.GlobalTracer()))
+	r.router.Use(tracer.Tracer)
 }
