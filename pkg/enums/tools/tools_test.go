@@ -76,6 +76,6 @@ func TestToLowerCase(t *testing.T) {
 
 func TestValues(t *testing.T) {
 	t.Run("should return 21 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 21)
+		assert.Len(t, Values(), 22)
 	})
 }
