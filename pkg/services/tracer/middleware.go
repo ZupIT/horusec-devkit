@@ -1,10 +1,26 @@
+// Copyright 2021 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package tracer
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"runtime/debug"
+	"strconv"
 	"strings"
 
 	"github.com/urfave/negroni"
@@ -29,15 +45,15 @@ func Tracer(next http.Handler) http.Handler {
 
 func createSpanAndContext(r *http.Request, tr opentracing.Tracer) (opentracing.Span, context.Context) {
 	operationName, serverSpanCtx := getContextFromHeader(r, tr)
-	span, traceCtx := opentracing.StartSpanFromContextWithTracer(r.Context(),
-		tr, operationName, ext.RPCServerOption(serverSpanCtx))
+	span, traceCtx := opentracing.StartSpanFromContext(r.Context(),
+		operationName, ext.RPCServerOption(serverSpanCtx))
 	return span, traceCtx
 }
 
 func setSpanIfPanic(span opentracing.Span, w http.ResponseWriter) {
 	if err := recover(); err != nil {
 		ext.HTTPStatusCode.Set(span, http.StatusInternalServerError)
-		ext.Error.Set(span, true)
+		SetSpanError(span, errors.New(fmt.Sprint(err)))
 		span.SetTag("error.type", "panic")
 		span.LogKV(
 			"event", "error",
@@ -69,6 +85,7 @@ func setHTTPSpans(traceCtx context.Context, w http.ResponseWriter, r *http.Reque
 
 func getContextFromHeader(r *http.Request, tr opentracing.Tracer) (string, opentracing.SpanContext) {
 	operationName := GetOperationName(r.Context())
+
 	if operationName == "" {
 		operationName = fmt.Sprintf("%s %s", r.Method, r.URL.Path)
 	}
@@ -77,8 +94,8 @@ func getContextFromHeader(r *http.Request, tr opentracing.Tracer) (string, opent
 }
 
 func setSpanErrorIfStatus(status int, span opentracing.Span) {
-	if status >= 400 && status < 600 {
-		ext.Error.Set(span, true)
+	if status >= 500 && status < 600 {
+		SetSpanError(span, errors.New("status code "+strconv.Itoa(status)))
 		span.SetTag("error.type", fmt.Sprintf("%d: %s", status, http.StatusText(status)))
 		span.LogKV(
 			"event", "error",
