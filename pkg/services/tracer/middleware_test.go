@@ -40,14 +40,10 @@ func TestMiddleware(t *testing.T) {
 		panic("error")
 	}
 
-	err := os.Setenv(enums.HorusecJaegerName, "test")
-	assert.NoError(t, err)
-	err = os.Setenv(enums.HorusecJaegerLogInfo, "true")
-	assert.NoError(t, err)
-	err = os.Setenv(enums.HorusecJaegerLogError, "true")
+	err := os.Setenv(enums.JaegerServiceName, "test")
 	assert.NoError(t, err)
 
-	j, err := NewJaeger()
+	j, err := NewJaeger("")
 	assert.NoError(t, err)
 	closer, err := j.Config(true)
 	assert.NoError(t, err)

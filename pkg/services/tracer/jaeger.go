@@ -17,7 +17,6 @@ package tracer
 import (
 	"errors"
 	"io"
-	"time"
 
 	"github.com/opentracing/opentracing-go/ext"
 
@@ -31,65 +30,56 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go/config"
-	"github.com/uber/jaeger-client-go/zipkin"
 )
 
 type (
 	Jaeger struct {
-		Name     string
-		LogError bool
-		LogInfo  bool
+		Name string
 	}
 )
 
-func NewJaeger() (*Jaeger, error) {
+func NewJaeger(serviceName string) (*Jaeger, error) {
 	j := &Jaeger{
-		Name:     env.GetEnvOrDefault(enums.HorusecJaegerName, ""),
-		LogError: env.GetEnvOrDefaultBool(enums.HorusecJaegerLogError, true),
-		LogInfo:  env.GetEnvOrDefaultBool(enums.HorusecJaegerLogInfo, false),
+		Name: env.GetEnvOrDefault(enums.JaegerServiceName, serviceName),
 	}
 	if j.Name == "" {
-		return nil, errors.New(enums.ErrorEmptyJaegerName)
+		return nil, errors.New(enums.ErrorEmptyJaegerServiceName)
 	}
 	return j, nil
 }
 
-//nolint:funlen // need to have more than 15 lines
 func (j *Jaeger) Config(setPrometheus bool) (io.Closer, error) {
-	defcfg := config.Configuration{
-		ServiceName: j.Name,
-		Sampler: &config.SamplerConfig{
-			Type:  "const",
-			Param: 1,
-		},
-		Reporter: &config.ReporterConfig{
-			LogSpans:            true,
-			BufferFlushInterval: 1 * time.Second,
-		},
-	}
+	defcfg := j.getDefaultConfig()
 	cfg, err := defcfg.FromEnv()
 
 	if err != nil {
 		return nil, err
 	}
-
-	zipkinPropagator := zipkin.NewZipkinB3HTTPHeaderPropagator()
 	var options []config.Option
-	prom := jaegerPrometheus.New()
 	if setPrometheus {
-		options = append(options, config.Metrics(prom))
+		options = append(options, config.Metrics(jaegerPrometheus.New()))
 	}
-	options = append(options, config.Injector(opentracing.HTTPHeaders, zipkinPropagator),
-		config.Extractor(opentracing.HTTPHeaders, zipkinPropagator),
+	options = append(options,
 		config.ZipkinSharedRPCSpan(true),
 		config.Logger(jaeger.StdLogger))
-	return cfg.InitGlobalTracer(
-		j.Name,
-		options...,
-	)
+	return cfg.InitGlobalTracer(j.Name, options...)
+}
+
+func (j *Jaeger) getDefaultConfig() config.Configuration {
+	defcfg := config.Configuration{
+		ServiceName: j.Name,
+	}
+	return defcfg
 }
 
 func SetSpanError(span opentracing.Span, err error) {
 	span.SetTag("error.message", err.Error())
 	ext.LogError(span, err)
+}
+func SpanError(span opentracing.Span, err error) error {
+	if err != nil {
+		span.SetTag("error.message", err.Error())
+		ext.LogError(span, err)
+	}
+	return err
 }

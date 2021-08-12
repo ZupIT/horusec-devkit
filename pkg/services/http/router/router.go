@@ -95,6 +95,7 @@ func (r *Router) GetPort() string {
 }
 
 func (r *Router) setRouterConfig() *Router {
+	r.enableTrace()
 	r.enableRealIP()
 	r.enableLogger()
 	r.enableRecover()
@@ -102,7 +103,6 @@ func (r *Router) setRouterConfig() *Router {
 	r.enableCompress()
 	r.enableRequestID()
 	r.enableCORS()
-	r.enableTrace()
 	r.routeMetrics()
 	return r
 }

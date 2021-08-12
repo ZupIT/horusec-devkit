@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/urfave/negroni"
+	"github.com/go-chi/chi/middleware"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
@@ -75,7 +75,7 @@ func setHTTPSpans(traceCtx context.Context, w http.ResponseWriter, r *http.Reque
 	resourceName = r.Method + " " + resourceName
 	span.SetTag("resource.name", resourceName)
 
-	ww := negroni.NewResponseWriter(w)
+	ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 	next.ServeHTTP(ww, r.WithContext(traceCtx))
 
 	status := ww.Status()
@@ -85,7 +85,6 @@ func setHTTPSpans(traceCtx context.Context, w http.ResponseWriter, r *http.Reque
 
 func getContextFromHeader(r *http.Request, tr opentracing.Tracer) (string, opentracing.SpanContext) {
 	operationName := GetOperationName(r.Context())
-
 	if operationName == "" {
 		operationName = fmt.Sprintf("%s %s", r.Method, r.URL.Path)
 	}
