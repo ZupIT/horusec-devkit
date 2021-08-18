@@ -707,3 +707,117 @@ func TestFindPreload(t *testing.T) {
 		assert.Equal(t, nil, response.GetData())
 	})
 }
+
+func TestFindPreloadWitLimitAndPage(t *testing.T) {
+	t.Run("should success find a database record without limit", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WithArgs(sqlmock.AnyArg()).
+			WillReturnRows(sqlmock.NewRows([]string{"text"}).
+				AddRow("test"))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.FindPreloadWitLimitAndPage(newTestEntity(), map[string]interface{}{"text": "test"},
+			map[string][]interface{}{}, "test", 0, 0)
+
+		assert.NoError(t, response.GetError())
+		assert.Equal(t, 1, response.GetRowsAffected())
+		assert.Equal(t, newTestEntity(), response.GetData())
+	})
+	t.Run("should success find a database record", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WithArgs(sqlmock.AnyArg()).
+			WillReturnRows(sqlmock.NewRows([]string{"text"}).
+				AddRow("test"))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.FindPreloadWitLimitAndPage(newTestEntity(), map[string]interface{}{"text": "test"},
+			map[string][]interface{}{}, "test", 10, 0)
+
+		assert.NoError(t, response.GetError())
+		assert.Equal(t, 1, response.GetRowsAffected())
+		assert.Equal(t, newTestEntity(), response.GetData())
+	})
+
+	t.Run("should return error not found records when database return it", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WithArgs(sqlmock.AnyArg()).
+			WillReturnError(errors.New("record not found"))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.FindPreloadWitLimitAndPage(newTestEntity(), map[string]interface{}{"text": "test"},
+			map[string][]interface{}{}, "test", 10, 0)
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return error not found records when no rows affected", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnRows(sqlmock.NewRows([]string{"text"}))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.FindPreloadWitLimitAndPage(newTestEntity(), map[string]interface{}{"text": "test"},
+			map[string][]interface{}{}, "test", 10, 0)
+
+		assert.Error(t, response.GetError())
+		assert.Equal(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+
+	t.Run("should return a error different than not found", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		mock.ExpectQuery("SELECT").
+			WillReturnError(errors.New("test"))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		response := database.FindPreloadWitLimitAndPage(newTestEntity(), map[string]interface{}{"text": "test"},
+			map[string][]interface{}{"": {}}, "test", 10, 0)
+
+		assert.Error(t, response.GetError())
+		assert.NotEqual(t, enums.ErrorNotFoundRecords, response.GetError())
+		assert.Equal(t, 0, response.GetRowsAffected())
+		assert.Equal(t, nil, response.GetData())
+	})
+}
