@@ -84,3 +84,9 @@ func (m *Mock) FindPreload(_ interface{}, _ map[string]interface{}, _ map[string
 	args := m.MethodCalled("FindPreload")
 	return args.Get(0).(response.IResponse)
 }
+
+func (m *Mock) FindPreloadWitLimitAndPage(_ interface{}, _ map[string]interface{},
+	_ map[string][]interface{}, _ string, _, _ int) response.IResponse {
+	args := m.MethodCalled("FindPreloadWitLimitAndPage")
+	return args.Get(0).(response.IResponse)
+}
