@@ -25,4 +25,6 @@ type IDatabaseRead interface {
 	Find(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
 	First(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
 	Raw(rawSQL string, entityPointer interface{}, values ...interface{}) response.IResponse
+	FindPreloadWitLimitAndPage(entityPointer interface{}, where map[string]interface{},
+		preloads map[string][]interface{}, table string, limit, page int) response.IResponse
 }
