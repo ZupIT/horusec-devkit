@@ -213,3 +213,21 @@ func (d *database) FindPreload(entityPointer interface{}, where map[string]inter
 
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
 }
+
+func (d *database) FindPreloadWitLimitAndPage(entityPointer interface{}, where map[string]interface{},
+	preloads map[string][]interface{}, table string, limit, page int) response.IResponse {
+	if limit == 0 {
+		limit = 10
+	}
+	query := d.connectionRead.Table(table).Where(where).Limit(limit).Offset(page * limit)
+	for key, preload := range preloads {
+		query = query.Preload(key, preload...)
+	}
+
+	result := query.Find(entityPointer)
+	if err := d.verifyNotFoundError(result); err != nil {
+		return response.NewResponse(0, err, nil)
+	}
+
+	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
+}
