@@ -17,3 +17,4 @@ package enums
 import "errors"
 
 var ErrorNotFoundRecords = errors.New("{ERROR_DATABASE} database not found records")
+var ErrorInvalidURI = errors.New("{ERROR_DATABASE} invalid database URI")

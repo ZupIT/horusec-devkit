@@ -33,22 +33,42 @@ func TestNewConfig(t *testing.T) {
 	})
 
 	t.Run("should success create config with custom values", func(t *testing.T) {
-		_ = os.Setenv(enums.EnvRelationalURI, "test")
+		_ = os.Setenv(enums.EnvRelationalURI, "postgresql://root123:root321@localhost:1432/horusec_db?sslmode=enable")
 		_ = os.Setenv(enums.EnvRelationalLogMode, "true")
 
 		databaseConfig := NewDatabaseConfig()
 
 		assert.Equal(t, true, databaseConfig.GetLogMode())
-		assert.Equal(t, "test", databaseConfig.GetURI())
+		assert.Equal(t, "postgresql://root123:root321@localhost:1432/horusec_db?sslmode=enable", databaseConfig.GetURI())
 	})
 }
 
 func TestGetAndSetURI(t *testing.T) {
 	t.Run("should success set and get dialect", func(t *testing.T) {
 		databaseConfig := NewDatabaseConfig()
-		databaseConfig.SetURI("test")
+		databaseConfig.SetURI("postgresql://root123:root321@localhost:1432/horusec_db?sslmode=enable")
 
-		assert.Equal(t, "test", databaseConfig.GetURI())
+		assert.Equal(t, "postgresql://root123:root321@localhost:1432/horusec_db?sslmode=enable", databaseConfig.GetURI())
+	})
+	t.Run("should panic when set an invalid URI", func(t *testing.T) {
+		databaseConfig := NewDatabaseConfig()
+
+		assert.Panics(t, func() {
+			databaseConfig.SetURI("test")
+		})
+	})
+	t.Run("should success return default values when set URI with empty value", func(t *testing.T) {
+		databaseConfig := NewDatabaseConfig()
+		databaseConfig.SetURI("")
+		assert.Equal(t, "postgresql://root:root@localhost:5432/horusec_db?sslmode=disable",
+			databaseConfig.GetURI())
+	})
+	t.Run("should success return default values whith ssl enable when set URI with sslEnabled", func(t *testing.T) {
+		_ = os.Setenv(enums.EnvRelationalSSLEnable, "true")
+		databaseConfig := NewDatabaseConfig()
+		databaseConfig.SetURI("")
+		assert.Equal(t, "postgresql://root:root@localhost:5432/horusec_db?sslmode=enable",
+			databaseConfig.GetURI())
 	})
 }
 
