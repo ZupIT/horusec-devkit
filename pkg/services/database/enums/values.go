@@ -15,9 +15,10 @@
 package enums
 
 const (
-	EnvRelationalURI       = "HORUSEC_DATABASE_SQL_URI"
-	EnvRelationalLogMode   = "HORUSEC_DATABASE_SQL_LOG_MODE"
-	EnvRelationalUsername  = "HORUSEC_DATABASE_SQL_USERNAME"
+	EnvRelationalURI      = "HORUSEC_DATABASE_SQL_URI"
+	EnvRelationalLogMode  = "HORUSEC_DATABASE_SQL_LOG_MODE"
+	EnvRelationalUsername = "HORUSEC_DATABASE_SQL_USERNAME"
+	//nolint
 	EnvRelationalPassword  = "HORUSEC_DATABASE_SQL_PASSWORD"
 	EnvRelationalHost      = "HORUSEC_DATABASE_SQL_HOST"
 	EnvRelationalPort      = "HORUSEC_DATABASE_SQL_PORT"
