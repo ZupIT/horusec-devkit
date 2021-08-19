@@ -63,8 +63,34 @@ func TestNewDatabaseReadAndWrite(t *testing.T) {
 
 		assert.Error(t, err)
 	})
-}
+	t.Run("should not return error when valid config", func(t *testing.T) {
+		databaseConfig := config.NewDatabaseConfig()
+		databaseConfig.SetLogMode(false)
+		_, err := NewDatabaseReadAndWrite(databaseConfig)
+		assert.NoError(t, err)
+	})
 
+}
+func TestMakeConnection(t *testing.T) {
+	t.Run("should not panic when conecting to a valid db", func(t *testing.T) {
+		db, _, err := sqlmock.New()
+		assert.NoError(t, err)
+
+		databaseConfig := config.NewDatabaseConfig()
+		databaseConfig.SetLogMode(false)
+
+		database := &database{
+			config:          databaseConfig,
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+		database.makeConnection()
+
+		assert.NotPanics(t, func() {
+			database.makeConnection()
+		})
+	})
+}
 func TestSetConnections(t *testing.T) {
 	t.Run("should success set connections", func(t *testing.T) {
 		database := &database{}
