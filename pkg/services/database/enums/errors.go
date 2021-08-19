@@ -17,3 +17,6 @@ package enums
 import "errors"
 
 var ErrorNotFoundRecords = errors.New("{ERROR_DATABASE} database not found records")
+var ErrorConnectingToDB = errors.New("{ERROR_DATABASE} error connecting to db, use this format" +
+	" string for connection in " + EnvRelationalURI +
+	": 'host=localhost user=username password=user_password dbname=db_name port=5432 sslmode=disable TimeZone=Asia/Shanghai'")

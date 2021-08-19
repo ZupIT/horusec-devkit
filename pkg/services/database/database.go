@@ -67,7 +67,7 @@ func (d *database) makeConnection() {
 func (d *database) makeConnectionWrite() {
 	connectionWrite, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
-		logger.LogPanic(enums.MessageFailedToConnectToDatabase, err)
+		logger.LogPanic(enums.MessageFailedToConnectToDatabase, enums.ErrorConnectingToDB)
 	}
 
 	d.connectionWrite = connectionWrite
@@ -76,7 +76,7 @@ func (d *database) makeConnectionWrite() {
 func (d *database) makeConnectionRead() {
 	connectionRead, err := gorm.Open(postgres.Open(d.config.GetURI()), &gorm.Config{})
 	if err != nil {
-		logger.LogPanic(enums.MessageFailedToConnectToDatabase, err)
+		logger.LogPanic(enums.MessageFailedToConnectToDatabase, enums.ErrorConnectingToDB)
 	}
 
 	d.connectionRead = connectionRead
