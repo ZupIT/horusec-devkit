@@ -41,5 +41,4 @@ fi
 
 echo "FAILS! Coverage below threshold"
 echo "coverage: ${COVERAGE} - threshold: ${THRESHOLD}"
-rm coverage.out
 exit 1
