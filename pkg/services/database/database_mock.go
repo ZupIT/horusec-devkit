@@ -15,6 +15,8 @@
 package database
 
 import (
+	"encoding/json"
+
 	"github.com/stretchr/testify/mock"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/database/response"
@@ -32,23 +34,17 @@ func (m *Mock) IsAvailable() bool {
 
 func (m *Mock) Find(entityPointer interface{}, _ map[string]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("Find")
-	resp := args.Get(0).(response.IResponse)
-	entityPointer = resp.GetData()
-	return resp
+	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))
 }
 
 func (m *Mock) First(entityPointer interface{}, _ map[string]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("First")
-	resp := args.Get(0).(response.IResponse)
-	entityPointer = resp.GetData()
-	return resp
+	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))
 }
 
 func (m *Mock) Raw(_ string, entityPointer interface{}, _ ...interface{}) response.IResponse {
 	args := m.MethodCalled("Raw")
-	resp := args.Get(0).(response.IResponse)
-	entityPointer = resp.GetData()
-	return resp
+	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))
 }
 
 func (m *Mock) StartTransaction() IDatabaseWrite {
@@ -88,15 +84,17 @@ func (m *Mock) Delete(_ map[string]interface{}, _ string) response.IResponse {
 
 func (m *Mock) FindPreload(entityPointer interface{}, _ map[string]interface{}, _ map[string][]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("FindPreload")
-	resp := args.Get(0).(response.IResponse)
-	entityPointer = resp.GetData()
-	return resp
+	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))
 }
 
 func (m *Mock) FindPreloadWitLimitAndPage(entityPointer interface{}, _ map[string]interface{},
 	_ map[string][]interface{}, _ string, _, _ int) response.IResponse {
 	args := m.MethodCalled("FindPreloadWitLimitAndPage")
-	resp := args.Get(0).(response.IResponse)
-	entityPointer = resp.GetData()
+	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))
+}
+
+func (m *Mock) reflectValues(entityPointer interface{}, resp response.IResponse) response.IResponse {
+	bytes, _ := json.Marshal(resp.GetData())
+	_ = json.Unmarshal(bytes, entityPointer)
 	return resp
 }
