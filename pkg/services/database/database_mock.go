@@ -30,19 +30,25 @@ func (m *Mock) IsAvailable() bool {
 	return mockUtils.ReturnBool(args, 0)
 }
 
-func (m *Mock) Find(_ interface{}, _ map[string]interface{}, _ string) response.IResponse {
+func (m *Mock) Find(entityPointer interface{}, _ map[string]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("Find")
-	return args.Get(0).(response.IResponse)
+	resp := args.Get(0).(response.IResponse)
+	entityPointer = resp.GetData()
+	return resp
 }
 
-func (m *Mock) First(_ interface{}, _ map[string]interface{}, _ string) response.IResponse {
+func (m *Mock) First(entityPointer interface{}, _ map[string]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("First")
-	return args.Get(0).(response.IResponse)
+	resp := args.Get(0).(response.IResponse)
+	entityPointer = resp.GetData()
+	return resp
 }
 
-func (m *Mock) Raw(_ string, _ interface{}, _ ...interface{}) response.IResponse {
+func (m *Mock) Raw(_ string, entityPointer interface{}, _ ...interface{}) response.IResponse {
 	args := m.MethodCalled("Raw")
-	return args.Get(0).(response.IResponse)
+	resp := args.Get(0).(response.IResponse)
+	entityPointer = resp.GetData()
+	return resp
 }
 
 func (m *Mock) StartTransaction() IDatabaseWrite {
@@ -80,13 +86,17 @@ func (m *Mock) Delete(_ map[string]interface{}, _ string) response.IResponse {
 	return args.Get(0).(response.IResponse)
 }
 
-func (m *Mock) FindPreload(_ interface{}, _ map[string]interface{}, _ map[string][]interface{}, _ string) response.IResponse {
+func (m *Mock) FindPreload(entityPointer interface{}, _ map[string]interface{}, _ map[string][]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("FindPreload")
-	return args.Get(0).(response.IResponse)
+	resp := args.Get(0).(response.IResponse)
+	entityPointer = resp.GetData()
+	return resp
 }
 
-func (m *Mock) FindPreloadWitLimitAndPage(_ interface{}, _ map[string]interface{},
+func (m *Mock) FindPreloadWitLimitAndPage(entityPointer interface{}, _ map[string]interface{},
 	_ map[string][]interface{}, _ string, _, _ int) response.IResponse {
 	args := m.MethodCalled("FindPreloadWitLimitAndPage")
-	return args.Get(0).(response.IResponse)
+	resp := args.Get(0).(response.IResponse)
+	entityPointer = resp.GetData()
+	return resp
 }
