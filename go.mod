@@ -6,7 +6,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/auth0/go-jwt-middleware v1.0.1
-	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
+	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.2.0
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
