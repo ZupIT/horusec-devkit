@@ -2,7 +2,5 @@
   "horusecCliFilesOrPathsToIgnore": [
     "**/*_test.go",
     "**/*_mock.go"
-  ],
-  "horusecCliFalsePositiveHashes": [
   ]
 }
