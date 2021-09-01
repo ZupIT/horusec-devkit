@@ -1,0 +1,6 @@
+{
+  "baseBranches": ["main"],
+  "extends": [
+    "config:base"
+  ]
+}
