@@ -17,6 +17,8 @@ package config
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
@@ -47,8 +49,8 @@ func NewBrokerConfig() IConfig {
 	config := &Config{}
 	config.SetHost(env.GetEnvOrDefault(enums.EnvBrokerHost, "127.0.0.1"))
 	config.SetPort(env.GetEnvOrDefault(enums.EnvBrokerPort, "5672"))
-	config.SetUsername(env.GetEnvOrDefault(enums.EnvBrokerUsername, "guest"))
-	config.SetPassword(env.GetEnvOrDefault(enums.EnvBrokerPassword, "guest"))
+	config.SetUsername(env.GetEnvOrDefault(enums.EnvBrokerUsername, enums.DefaultUsername))
+	config.SetPassword(env.GetEnvOrDefault(enums.EnvBrokerPassword, enums.DefaultPassword))
 
 	return config
 }
@@ -81,6 +83,9 @@ func (c *Config) SetPort(port string) {
 }
 
 func (c *Config) GetUsername() string {
+	if c.username == enums.DefaultUsername {
+		logger.LogWarn(enums.MessageWarningDefaultBrokerConnection)
+	}
 	return c.username
 }
 
@@ -89,6 +94,9 @@ func (c *Config) SetUsername(username string) {
 }
 
 func (c *Config) GetPassword() string {
+	if c.password == enums.DefaultUsername {
+		logger.LogWarn(enums.MessageWarningDefaultBrokerConnection)
+	}
 	return c.password
 }
 

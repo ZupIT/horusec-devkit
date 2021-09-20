@@ -19,4 +19,7 @@ const (
 	EnvBrokerPort     = "HORUSEC_BROKER_PORT"
 	EnvBrokerUsername = "HORUSEC_BROKER_USERNAME"
 	EnvBrokerPassword = "HORUSEC_BROKER_PASSWORD" //nolint:gosec // false positive
+
+	DefaultUsername = "guest"
+	DefaultPassword = "guest"
 )

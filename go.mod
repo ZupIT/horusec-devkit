@@ -15,6 +15,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2
+	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/gopherjs/gopherjs v0.0.0-20210420193930-a4630ec28c79 // indirect
 	github.com/iancoleman/strcase v0.2.0
@@ -27,20 +28,17 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/smartystreets/assertions v1.2.0 // indirect
-	github.com/smartystreets/goconvey v1.6.4
-	github.com/spf13/cast v1.4.1 // indirect
-	github.com/spf13/cobra v1.2.1
-	github.com/spf13/viper v1.9.0
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/http-swagger v1.1.1
 	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
-	google.golang.org/genproto v0.0.0-20210713002101-d411969a0d9a // indirect
+	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	google.golang.org/genproto v0.0.0-20210828152312-66f60bf46e71 // indirect
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	gorm.io/driver/postgres v1.1.0
 	gorm.io/gorm v1.21.11
 )

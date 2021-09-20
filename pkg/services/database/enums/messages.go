@@ -15,6 +15,8 @@
 package enums
 
 const (
-	MessageFailedToConnectToDatabase = "{ERROR_DATABASE} failed to connect with postgres database"
-	MessageFailedToVerifyIsAvailable = "{ERROR_DATABASE} failed to get database while checking if is available"
+	MessageFailedToConnectToDatabase        = "{ERROR_DATABASE} failed to connect with postgres database"
+	MessageFailedToVerifyIsAvailable        = "{ERROR_DATABASE} failed to get database while checking if is available"
+	MessageWarningDefaultDatabaseConnection = "{WARN} your user or password for connection with database " +
+		"is default content, please change for you best security"
 )
