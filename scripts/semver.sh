@@ -88,8 +88,7 @@ echo "New version ${versionArray[0]}.${versionArray[1]}.${versionArray[2]}"
 version=$(echo "${versionArray[0]}.${versionArray[1]}.${versionArray[2]}")
 echo "::set-output name=version::${version}"
 
-strippedVersion=$(echo "${major_version}.${versionArray[1]}.${versionArray[2]}")
-echo "::set-output name=strippedVersion::${strippedVersion}"
+echo "::set-output name=strippedVersion::$(echo ${version} | sed 's/v//')"
 
 releaseBranchName=$(echo "${versionArray[0]}.${versionArray[1]}")
 echo "::set-output name=releaseBranchName::release/${releaseBranchName}"
