@@ -28,10 +28,12 @@ done
 
 shift $(($OPTIND - 1))
 
+repositoryName=$1
+
 echo "cd to github workspace"
 cd ${GITHUB_WORKSPACE}
 
-version=$(git for-each-ref refs/tags/ --count=1 --sort=-version:refname --format='%(refname:short)')
+version=$(curl -sL https://api.github.com/repos/$repositoryName/releases/latest | jq -r ".tag_name")
 echo "Actual version: ${version}"
 
 if [ -z ${version} ]
