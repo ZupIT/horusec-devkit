@@ -35,6 +35,7 @@ cd ${GITHUB_WORKSPACE}
 
 version=$(curl -sL https://api.github.com/repos/$repositoryName/releases/latest | jq -r ".tag_name")
 echo "Actual version: ${version}"
+echo "::set-output name=actualVersion::${version}"
 
 if [ -z ${version} ]
 then
