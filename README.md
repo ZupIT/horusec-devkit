@@ -18,55 +18,58 @@
         <img src="https://img.shields.io/badge/license-Apache%202-blue"/></a>
 </p>
 
-# Horusec Development Kit
 
-This repository has the idea of centralizing all the reused horusec codes in one place. 
-It is also where are some abstractions that we use in order to simplify development and testing.
+# **Horusec Development Kit**
 
-## Structure
+This repository has all the reused Horusec codes in one place. 
 
-### Entities
+## **How does DevKit work?**
+DevKit is the repository where there are some abstractions Horusec's team use to simplify development and testing.  For example:
+-  If you want a code to help you make an HTTP request or if you need a database, you can find it here. 
 
-All entities that are shared by multiple microservices are kept here.
-An example is our analysis and vulnerability structs, which are used from the cli to the web services.
+It is reusable codes from other projects, like CLI, Engine, Platform, and Operator. See below DevKit's structure:
 
-### Enums
+### **Entities**
 
-It refers to all the constants shared between the services.
-An example is the vulnerability severity constant.
+We keep all entities shared by multiple microservices here. For example, analysis and vulnerability structs, which are used from the CLI to the web services.
 
-### Service
+### **Enums**
 
-Here you will find abstractions from libraries that we use, very similar to the next topic.
-The big difference between service and utils, is that here they all need an instance or
-connection due to some requirement.
-An example is the abstraction of rabbit mq library for go, that simplifies testing and development.
+Enums refers to all the constants shared between the services. For example, the vulnerability severity constant.
 
-### Utils
+### **Service**
 
-To finish, the utils refers to an abstraction which instantiation or connection is not necessary. 
-Just import and use it, simply and quickly.
-An example is our abstraction from the logrus library, that we adapted to make it more comfortable to use.
+You will find here some abstractions from the libraries we use. The difference between service and utils is that here they need an instance or a connection to some requirement.
+For example, the abstraction of the RabbitMQ library for Go, which simplifies testing and development.
 
-## Communication
+### **Utils**
 
-We have a few channels for contact, feel free to reach out to us at:
+The utils refer to an abstraction in which instantiation or connection is not necessary. 
+Just import and use it, simply and quickly. For example, the abstraction from the Logrus library was adapted to make it more comfortable to use.
 
-- [GitHub Issues](https://github.com/ZupIT/horusec-devkit/issues)
-- [Zup Open Source Forum](https://forum.zup.com.br)
 
-## Contributing
+## **Documentation**
 
-Feel free to use, recommend improvements, or contribute to new implementations.
+For more information about Horusec, please check out the [**documentation**](https://horusec.io/docs/).
 
-If this is our first repository that you visit, or would like to know more about Horusec, 
-check out some of our other projects.
+## **Contributing**
 
-- [Horusec CLI](https://github.com/ZupIT/horusec)
-- [Horusec Platform](https://github.com/ZupIT/horusec-platform)
-- [Horusec Engine](https://github.com/ZupIT/horusec-engine)
-- [Horusec Operator](https://github.com/ZupIT/horusec-operator)
-- [Horusec Admin](https://github.com/ZupIT/horusec-admin)
-- [Horusec VsCode](https://github.com/ZupIT/horusec-vscode-plugin)
+If you want to contribute to this repository, access our [**Contributing Guide**](https://github.com/ZupIT/charlescd/blob/main/CONTRIBUTING.md). 
+And if you want to know more about Horusec, check out some of our other projects:
+
+
+- [**Horusec CLI**](https://github.com/ZupIT/horusec)
+- [**Horusec Platform**](https://github.com/ZupIT/horusec-platform)
+- [**Horusec Engine**](https://github.com/ZupIT/horusec-engine)
+- [**Horusec Operator**](https://github.com/ZupIT/horusec-operator)
+- [**Horusec Admin**](https://github.com/ZupIT/horusec-admin)
+- [**Horusec VsCode**](https://github.com/ZupIT/horusec-vscode-plugin)
+
+## **Community**
+Feel free to reach out to us at:
+
+- [**GitHub Issues**](https://github.com/ZupIT/horusec-devkit/issues)
+- [**Zup Open Source Forum**](https://forum.zup.com.br)
+
 
 This project exists thanks to all the contributors. You rock! ❤️🚀
