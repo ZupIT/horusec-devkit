@@ -16,6 +16,7 @@ package analysis
 
 import (
 	"encoding/json"
+	"github.com/ZupIT/horusec-devkit/pkg/enums/vulnerability"
 	"time"
 
 	"github.com/google/uuid"
@@ -121,7 +122,12 @@ func (a *Analysis) SetFinishedData() {
 }
 
 func (a *Analysis) HasErrors() bool {
-	return len(a.Errors) > 0
+	for _, vuln := range a.AnalysisVulnerabilities {
+		if vuln.Vulnerability.Type == vulnerability.Vulnerability {
+			return true
+		}
+	}
+	return false
 }
 
 func (a *Analysis) GetTotalVulnerabilities() int {
