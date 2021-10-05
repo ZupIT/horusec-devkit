@@ -311,8 +311,8 @@ func TestFind(t *testing.T) {
 
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -449,8 +449,8 @@ func TestFirst(t *testing.T) {
 
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -536,8 +536,8 @@ func TestRaw(t *testing.T) {
 		assert.NoError(t, err)
 
 		mock.ExpectQuery("SELECT").
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -623,8 +623,8 @@ func TestFindPreload(t *testing.T) {
 
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -715,8 +715,8 @@ func TestFindPreloadWitLimitAndPage(t *testing.T) {
 
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
@@ -737,8 +737,8 @@ func TestFindPreloadWitLimitAndPage(t *testing.T) {
 
 		mock.ExpectQuery("SELECT").
 			WithArgs(sqlmock.AnyArg()).
-			WillReturnRows(sqlmock.NewRows([]string{"text"}).
-				AddRow("test"))
+			WillReturnRows(sqlmock.NewRows([]string{"text", "text"}).
+				AddRow("test", "test"))
 
 		database := &database{
 			config:          config.NewDatabaseConfig(),
