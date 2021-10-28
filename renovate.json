@@ -3,5 +3,10 @@
   "extends": [
     "config:base"
   ],
-  "commitBody": "Signed-off-by: Renovate Bot <bot@renovateapp.com>"
+  "schedule": [
+    "every weekend"
+  ],
+  "commitBody": "Signed-off-by: Renovate Bot <bot@renovateapp.com>",
+  "commitMessagePrefix": "deps:",
+  "commitMessageAction": "update"
 }
