@@ -16,7 +16,7 @@ package entities
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/enums"
@@ -32,7 +32,7 @@ func (h *HTTPResponse) GetBodyBytes() ([]byte, error) {
 		return []byte{}, nil
 	}
 
-	return ioutil.ReadAll(h.Body)
+	return io.ReadAll(h.Body)
 }
 
 func (h *HTTPResponse) GetStatusCodeString() string {

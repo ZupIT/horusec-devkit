@@ -17,7 +17,6 @@ package parser
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"strings"
 
 	"github.com/google/uuid"
@@ -59,7 +58,7 @@ func ParseEntityToIOReadCloser(entity interface{}) (io.ReadCloser, error) {
 		return nil, err
 	}
 
-	return ioutil.NopCloser(strings.NewReader(string(bytes))), nil
+	return io.NopCloser(strings.NewReader(string(bytes))), nil
 }
 
 func ParseStringToUUID(id string) uuid.UUID {
