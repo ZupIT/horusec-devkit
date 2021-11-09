@@ -22,7 +22,7 @@ fi
 validateSwagger () {
     if ! swag &> /dev/null
     then
-        go get -v github.com/swaggo/swag/cmd/swag@v1.7.0
+        go install github.com/swaggo/swag/cmd/swag@v1.7.4
     fi
     if ! swag &> /dev/null
     then
