@@ -47,6 +47,7 @@ func (r *Request) DoRequest(request *http.Request, tlsConfig *tls.Config) (*enti
 	response, err := r.setClient(tlsConfig).Do(request)
 	if err != nil {
 		logger.LogError(enums.MessageFailedToMakeHTTPRequest, err)
+
 		return r.newHTTPResponse(response), err
 	}
 

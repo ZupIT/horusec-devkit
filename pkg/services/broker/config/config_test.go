@@ -68,6 +68,7 @@ func TestValidate(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
+
 func TestGetConnectionString(t *testing.T) {
 	t.Run("should get broker connection string", func(t *testing.T) {
 		config := NewBrokerConfig()

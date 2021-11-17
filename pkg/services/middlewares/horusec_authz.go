@@ -139,18 +139,31 @@ func (a *AuthzMiddleware) setAuthorizedData(r *http.Request,
 func (a *AuthzMiddleware) checkIsAuthorizedResponse(err error, response *proto.IsAuthorizedResponse,
 	w http.ResponseWriter, r *http.Request, isAuthorizedType authEnums.AuthorizationType) error {
 	if err != nil {
-		logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)
-		httpUtil.StatusInternalServerError(w, enums.ErrorFailedToVerifyRequest)
+		a.errResponse(w, err)
+
 		return enums.ErrorFailedToVerifyRequest
 	}
 
 	if !response.GetIsAuthorized() {
-		a.logHTTPRequestError(r, isAuthorizedType)
-		httpUtil.StatusUnauthorized(w, enums.ErrorUnauthorized)
+		a.unauthorizedResponse(w, r, isAuthorizedType)
+
 		return enums.ErrorUnauthorized
 	}
 
 	return nil
+}
+
+func (a *AuthzMiddleware) errResponse(w http.ResponseWriter, err error) {
+	logger.LogError(enums.MessageIsAuthorizedGRPCRequestError, err)
+
+	httpUtil.StatusInternalServerError(w, enums.ErrorFailedToVerifyRequest)
+}
+
+func (a *AuthzMiddleware) unauthorizedResponse(w http.ResponseWriter, r *http.Request,
+	isAuthorizedType authEnums.AuthorizationType) {
+	a.logHTTPRequestError(r, isAuthorizedType)
+
+	httpUtil.StatusUnauthorized(w, enums.ErrorUnauthorized)
 }
 
 func (a *AuthzMiddleware) logHTTPRequestError(r *http.Request, isAuthorizedType authEnums.AuthorizationType) {
@@ -162,6 +175,7 @@ func (a *AuthzMiddleware) getAccountID(r *http.Request) string {
 	accountID, err := jwt.GetAccountIDByJWTToken(a.getJWTToken(r))
 	if err != nil {
 		logger.LogError(enums.MessageFailedToGetAccountID, err)
+
 		return uuid.Nil.String()
 	}
 
@@ -176,6 +190,7 @@ func (a *AuthzMiddleware) checkGetConfigResponse(err error, w http.ResponseWrite
 	if err != nil {
 		logger.LogError(enums.MessageFailedToGetAuthConfig, err)
 		httpUtil.StatusInternalServerError(w, enums.ErrorWhenGettingAuthConfig)
+
 		return enums.ErrorWhenGettingAuthConfig
 	}
 

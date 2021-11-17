@@ -18,10 +18,9 @@ import (
 	"crypto/tls"
 	"net/http"
 
-	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/entities"
-
 	"github.com/stretchr/testify/mock"
 
+	"github.com/ZupIT/horusec-devkit/pkg/services/http/request/entities"
 	mockUtils "github.com/ZupIT/horusec-devkit/pkg/utils/mock"
 )
 

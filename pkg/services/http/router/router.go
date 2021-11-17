@@ -20,13 +20,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
-
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/ZupIT/horusec-devkit/pkg/enums/ozzovalidation"
 	"github.com/ZupIT/horusec-devkit/pkg/services/http/router/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
@@ -83,6 +82,7 @@ func (r *Router) setRouterConfig() *Router {
 	r.enableRequestID()
 	r.enableCORS()
 	r.routeMetrics()
+
 	return r
 }
 

@@ -29,5 +29,6 @@ type Message struct {
 
 func (m *Message) ToBytes() []byte {
 	bytes, _ := json.Marshal(m)
+
 	return bytes
 }

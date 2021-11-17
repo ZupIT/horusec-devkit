@@ -107,5 +107,6 @@ func verifyIfContainsBearer(token string) string {
 
 func CreateRefreshToken() string {
 	refreshToken := fmt.Sprintf("%s%s", uuid.New(), uuid.New())
+
 	return strings.ReplaceAll(refreshToken, "-", "")
 }

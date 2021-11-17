@@ -17,12 +17,11 @@ package config
 import (
 	"fmt"
 
-	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
-
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/broker/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
 type IConfig interface {
@@ -86,6 +85,7 @@ func (c *Config) GetUsername() string {
 	if c.username == enums.DefaultUsername {
 		logger.LogWarn(enums.MessageWarningDefaultBrokerConnection)
 	}
+
 	return c.username
 }
 
@@ -97,6 +97,7 @@ func (c *Config) GetPassword() string {
 	if c.password == enums.DefaultUsername {
 		logger.LogWarn(enums.MessageWarningDefaultBrokerConnection)
 	}
+
 	return c.password
 }
 

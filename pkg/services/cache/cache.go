@@ -43,6 +43,7 @@ func NewCache() ICache {
 
 func (c *Cache) Get(key string) interface{} {
 	data, _ := c.cache.Get(key)
+
 	return data
 }
 

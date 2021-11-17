@@ -208,7 +208,6 @@ func TestLogSetOutput(t *testing.T) {
 		}
 		assert.Contains(t, output.String(), textLogged)
 		assert.Contains(t, string(byteSlice), textLogged)
-
 	})
 	t.Run("Should set output instance with invalid writer and panic", func(t *testing.T) {
 		assert.Panics(t, func() {
@@ -216,5 +215,4 @@ func TestLogSetOutput(t *testing.T) {
 			LogInfo("Should panic")
 		})
 	})
-
 }
