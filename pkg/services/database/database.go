@@ -49,6 +49,7 @@ func NewDatabaseReadAndWrite(config databaseConfig.IConfig) (*Connection, error)
 	database := &database{config: config}
 	database.makeConnection()
 	database.setLogMode()
+
 	return database.setConnections(), nil
 }
 
@@ -86,6 +87,7 @@ func (d *database) setLogMode() {
 	if d.config.GetLogMode() {
 		d.connectionWrite.Logger = d.connectionWrite.Logger.LogMode(gormLogger.Info)
 		d.connectionRead.Logger = d.connectionRead.Logger.LogMode(gormLogger.Info)
+
 		return
 	}
 
@@ -101,11 +103,13 @@ func (d *database) StartTransaction() IDatabaseWrite {
 
 func (d *database) RollbackTransaction() response.IResponse {
 	result := d.connectionWrite.Rollback()
+
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
 func (d *database) CommitTransaction() response.IResponse {
 	result := d.connectionWrite.Commit()
+
 	return response.NewResponse(result.RowsAffected, result.Error, nil)
 }
 
@@ -124,6 +128,7 @@ func (d *database) IsAvailable() bool {
 func (d *database) pingDatabase(db *sql.DB, err error) bool {
 	if err != nil {
 		logger.LogError(enums.MessageFailedToVerifyIsAvailable, err)
+
 		return false
 	}
 
@@ -216,10 +221,8 @@ func (d *database) FindPreload(entityPointer interface{}, where map[string]inter
 
 func (d *database) FindPreloadWitLimitAndPage(entityPointer interface{}, where map[string]interface{},
 	preloads map[string][]interface{}, table string, limit, page int) response.IResponse {
-	if limit == 0 {
-		limit = 10
-	}
-	query := d.connectionRead.Table(table).Where(where).Limit(limit).Offset(page * limit)
+	query := d.findPreloadWitLimitAndPageQuery(table, where, limit, page)
+
 	for key, preload := range preloads {
 		query = query.Preload(key, preload...)
 	}
@@ -230,4 +233,13 @@ func (d *database) FindPreloadWitLimitAndPage(entityPointer interface{}, where m
 	}
 
 	return response.NewResponse(result.RowsAffected, result.Error, entityPointer)
+}
+
+func (d *database) findPreloadWitLimitAndPageQuery(
+	table string, where map[string]interface{}, limit, page int) *gorm.DB {
+	if limit == 0 {
+		limit = 10
+	}
+
+	return d.connectionRead.Table(table).Where(where).Limit(limit).Offset(page * limit)
 }

@@ -135,11 +135,13 @@ func (b *Broker) exchangeDeclare(exchange, exchangeKind string) error {
 func (b *Broker) Publish(queue, exchange, exchangeKind string, body []byte) error {
 	if err := b.setupChannel(); err != nil {
 		logger.LogError(enums.MessageFailedCreateChannelPublish, err)
+
 		return err
 	}
 
 	if err := b.exchangeDeclare(exchange, exchangeKind); err != nil {
 		logger.LogError(enums.MessageFailedDeclareExchangePublish, err)
+
 		return err
 	}
 

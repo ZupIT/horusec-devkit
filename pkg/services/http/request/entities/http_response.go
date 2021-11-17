@@ -55,12 +55,15 @@ func (h *HTTPResponse) CloseBody() {
 
 func (h *HTTPResponse) ErrorByStatusCode() error {
 	body, _ := h.GetBodyBytes()
+
 	switch {
 	case h.StatusCode >= http.StatusInternalServerError:
 		logger.LogError(enums.MessageHTTPResponseErrorStatusCode, errors.New(string(body)), h.mapResponse())
+
 		return enums.ErrorRequestServerError
 	case h.StatusCode >= http.StatusBadRequest && h.StatusCode < http.StatusInternalServerError:
 		logger.LogError(enums.MessageHTTPResponseErrorStatusCode, errors.New(string(body)), h.mapResponse())
+
 		return enums.ErrorRequestClientError
 	default:
 		return nil

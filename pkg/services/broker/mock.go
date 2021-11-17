@@ -27,21 +27,26 @@ type Mock struct {
 
 func (m *Mock) IsAvailable() bool {
 	args := m.MethodCalled("IsAvailable")
+
 	return mockUtils.ReturnBool(args, 0)
 }
 
 func (m *Mock) Publish(_, _, _ string, _ []byte) error {
 	args := m.MethodCalled("Publish")
+
 	return mockUtils.ReturnNilOrError(args, 0)
 }
 
 func (m *Mock) Consume(_, _, _ string, handler func(packet brokerPacket.IPacket)) {
 	args := m.MethodCalled("ConsumeHandlerFunc")
+
 	handler(args.Get(0).(brokerPacket.IPacket))
+
 	_ = m.MethodCalled("Consume")
 }
 
 func (m *Mock) Close() error {
 	args := m.MethodCalled("Close")
+
 	return mockUtils.ReturnNilOrError(args, 0)
 }

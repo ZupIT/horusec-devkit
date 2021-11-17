@@ -120,5 +120,6 @@ func getErrorMessage(err error) string {
 
 func internalServerError(err error) error {
 	logger.LogError("{INTERNAL_SERVER_ERROR} ->", err)
+
 	return httpEnums.ErrorGenericInternalError
 }

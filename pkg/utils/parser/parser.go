@@ -63,6 +63,7 @@ func ParseEntityToIOReadCloser(entity interface{}) (io.ReadCloser, error) {
 
 func ParseStringToUUID(id string) uuid.UUID {
 	parsedID, _ := uuid.Parse(id)
+
 	return parsedID
 }
 

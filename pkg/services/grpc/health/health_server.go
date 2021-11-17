@@ -22,8 +22,7 @@ import (
 	"github.com/ZupIT/horusec-devkit/pkg/utils/logger"
 )
 
-type CheckServer struct {
-}
+type CheckServer struct{}
 
 func NewHealthCheckGrpcServer() *CheckServer {
 	return &CheckServer{}
