@@ -30,17 +30,20 @@ type Mock struct {
 func (m *Mock) IsAuthorized(
 	_ context.Context, _ *IsAuthorizedData, _ ...grpc.CallOption) (*IsAuthorizedResponse, error) {
 	args := m.MethodCalled("IsAuthorized")
+
 	return args.Get(0).(*IsAuthorizedResponse), mockUtils.ReturnNilOrError(args, 1)
 }
 
 func (m *Mock) GetAccountInfo(_ context.Context, _ *GetAccountData,
 	_ ...grpc.CallOption) (*GetAccountDataResponse, error) {
 	args := m.MethodCalled("GetAccountInfo")
+
 	return args.Get(0).(*GetAccountDataResponse), mockUtils.ReturnNilOrError(args, 1)
 }
 
 func (m *Mock) GetAuthConfig(_ context.Context, _ *GetAuthConfigData,
 	_ ...grpc.CallOption) (*GetAuthConfigResponse, error) {
 	args := m.MethodCalled("GetAuthConfig")
+
 	return args.Get(0).(*GetAuthConfigResponse), mockUtils.ReturnNilOrError(args, 1)
 }

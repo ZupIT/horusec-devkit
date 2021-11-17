@@ -27,5 +27,6 @@ type AnalysisData struct {
 
 func (a *AnalysisData) ToBytes() []byte {
 	bytes, _ := json.Marshal(a)
+
 	return bytes
 }

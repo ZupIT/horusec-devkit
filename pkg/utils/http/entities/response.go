@@ -24,6 +24,7 @@ type Response struct {
 
 func (r *Response) ToBytes() []byte {
 	data, _ := json.Marshal(r)
+
 	return data
 }
 
@@ -43,5 +44,6 @@ func (r *Response) GetStatusCode() int {
 
 func (r *Response) ContentToBytes() []byte {
 	data, _ := json.Marshal(r.Content)
+
 	return data
 }

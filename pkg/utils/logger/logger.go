@@ -29,6 +29,7 @@ func LogPanic(msg string, err error, args ...map[string]interface{}) {
 	if err != nil {
 		if len(args) > 0 {
 			logrus.WithFields(args[0]).WithError(err).Panic(msg)
+
 			return
 		}
 
@@ -40,6 +41,7 @@ func LogError(msg string, err error, args ...map[string]interface{}) {
 	if err != nil {
 		if len(args) > 0 {
 			logrus.WithFields(args[0]).WithError(err).Error(msg)
+
 			return
 		}
 
@@ -50,14 +52,17 @@ func LogError(msg string, err error, args ...map[string]interface{}) {
 func LogInfo(msg string, args ...interface{}) {
 	if args != nil {
 		logrus.Info(msg, args)
+
 		return
 	}
+
 	logrus.Info(msg)
 }
 
 func LogWarn(msg string, args ...interface{}) {
 	if args != nil {
 		logrus.Warn(msg, args)
+
 		return
 	}
 
@@ -93,6 +98,7 @@ func LogErrorWithLevel(msg string, err error, args ...map[string]interface{}) {
 	if logrus.IsLevelEnabled(enums.ErrorLevel) && err != nil {
 		if len(args) > 0 {
 			logrus.WithFields(args[0]).WithError(err).Error(msg)
+
 			return
 		}
 
@@ -104,6 +110,7 @@ func LogWarnWithLevel(msg string, args ...interface{}) {
 	if logrus.IsLevelEnabled(enums.WarnLevel) {
 		if args != nil {
 			logrus.Warn(msg, args)
+
 			return
 		}
 
@@ -115,6 +122,7 @@ func LogInfoWithLevel(msg string, args ...interface{}) {
 	if logrus.IsLevelEnabled(enums.InfoLevel) {
 		if args != nil {
 			logrus.Info(msg, args)
+
 			return
 		}
 
@@ -126,6 +134,7 @@ func LogDebugWithLevel(msg string, args ...interface{}) {
 	if logrus.IsLevelEnabled(enums.DebugLevel) {
 		if args != nil {
 			logrus.Debug(msg, args)
+
 			return
 		}
 
@@ -137,6 +146,7 @@ func LogTraceWithLevel(msg string, args ...interface{}) {
 	if logrus.IsLevelEnabled(enums.TraceLevel) {
 		if args != nil {
 			logrus.Trace(msg, args)
+
 			return
 		}
 
@@ -151,6 +161,7 @@ func LogStringAsError(msg string) {
 func LogDebugJSON(message string, content interface{}) {
 	if contentBytes, err := json.Marshal(content); err == nil {
 		LogDebugWithLevel(message, string(contentBytes))
+
 		return
 	}
 

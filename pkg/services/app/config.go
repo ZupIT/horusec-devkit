@@ -52,6 +52,7 @@ func (c *Config) getAuthConfig() IConfig {
 	}
 
 	c.GetAuthConfigResponse = response
+
 	return c
 }
 

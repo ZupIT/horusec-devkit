@@ -43,6 +43,7 @@ func (a *Analysis) GetTable() string {
 
 func (a *Analysis) ToBytes() []byte {
 	bytes, _ := json.Marshal(a)
+
 	return bytes
 }
 
@@ -80,8 +81,10 @@ func (a *Analysis) SetFindOneFilter() map[string]interface{} {
 func (a *Analysis) SetError(err error) {
 	if err != nil {
 		toAppend := ""
+
 		if len(a.Errors) > 0 {
 			a.Errors += "; " + err.Error()
+
 			return
 		}
 
@@ -114,6 +117,7 @@ func (a *Analysis) SetFinishedData() {
 
 	if a.HasErrors() {
 		a.Status = analysis.Error
+
 		return
 	}
 
