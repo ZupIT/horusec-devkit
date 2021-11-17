@@ -50,18 +50,19 @@ const (
 
 // UpVersions data struct
 type upVersions struct {
-	githubClient         *github.Client
-	ctx                  context.Context
-	githubOrg            string
-	githubRepo           string
-	releaseType          string
-	actualReleaseVersion string
-	nextReleaseVersion   string
-	releaseBranchName    string
-	actualRCVersion      string
-	nextRCVersion        string
-	actualBetaVersion    string
-	nextBetaVersion      string
+	githubClient               *github.Client
+	ctx                        context.Context
+	githubOrg                  string
+	githubRepo                 string
+	releaseType                string
+	actualReleaseVersion       string
+	nextReleaseVersion         string
+	nextReleaseVersionStripped string
+	nextReleaseBranchName      string
+	actualRCVersion            string
+	nextRCVersion              string
+	actualBetaVersion          string
+	nextBetaVersion            string
 }
 
 // newUpVersions instantiates a new UpVersions command struct.
@@ -77,12 +78,14 @@ func newUpVersions(releaseType string) *upVersions {
 
 // UpVersions command to up latest version of the repository to the next, including the beta and rc next versions.
 // Outputs:
-// actualVersion: represents the actual version of the repository (v1.0.0).
-// releaseVersion: represents the next release version (v1.1.0).
-// strippedReleaseVersion: represents the next release version without the v prefix (1.1.0).
-// releaseBranchName: represents the next release branch name (release/v1.1).
-// betaVersion: represents the next beta release tag name (v1.1.0-beta.1).
-// rcVersion: represents the next rc release tag name (v1.1.0-rc.1).
+// actualReleaseVersion: represents the actual version of the repository (v1.0.0).
+// nextReleaseVersion: represents the next release version (v1.1.0).
+// nextReleaseVersionStripped: represents the next release version without the v prefix (1.1.0).
+// nextReleaseBranchName: represents the next release branch name (release/v1.1).
+// nextBetaVersion: represents the next beta release tag name (v1.1.0-beta.1).
+// nextRCVersion: represents the next rc release tag name (v1.1.0-rc.1).
+// actualBetaVersion: represents the actual beta release tag name (v1.0.0-beta.1).
+// actualRCVersion: represents the actual rc release tag name (v1.0.0-rc.1).
 func UpVersions(releaseType string) error {
 	version := newUpVersions(releaseType)
 	if err := version.isValidVersionCommand(); err != nil {
@@ -186,7 +189,8 @@ func (u *upVersions) getSplittedVersionRelease() (string, string, string) {
 
 // setReleaseVersion set the next release branch name and version.
 func (u *upVersions) setReleaseVersion(major, minor, patch string) string {
-	u.releaseBranchName = fmt.Sprintf("release/v%s.%s", major, minor)
+	u.nextReleaseBranchName = fmt.Sprintf("release/v%s.%s", major, minor)
+	u.nextReleaseVersionStripped = fmt.Sprintf("%s.%s.%s", major, minor, patch)
 
 	return fmt.Sprintf("%s%s.%s.%s", "v", major, minor, patch)
 }
@@ -198,18 +202,17 @@ func (u *upVersions) upVersion(value string) string {
 	return strconv.Itoa(valueInt + 1)
 }
 
-//nolint:forbidigo,lll // this isn't a debug statement, link pass the line length
+// nolint:forbidigo,lll // this isn't a debug statement, link pass the line length
 // outputNextRelease set the release branch, version and stripped release output to be available in GitHub actions.
 // https://docs.github.com/pt/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-output-parameter
 func (u *upVersions) outputNextRelease() {
-	fmt.Printf("::set-output name=actualVersion::%s\n", u.actualReleaseVersion)
+	fmt.Printf("::set-output name=actualReleaseVersion::%s\n", u.actualReleaseVersion)
 
-	fmt.Printf("::set-output name=releaseVersion::%s\n", u.nextReleaseVersion)
+	fmt.Printf("::set-output name=nextReleaseVersion::%s\n", u.nextReleaseVersion)
 
-	fmt.Printf("::set-output name=strippedReleaseVersion::%s\n",
-		strings.ReplaceAll(u.nextReleaseVersion, "v", ""))
+	fmt.Printf("::set-output name=nextReleaseVersionStripped::%s\n", u.nextReleaseVersionStripped)
 
-	fmt.Printf("::set-output name=releaseBranchName::%s\n", u.releaseBranchName)
+	fmt.Printf("::set-output name=nextReleaseBranchName::%s\n", u.nextReleaseBranchName)
 }
 
 // listTags list last 50 github tags
@@ -359,13 +362,17 @@ func (u *upVersions) getSplittedVersionBetaOrRC(version string) (string, string,
 	return major, minor, patch, betaRC
 }
 
-//nolint:forbidigo,lll // this isn't a debug statement, link pass the line length
+// nolint:forbidigo,lll // this isn't a debug statement, link pass the line length
 // outputNextBetaAndRC set the beta and rc release output to be available in GitHub actions.
 // https://docs.github.com/pt/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-output-paramete
 func (u *upVersions) outputNextBetaAndRC() {
-	fmt.Printf("::set-output name=betaVersion::%s\n", u.nextBetaVersion)
+	fmt.Printf("::set-output name=actualBetaVersion::%s\n", u.actualBetaVersion)
 
-	fmt.Printf("::set-output name=rcVersion::%s\n", u.nextRCVersion)
+	fmt.Printf("::set-output name=nextBetaVersion::%s\n", u.nextBetaVersion)
+
+	fmt.Printf("::set-output name=actualRCVersion::%s\n", u.actualRCVersion)
+
+	fmt.Printf("::set-output name=nextRCVersion::%s\n", u.nextRCVersion)
 }
 
 // removePrefixes remove all the prefixes from the version, including -rc, -beta, v.
