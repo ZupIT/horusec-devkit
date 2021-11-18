@@ -31,6 +31,7 @@ sed -i '/libs/d' coverage.out
 sed -i '/cmd\/migration/d' coverage.out
 sed -i '/test\/mocks/d' coverage.out
 sed -i '/pkg\/utils\/mageutils/d' coverage.out
+sed -i '/magefile.go/d' coverage.out
 
 COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}')
 COVERAGE=${COVERAGE%\%}

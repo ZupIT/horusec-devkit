@@ -76,6 +76,13 @@ func newUpVersions(releaseType string) *upVersions {
 }
 
 // UpVersions command to up latest version of the repository to the next, including the beta and rc next versions.
+// Outputs:
+// actualVersion: represents the actual version of the repository (v1.0.0).
+// releaseVersion: represents the next release version (v1.1.0).
+// strippedReleaseVersion: represents the next release version without the v prefix (1.1.0).
+// releaseBranchName: represents the next release branch name (release/v1.1).
+// betaVersion: represents the next beta release tag name (v1.1.0-beta.1).
+// rcVersion: represents the next rc release tag name (v1.1.0-rc.1).
 func UpVersions(releaseType string) error {
 	version := newUpVersions(releaseType)
 	if err := version.isValidVersionCommand(); err != nil {
@@ -195,6 +202,8 @@ func (u *upVersions) upVersion(value string) string {
 // outputNextRelease set the release branch, version and stripped release output to be available in GitHub actions.
 // https://docs.github.com/pt/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-output-parameter
 func (u *upVersions) outputNextRelease() {
+	fmt.Printf("::set-output name=actualVersion::%s\n", u.actualReleaseVersion)
+
 	fmt.Printf("::set-output name=releaseVersion::%s\n", u.nextReleaseVersion)
 
 	fmt.Printf("::set-output name=strippedReleaseVersion::%s\n",
