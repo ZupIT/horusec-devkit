@@ -13,6 +13,7 @@ require (
 	github.com/google/go-github/v40 v40.0.0
 	github.com/google/uuid v1.3.0
 	github.com/iancoleman/strcase v0.2.0
+	github.com/magefile/mage v1.11.0
 	github.com/migueleliasweb/go-github-mock v0.0.5
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
