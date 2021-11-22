@@ -185,12 +185,22 @@ func TestVersion(t *testing.T) {
 			{
 				releaseType:                        "patch",
 				repositoryRelease:                  newMockRelease("v7.8.1"),
-				repositoryTags:                     newMockTags([]string{"v7.8.2-rc.2", "vv7.8.2-rc.1", "vv7.8.2-beta.3", "vv7.8.2-beta.2", "vv7.8.2-beta.1", "v7.8.1", "v7.8.0", "v7.8.0-rc.1", "v7.8.0-beta.1"}),
+				repositoryTags:                     newMockTags([]string{"v7.8.2-rc.2", "vv7.8.2-rc.1", "v7.8.2-beta.3", "v7.8.2-beta.2", "v7.8.2-beta.1", "v7.8.1", "v7.8.0", "v7.8.0-rc.1", "v7.8.0-beta.1"}),
 				expectedNextReleaseVersion:         "v7.8.2",
 				expectedNextReleaseVersionStripped: "7.8.2",
 				expectedNextReleaseBranchName:      "release/v7.8",
 				expectedNextBetaVersion:            "v7.8.2-beta.4",
 				expectedNextRCVersion:              "v7.8.2-rc.3",
+			},
+			{
+				releaseType:                        "minor",
+				repositoryRelease:                  newMockRelease("v2.3.9"),
+				repositoryTags:                     newMockTags([]string{"v2.4.0-beta.1", "v2.3.9"}),
+				expectedNextReleaseVersion:         "v2.4.0",
+				expectedNextReleaseVersionStripped: "2.4.0",
+				expectedNextReleaseBranchName:      "release/v2.4",
+				expectedNextBetaVersion:            "v2.4.0-beta.2",
+				expectedNextRCVersion:              "v2.4.0-rc.1",
 			},
 		}
 

@@ -314,17 +314,29 @@ func (u *upVersions) upVersionNextBetaAndRc() {
 	}
 }
 
-// upVersionBeta increase the actual beta number by 1 and set next beta version
+// upVersionBeta increase the actual beta number by 1 and set next beta version, for majors also check for new beta cont
+// by verifying if the actual beta it's lower than the actual release.
 func (u *upVersions) upVersionBeta() {
-	major, minor, patch, beta := u.getSplittedVersionBetaOrRC(u.actualBetaVersion)
+	if u.releaseType == majorType && u.isOlderThanActualRelease(u.actualBetaVersion) {
+		u.nextBetaVersion = fmt.Sprintf("%s-beta.0", u.nextReleaseVersion)
 
+		return
+	}
+
+	major, minor, patch, beta := u.getSplittedVersionBetaOrRC(u.actualBetaVersion)
 	u.nextBetaVersion = fmt.Sprintf("v%s.%s.%s-beta.%s", major, minor, patch, u.upVersion(beta))
 }
 
-// upVersionRC increase the actual rc number by 1 and set next rc version
+// upVersionRC increase the actual rc number by 1 and set next rc version, for majors also check for new rc cont
+// by verifying if the actual RC it's lower than the actual release.
 func (u *upVersions) upVersionRC() {
-	major, minor, patch, rc := u.getSplittedVersionBetaOrRC(u.actualRCVersion)
+	if u.releaseType == majorType && u.isOlderThanActualRelease(u.actualRCVersion) {
+		u.nextRCVersion = fmt.Sprintf("%s-rc.0", u.nextReleaseVersion)
 
+		return
+	}
+
+	major, minor, patch, rc := u.getSplittedVersionBetaOrRC(u.actualRCVersion)
 	u.nextRCVersion = fmt.Sprintf("v%s.%s.%s-rc.%s", major, minor, patch, u.upVersion(rc))
 }
 
