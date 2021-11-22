@@ -40,16 +40,10 @@ func isCosignInstalled() error {
 	return sh.RunV("cosign", "version")
 }
 
-//nolint:funlen //this function only has more than 15 lines because of empty lines lint check
 func hasAllNecessaryEnvs() error {
-	envs := map[string]string{
-		"COSIGN_KEY":          os.Getenv("COSIGN_KEY"),
-		"COSIGN_KEY_LOCATION": os.Getenv("COSIGN_KEY_LOCATION"),
-	}
-
 	var result []string
 
-	for k, v := range envs {
+	for k, v := range getConsingEnvs() {
 		if v == "" {
 			result = append(result, k)
 		}
@@ -60,4 +54,11 @@ func hasAllNecessaryEnvs() error {
 	}
 
 	return nil
+}
+
+func getConsingEnvs() map[string]string {
+	return map[string]string{
+		"COSIGN_KEY":          os.Getenv("COSIGN_KEY"),
+		"COSIGN_KEY_LOCATION": os.Getenv("COSIGN_KEY_LOCATION"),
+	}
 }
