@@ -15,6 +15,7 @@
 package mageutils
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/magefile/mage/mg"
@@ -38,35 +39,19 @@ func GitPushAlpha() error {
 // CreateLocalTag executes "git", "tag", "-s", tag, "-m", "release "+tag
 func CreateLocalTag(tag string) (err error) {
 	mg.Deps(isGitExistent)
+	mg.Deps(mg.F(isValidTag, tag))
 
 	return sh.RunV("git", "tag", "-s", tag, "-m", "release "+tag)
 }
 
-// CheckoutRcBranch checkout/create and rc/tag branch based on main branch
-func CheckoutRcBranch(tag string) error {
+// CheckoutReleaseBranch creates if not exists a release branch and then checkout
+func CheckoutReleaseBranch(branchName string) error {
 	mg.Deps(isGitExistent)
-
-	branchName := "release/" + tag[:4]
 
 	if err := sh.RunV("git", "checkout", branchName); err != nil {
-		log.Printf("First %s release, creating release branch", tag[:4])
+		log.Printf("First %s release, creating release branch", branchName)
 
 		return sh.RunV("git", "checkout", "-b", branchName)
-	}
-
-	return nil
-}
-
-// CheckoutReleaseBranch creates and release/tag branch based on rc/tag branch
-func CheckoutReleaseBranch(tag string) error {
-	mg.Deps(isGitExistent)
-
-	releaseBranchName := "release/" + tag[:4]
-
-	if err := sh.RunV("git", "checkout", releaseBranchName); err != nil {
-		log.Printf("Cannot launch a release without the release branch: %s", tag[:4])
-
-		return err
 	}
 
 	return nil
@@ -101,4 +86,14 @@ func DefaultGitConfig() error {
 
 func isGitExistent() error {
 	return sh.RunV("git", "version")
+}
+
+func isValidTag(tag string) error {
+	validTagLength := 4
+	// TODO(ian) : we should make a more assertive check on passed tags
+	if len(tag) < validTagLength {
+		return fmt.Errorf("invalid tag format: %s", tag)
+	}
+
+	return nil
 }
