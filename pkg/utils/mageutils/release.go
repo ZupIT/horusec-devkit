@@ -45,6 +45,7 @@ func CreateLocalTag(tag string) (err error) {
 }
 
 // CheckoutReleaseBranch creates if not exists a release branch and then checkout
+// @TODO validate release branch name with regex
 func CheckoutReleaseBranch(branchName string) error {
 	mg.Deps(isGitExistent)
 
@@ -57,15 +58,11 @@ func CheckoutReleaseBranch(branchName string) error {
 	return nil
 }
 
-// GitPushAll executes "git", "push", "--all" and "git", "push", "--tags"
+// GitPushAll executes "git", "push", "--all"
 func GitPushAll() error {
 	mg.Deps(isGitExistent)
 
-	if err := sh.RunV("git", "push", "--all"); err != nil {
-		return err
-	}
-
-	return sh.RunV("git", "push", "--tags")
+	return sh.RunV("git", "push", "--all")
 }
 
 // GitConfig configures global email and user for git
