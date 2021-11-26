@@ -52,7 +52,11 @@ func CheckoutReleaseBranch(branchName string) error {
 	if err := sh.RunV("git", "checkout", branchName); err != nil {
 		log.Printf("First %s release, creating release branch", branchName)
 
-		return sh.RunV("git", "checkout", "-b", branchName)
+		if err := sh.RunV("git", "checkout", "-b", branchName); err != nil {
+			return err
+		}
+
+		return sh.RunV("git", "push", "--set-upstream", "origin", branchName)
 	}
 
 	return nil

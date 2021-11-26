@@ -56,7 +56,7 @@ func toStringPointer(value string) *string {
 }
 
 func newMockRelease(tagName string) *github.RepositoryRelease {
-	return &github.RepositoryRelease{TagName: toStringPointer(tagName)}
+	return &github.RepositoryRelease{Name: toStringPointer(tagName)}
 }
 
 func newMockTags(tags []string) []*github.RepositoryTag {

@@ -156,7 +156,7 @@ func (u *upVersions) getLatestRelease() error {
 		return err
 	}
 
-	u.actualReleaseVersion = *release.TagName
+	u.actualReleaseVersion = release.GetName()
 
 	return nil
 }
