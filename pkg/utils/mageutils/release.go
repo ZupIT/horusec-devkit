@@ -22,18 +22,18 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-// CreateAlphaTag executes "git", "tag", "-f", "-s", "v0.0.0-alpha", "-m", "v0.0.0-alpha"
+// CreateAlphaTag executes "git", "tag", "-f", "-s", "alpha", "-m", "alpha"
 func CreateAlphaTag() error {
 	mg.Deps(isGitExistent)
 
-	return sh.RunV("git", "tag", "-f", "-s", "v0.0.0-alpha", "-m", "v0.0.0-alpha")
+	return sh.RunV("git", "tag", "-f", "-s", "alpha", "-m", "alpha")
 }
 
-// GitPushAlpha executes "git", "push", "origin", "-f", "v0.0.0-alpha"
+// GitPushAlpha executes "git", "push", "origin", "-f", "alpha"
 func GitPushAlpha() error {
 	mg.Deps(isGitExistent)
 
-	return sh.RunV("git", "push", "origin", "-f", "v0.0.0-alpha")
+	return sh.RunV("git", "push", "origin", "-f", "alpha")
 }
 
 // CreateLocalTag executes "git", "tag", "-s", tag, "-m", "release "+tag
