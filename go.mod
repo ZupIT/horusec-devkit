@@ -23,7 +23,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/http-swagger v1.2.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
-	google.golang.org/grpc v1.42.0
+	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/gorm v1.22.5
