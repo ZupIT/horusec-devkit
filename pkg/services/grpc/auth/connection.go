@@ -17,6 +17,7 @@ package auth
 import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/ZupIT/horusec-devkit/pkg/services/grpc/enums"
 	"github.com/ZupIT/horusec-devkit/pkg/utils/env"
@@ -42,7 +43,7 @@ func makeConnection() (grpc.ClientConnInterface, error) {
 
 func setupWithoutCerts() (grpc.ClientConnInterface, error) {
 	return grpc.Dial(env.GetEnvOrDefault(enums.HorusecAuthGRPCURL, enums.HorusecDefaultAuthHost),
-		grpc.WithInsecure())
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 }
 
 func setupWithCerts() (grpc.ClientConnInterface, error) {
