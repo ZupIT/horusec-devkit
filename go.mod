@@ -21,7 +21,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.7.0
-	github.com/swaggo/http-swagger v1.2.0
+	github.com/swaggo/http-swagger v1.2.5
 	golang.org/x/crypto v0.0.0-20220213190939-1e6e3497d506
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
@@ -64,7 +64,7 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
-	github.com/swaggo/swag v1.7.8 // indirect
+	github.com/swaggo/swag v1.7.9 // indirect
 	golang.org/x/net v0.0.0-20220114011407-0dd24b26b47d // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	golang.org/x/text v0.3.7 // indirect
