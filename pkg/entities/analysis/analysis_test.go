@@ -236,3 +236,13 @@ func TestGetDataWithoutVulnerabilities(t *testing.T) {
 		assert.NotEmpty(t, result.FinishedAt)
 	})
 }
+
+func TestAddWarning(t *testing.T) {
+	t.Run("should success append a new warning", func(t *testing.T) {
+		analysis := new(Analysis)
+
+		analysis.AddWarning("test")
+
+		assert.Len(t, analysis.Warnings, 1)
+	})
+}
