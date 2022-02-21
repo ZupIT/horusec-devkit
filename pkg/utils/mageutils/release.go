@@ -44,6 +44,19 @@ func CreateLocalTag(tag string) (err error) {
 	return sh.RunV("git", "tag", "-s", tag, "-m", "release "+tag)
 }
 
+// CreateAndPushTag executes "git", "tag", "-s", tag, "-m", "release "+tag
+// and after executes "git", "push", "--tags"
+func CreateAndPushTag(tag string) (err error) {
+	mg.Deps(isGitExistent)
+	mg.Deps(mg.F(isValidTag, tag))
+
+	if err := sh.RunV("git", "tag", "-s", tag, "-m", "release "+tag); err != nil {
+		return err
+	}
+
+	return sh.RunV("git", "push", "--tags")
+}
+
 // CheckoutReleaseBranch creates if not exists a release branch and then checkout
 // @TODO validate release branch name with regex
 func CheckoutReleaseBranch(branchName string) error {
