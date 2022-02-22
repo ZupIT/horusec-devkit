@@ -35,6 +35,12 @@ type Analysis struct {
 	CreatedAt               time.Time                 `json:"createdAt" gorm:"Column:created_at" example:"2021-12-30T23:59:59Z"`
 	FinishedAt              time.Time                 `json:"finishedAt" gorm:"Column:finished_at" example:"2021-12-30T23:59:59Z"`
 	AnalysisVulnerabilities []AnalysisVulnerabilities `json:"analysisVulnerabilities" gorm:"foreignKey:AnalysisID;references:ID"`
+
+	// Warnings this field has an idea of centralizing all warnings that need to printed in the end of the analysis,
+	// simplifying our warning management. After start an analysis we cannot print any message or the loading will
+	// break, the idea are that we add all necessary warnings into this field and avoid these messages during the
+	// loading phase.
+	Warnings []string `json:"-"`
 }
 
 func (a *Analysis) GetTable() string {
@@ -144,4 +150,8 @@ func (a *Analysis) GetDataWithoutVulnerabilities() *Analysis {
 		CreatedAt:      a.CreatedAt,
 		FinishedAt:     a.FinishedAt,
 	}
+}
+
+func (a *Analysis) AddWarning(warning string) {
+	a.Warnings = append(a.Warnings, warning)
 }
