@@ -14,7 +14,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/magefile/mage v1.12.1
-	github.com/migueleliasweb/go-github-mock v0.0.6
+	github.com/migueleliasweb/go-github-mock v0.0.7
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.12.1
