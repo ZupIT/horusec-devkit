@@ -25,4 +25,5 @@ type IDatabaseWrite interface {
 	CreateOrUpdate(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
 	Update(entityPointer interface{}, where map[string]interface{}, table string) response.IResponse
 	Delete(where map[string]interface{}, table string) response.IResponse
+	Exec(rawQuery string, values ...interface{}) error
 }

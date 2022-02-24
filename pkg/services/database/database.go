@@ -243,3 +243,23 @@ func (d *database) findPreloadWitLimitAndPageQuery(
 
 	return d.connectionRead.Table(table).Where(where).Limit(limit).Offset(page * limit)
 }
+
+// Deprecated: Exec starts a transaction and try to execute the raw query into database.
+// is not recommended using this and the method will not be available after cli v2.10.0
+func (d *database) Exec(rawQuery string, values ...interface{}) error {
+	sqlDB, err := d.connectionWrite.DB()
+	if err != nil {
+		return err
+	}
+
+	tx, err := sqlDB.Begin()
+	if err != nil {
+		return err
+	}
+
+	if _, err = tx.Exec(rawQuery, values...); err != nil {
+		return tx.Rollback()
+	}
+
+	return tx.Commit()
+}

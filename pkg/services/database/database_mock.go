@@ -82,6 +82,11 @@ func (m *Mock) Delete(_ map[string]interface{}, _ string) response.IResponse {
 	return args.Get(0).(response.IResponse)
 }
 
+func (m *Mock) Exec(_ string, _ ...interface{}) error {
+	args := m.MethodCalled("Exec")
+	return mockUtils.ReturnNilOrError(args, 0)
+}
+
 func (m *Mock) FindPreload(entityPointer interface{}, _ map[string]interface{}, _ map[string][]interface{}, _ string) response.IResponse {
 	args := m.MethodCalled("FindPreload")
 	return m.reflectValues(entityPointer, args.Get(0).(response.IResponse))

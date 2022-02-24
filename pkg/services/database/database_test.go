@@ -821,3 +821,98 @@ func TestFindPreloadWitLimitAndPage(t *testing.T) {
 		assert.Equal(t, nil, response.GetData())
 	})
 }
+
+func TestBatch(t *testing.T) {
+	t.Run("should success batch query", func(t *testing.T) {
+		db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+		assert.NoError(t, err)
+		query := "UPDATE table a SET a.value = ? where a.id = ? ;"
+		mock.ExpectBegin()
+		mock.ExpectExec(query).WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		err = database.Exec(query, "1", "2")
+
+		assert.NoError(t, err)
+	})
+	t.Run("should error when exec fails", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		query := "UPDATE table a SET a.value = ? where a.id = ? ;"
+		values := []string{"1", "2"}
+		mock.ExpectBegin()
+		mock.ExpectExec(query).WithArgs().WillReturnError(errors.New("some error"))
+		mock.ExpectCommit()
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		err = database.Exec(query, values)
+
+		assert.Error(t, err)
+	})
+	t.Run("should error when begin fails", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		query := "UPDATE table a SET a.value = ? where a.id = ? ;"
+		values := []string{"1", "2"}
+		mock.ExpectBegin().WillReturnError(errors.New("some error"))
+		mock.ExpectExec(query).WithArgs().WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		err = database.Exec(query, values)
+
+		assert.Error(t, err)
+	})
+	t.Run("should error when commit fails", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		query := "UPDATE table a SET a.value = ? where a.id = ? ;"
+		values := []string{"1", "2"}
+		mock.ExpectBegin()
+		mock.ExpectExec(query).WithArgs().WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit().WillReturnError(errors.New("some error"))
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionRead:  getMockedConnection(db),
+			connectionWrite: getMockedConnection(db),
+		}
+
+		err = database.Exec(query, values)
+
+		assert.Error(t, err)
+	})
+	t.Run("should error when get DB fails", func(t *testing.T) {
+		db := &gorm.DB{
+			Config: &gorm.Config{},
+		}
+
+		query := "UPDATE table a SET a.value = ? where a.id = ? ;"
+		values := []string{"1", "2"}
+
+		database := &database{
+			config:          config.NewDatabaseConfig(),
+			connectionWrite: db,
+		}
+
+		err := database.Exec(query, values)
+
+		assert.Error(t, err)
+	})
+}
