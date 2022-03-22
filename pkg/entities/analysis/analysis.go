@@ -40,7 +40,7 @@ type Analysis struct {
 	// simplifying our warning management. After start an analysis we cannot print any message or the loading will
 	// break, the idea are that we add all necessary warnings into this field and avoid these messages during the
 	// loading phase.
-	Warnings []string `json:"-"`
+	Warnings []string `json:"-" gorm:"-"`
 }
 
 func (a *Analysis) GetTable() string {
