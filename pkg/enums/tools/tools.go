@@ -19,28 +19,29 @@ import "github.com/iancoleman/strcase"
 type Tool string
 
 const (
-	HorusecEngine        Tool = "HorusecEngine"
-	GoSec                Tool = "GoSec"
-	SecurityCodeScan     Tool = "SecurityCodeScan"
-	Brakeman             Tool = "Brakeman"
-	Safety               Tool = "Safety"
-	Bandit               Tool = "Bandit"
-	NpmAudit             Tool = "NpmAudit"
-	YarnAudit            Tool = "YarnAudit"
-	GitLeaks             Tool = "GitLeaks"
-	TfSec                Tool = "TfSec"
-	Checkov              Tool = "Checkov"
-	Semgrep              Tool = "Semgrep"
-	Flawfinder           Tool = "Flawfinder"
-	PhpCS                Tool = "PhpCS"
-	MixAudit             Tool = "MixAudit"
-	Sobelow              Tool = "Sobelow"
-	ShellCheck           Tool = "ShellCheck"
-	BundlerAudit         Tool = "BundlerAudit"
-	OwaspDependencyCheck Tool = "OwaspDependencyCheck"
-	DotnetCli            Tool = "DotnetCli"
-	Nancy                Tool = "Nancy"
-	Trivy                Tool = "Trivy"
+	HorusecEngine         Tool = "HorusecEngine"
+	GoSec                 Tool = "GoSec"
+	SecurityCodeScan      Tool = "SecurityCodeScan"
+	Brakeman              Tool = "Brakeman"
+	Safety                Tool = "Safety"
+	Bandit                Tool = "Bandit"
+	NpmAudit              Tool = "NpmAudit"
+	YarnAudit             Tool = "YarnAudit"
+	GitLeaks              Tool = "GitLeaks"
+	TfSec                 Tool = "TfSec"
+	Checkov               Tool = "Checkov"
+	Semgrep               Tool = "Semgrep"
+	Flawfinder            Tool = "Flawfinder"
+	PhpCS                 Tool = "PhpCS"
+	MixAudit              Tool = "MixAudit"
+	Sobelow               Tool = "Sobelow"
+	ShellCheck            Tool = "ShellCheck"
+	BundlerAudit          Tool = "BundlerAudit"
+	OwaspDependencyCheck  Tool = "OwaspDependencyCheck"
+	DotnetCli             Tool = "DotnetCli"
+	Nancy                 Tool = "Nancy"
+	Trivy                 Tool = "Trivy"
+	HorusecSemanticEngine Tool = "HorusecSemanticEngine"
 )
 
 func (t Tool) ToString() string {
@@ -76,5 +77,6 @@ func Values() []Tool {
 		DotnetCli,
 		Nancy,
 		Trivy,
+		HorusecSemanticEngine,
 	}
 }

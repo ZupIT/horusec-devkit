@@ -44,6 +44,7 @@ func TestToString(t *testing.T) {
 		assert.Equal(t, "DotnetCli", DotnetCli.ToString())
 		assert.Equal(t, "Nancy", Nancy.ToString())
 		assert.Equal(t, "Trivy", Trivy.ToString())
+		assert.Equal(t, "HorusecSemanticEngine", HorusecSemanticEngine.ToString())
 	})
 }
 
@@ -71,11 +72,12 @@ func TestToLowerCase(t *testing.T) {
 		assert.Equal(t, "dotnetCli", DotnetCli.ToLowerCamel())
 		assert.Equal(t, "nancy", Nancy.ToLowerCamel())
 		assert.Equal(t, "trivy", Trivy.ToLowerCamel())
+		assert.Equal(t, "horusecSemanticEngine", HorusecSemanticEngine.ToLowerCamel())
 	})
 }
 
 func TestValues(t *testing.T) {
-	t.Run("should return 21 valid values", func(t *testing.T) {
-		assert.Len(t, Values(), 22)
+	t.Run("should return 23 valid values", func(t *testing.T) {
+		assert.Len(t, Values(), 23)
 	})
 }
