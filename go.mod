@@ -1,6 +1,8 @@
 module github.com/ZupIT/horusec-devkit
 
-go 1.17
+go 1.21
+
+toolchain go1.23.2
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
@@ -14,7 +16,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/magefile/mage v1.12.1
-	github.com/migueleliasweb/go-github-mock v0.0.7
+	github.com/migueleliasweb/go-github-mock v0.0.23
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.12.1
@@ -43,6 +45,7 @@ require (
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-github/v41 v41.0.0 // indirect
+	github.com/google/go-github/v59 v59.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -68,6 +71,7 @@ require (
 	golang.org/x/net v0.0.0-20220114011407-0dd24b26b47d // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.1.8 // indirect
 	google.golang.org/genproto v0.0.0-20220114231437-d2e6a121cae0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
