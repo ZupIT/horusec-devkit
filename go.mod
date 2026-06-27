@@ -12,7 +12,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-github/v40 v40.0.0
 	github.com/google/uuid v1.3.0
-	github.com/iancoleman/strcase v0.2.0
+	github.com/iancoleman/strcase v0.3.0
 	github.com/magefile/mage v1.12.1
 	github.com/migueleliasweb/go-github-mock v0.0.7
 	github.com/patrickmn/go-cache v2.1.0+incompatible
