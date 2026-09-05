@@ -8,7 +8,7 @@ require (
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.2.0
-	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
+	github.com/go-ozzo/ozzo-validation/v4 v4.4.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-github/v40 v40.0.0
 	github.com/google/uuid v1.3.0
