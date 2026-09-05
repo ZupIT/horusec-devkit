@@ -3,7 +3,7 @@ module github.com/ZupIT/horusec-devkit
 go 1.17
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/auth0/go-jwt-middleware v1.0.1
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
